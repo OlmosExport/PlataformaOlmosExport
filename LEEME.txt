@@ -1,11 +1,20 @@
-PLATAFORMA AGROCLIMÁTICA · EXPORTADORA LOS OLMOS
-================================================
+PLATAFORMA EXPORTADORA LOS OLMOS
+================================
+Versión 4.0 · Departamento Técnico
 
-ARCHIVOS DEL SITIO (todos en la misma carpeta, sin subcarpetas)
 
-  index.html            La aplicación. Solo cambia cuando se modifica el diseño.
-  datos.json            Todos los datos. Es lo único que se reemplaza al actualizar.
+QUÉ HAY EN LA CARPETA (todo junto, sin subcarpetas)
+
+  index.html            Página de inicio con los indicadores y el acceso a las
+                        dos plataformas. Es lo primero que se abre.
+  clima.html            Plataforma Climática (antes se llamaba index.html).
+  tecnica.html          Plataforma de Campo.
+
+  datos.json            Todos los datos climáticos. Es lo único que se
+                        reemplaza al actualizar cada semana.
   config.json           Estaciones ocultas para todo el equipo.
+  heladas_comunas.json  Reporte de heladas por comuna.
+
   manifest.webmanifest  Datos de la app instalable.
   sw.js                 Permite usarla sin internet y avisa de versiones nuevas.
   icon-192.png
@@ -13,53 +22,90 @@ ARCHIVOS DEL SITIO (todos en la misma carpeta, sin subcarpetas)
   apple-touch-icon.png  Íconos de la app en el celular.
 
 
-ACTUALIZAR LOS DATOS (lo habitual, una vez por semana)
+ACTUALIZAR LOS DATOS CLIMÁTICOS (lo habitual, una vez por semana)
 
-  1. Entra a la plataforma como Exportadora.
+  Este flujo NO cambió. Sigue siendo el mismo de siempre.
+
+  1. Abre la plataforma y entra a la Plataforma Climática, como Exportadora.
   2. Menú lateral → Actualización de datos.
   3. Arrastra Base_climatica.xlsx y revisa el resumen.
      Si aparecen estaciones "nuevas" o "que ya no aparecen", revisa el Excel:
      casi siempre es un nombre mal escrito.
   4. Presiona "Actualizar plataforma".
   5. Presiona "Descargar datos.json actualizado".
-  6. Reemplaza datos.json dentro de tu carpeta y arrastra la CARPETA COMPLETA a Netlify.
+  6. Reemplaza datos.json en el repositorio de GitHub.
 
-  El index.html no se toca. Quien tenga la app abierta verá el aviso
+  No se toca ningún archivo .html. Quien tenga la app abierta verá el aviso
   "Hay una versión más reciente" y con un toque queda al día.
 
 
 CAMBIAR LAS ESTACIONES VISIBLES
 
-  1. Portada → botón del engranaje → clave: Olmosmmeza
+  1. Plataforma Climática → botón del engranaje → clave: Olmosmmeza
   2. Activa o desactiva estaciones (el cambio se ve al instante en tu equipo).
-  3. Presiona "config.json" para descargarlo y súbelo con la carpeta.
+  3. Presiona "config.json" para descargarlo y súbelo a GitHub.
      Sin ese paso, el cambio queda solo en tu navegador.
+
+
+LA CLAVE DE LA IA (informe de visita)
+
+  La Plataforma de Campo genera el informe de visita con inteligencia
+  artificial. Esa clave ya NO viaja dentro del archivo, porque el repositorio
+  es público y cualquiera podría leerla.
+
+  La primera vez que un técnico use "Generar con IA", la app le va a pedir la
+  clave. Se la entregas tú, la pega una vez y queda guardada en ese teléfono.
+  No hay que volver a ingresarla.
+
+  Si la clave deja de funcionar, la app la borra sola y la vuelve a pedir en
+  el siguiente intento.
 
 
 REVISIÓN RÁPIDA DESPUÉS DE PUBLICAR (2 minutos)
 
   Abre la dirección agregando ?check al final, por ejemplo:
-      https://tusitio.netlify.app/?check
-  La app se revisa sola y muestra cuántas secciones cargaron sin error.
-  Si alguna falla, aparece en rojo con el motivo.
+      https://tusitio.github.io/?check
+  La portada revisa sus indicadores y te dice cuántos cargaron bien.
+
+  Para revisar la Plataforma Climática por dentro:
+      https://tusitio.github.io/clima.html?check
+  Se revisa sola y muestra cuántas secciones cargaron sin error.
 
   Si algo se rompe durante el uso normal, aparece una franja roja abajo
   con el detalle técnico: sácale una foto y envíala.
 
 
-SI ALGÚN DÍA QUIERES QUE FUNCIONE 100% SIN INTERNET
+DÓNDE SE GUARDAN LOS DATOS DE CADA PLATAFORMA
 
-  Las librerías (gráficos, mapas y lectura de Excel) se descargan de cdnjs.
-  Quedan guardadas en el celular después de la primera visita, así que en el
-  campo sin señal la app igual abre. Si quieres independencia total, descarga
-  estos cuatro archivos, ponlos en la carpeta y cambia las cuatro líneas
-  correspondientes del index.html reemplazando la dirección larga por el
-  nombre del archivo:
+  Climática ...... en datos.json, dentro del repositorio. Lo ve todo el equipo.
+  Campo .......... los conteos se sincronizan a Google Sheets con el botón
+                   "Sincronizar con la nube".
+                   Los registros fenológicos, informes y labores viven SOLO en
+                   el teléfono de cada técnico. La única copia es el Backup.
+                   Conviene descargar el Backup seguido.
 
-     chart.umd.min.js      leaflet.min.js      leaflet.min.css      xlsx.full.min.js
+  Ojo con el espacio: las fotos del registro fenológico pesan mucho y el
+  navegador tiene un límite de unos 5 MB. Cuando se llena, la app avisa y
+  guarda el registro sin la foto. Si eso empieza a pasar seguido, hay que
+  mover las fotos fuera del navegador.
 
 
 CLAVES
 
-  Acceso Exportadora ....... Olmos2026
-  Configuración (engranaje)  Olmosmmeza
+  Acceso Exportadora (Climática) .... Olmos2026
+  Configuración (engranaje) ......... Olmosmmeza
+
+  Estas claves están escritas dentro del archivo y el repositorio es público:
+  sirven para ordenar los accesos, no para proteger información.
+
+
+SI ALGÚN DÍA QUIERES QUE FUNCIONE 100% SIN INTERNET
+
+  Las librerías (gráficos, mapas y lectura de Excel) se descargan de cdnjs y
+  unpkg. Quedan guardadas en el celular después de la primera visita, así que
+  en el campo sin señal la app igual abre. Si quieres independencia total,
+  descarga estos archivos, ponlos en la carpeta y cambia las líneas
+  correspondientes reemplazando la dirección larga por el nombre del archivo:
+
+     chart.umd.min.js   leaflet.min.js   leaflet.min.css
+     xlsx.full.min.js   jszip.min.js

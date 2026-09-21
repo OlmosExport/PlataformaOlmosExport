@@ -1,11 +1,15 @@
-/* Service Worker · Plataforma Agroclimática Los Olmos */
-const CACHE = 'olmos-agroclima-v5';
-const CORE = ['./','./index.html','./datos.json','./config.json','./heladas_comunas.json','./manifest.webmanifest',
+/* Service Worker · Plataforma Exportadora Los Olmos */
+const CACHE = 'olmos-plataforma-v6';
+const CORE = ['./','./index.html','./clima.html','./tecnica.html',
+  './datos.json','./config.json','./heladas_comunas.json','./manifest.webmanifest',
   './icon-192.png','./icon-512.png','./apple-touch-icon.png',
   'https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js',
   'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js',
   'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css',
-  'https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js'];
+  'https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js',
+  'https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js',
+  'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js',
+  'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css'];
 
 self.addEventListener('install', e => {
   self.skipWaiting();
@@ -25,7 +29,7 @@ self.addEventListener('message', e => { if (e.data === 'skipWaiting') self.skipW
 function cacheable(url) {
   const u = new URL(url);
   if (u.origin === self.location.origin) return true;
-  return /cdnjs\.cloudflare\.com|fonts\.googleapis\.com|fonts\.gstatic\.com/.test(u.hostname);
+  return /cdnjs\.cloudflare\.com|unpkg\.com|fonts\.googleapis\.com|fonts\.gstatic\.com/.test(u.hostname);
 }
 
 self.addEventListener('fetch', e => {
@@ -33,7 +37,10 @@ self.addEventListener('fetch', e => {
   if (req.method !== 'GET') return;
   const url = new URL(req.url);
 
-  // documento, datos y configuración: primero la red, así llegan las actualizaciones
+  // Las hojas de Google y la IA nunca se guardan en caché: siempre van a la red.
+  if (/script\.google\.com|generativelanguage\.googleapis\.com/.test(url.hostname)) return;
+
+  // Documentos, datos y configuración: primero la red, así llegan las actualizaciones.
   const vivo = req.mode === 'navigate' || req.destination === 'document' ||
                /\/(datos|config|heladas_comunas)\.json$/.test(url.pathname);
   if (vivo) {
