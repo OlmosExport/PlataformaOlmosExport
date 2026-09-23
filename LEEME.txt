@@ -1,6 +1,6 @@
 PLATAFORMA EXPORTADORA LOS OLMOS
 ================================
-Versión 4.4 · Departamento Técnico
+Versión 4.5 · Departamento Técnico
 
 
 QUÉ HAY EN LA CARPETA (todo junto, sin subcarpetas)
@@ -86,6 +86,32 @@ FENOLOGÍA (desde la versión 4.2)
 
   El código es lo que permite graficar el avance y comparar temporadas.
   Los registros anteriores se numeran solos a partir del nombre del estado.
+
+  PONER AL DÍA (tercera opción del menú de Fenología)
+
+  Sirve para arreglar registros ya guardados, por lote. Tiene tres partes:
+
+  1. ASIGNAR ESTACIÓN
+     Agrupa los registros por productor y cuartel, y propone una estación:
+     la usada antes en ese cuartel, la más cercana al GPS del registro, o
+     la de la zona según cuarteles.json. Siempre dice de dónde sacó la
+     sugerencia y a cuántos km está.
+     El botón de arriba acepta todas las sugerencias de una vez; abajo
+     puedes revisar y cambiar cuartel por cuartel.
+     Al asignar, los grados-día se calculan solos.
+
+  2. UNIFICAR NOMBRES
+     Detecta el mismo nombre escrito de dos formas (por ejemplo SANTINA y
+     Santina) y los junta en uno. Sin esto, los gráficos los cuentan como
+     variedades distintas.
+
+  3. PRODUCTORES QUE NO ESTÁN EN LA BASE
+     Marca los que no calzan con cuarteles.json y propone el más parecido.
+     Si no hay coincidencia clara lo dice en vez de adivinar.
+
+  También puedes editar un registro suelto con el lápiz en el historial:
+  ahora incluye la estación y recalcula todo al guardar.
+
 
   LA CURVA DE AVANCE
 

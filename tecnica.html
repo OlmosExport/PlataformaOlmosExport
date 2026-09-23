@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Plataforma de Campo · Exportadora Los Olmos</title>
 <meta name="theme-color" content="#14301C">
-<meta name="app-version" content="4.4">
+<meta name="app-version" content="4.5">
 <link rel="manifest" href="./manifest.webmanifest">
 <link rel="apple-touch-icon" href="./apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -50,6 +50,56 @@ body{font-family:var(--font);background:var(--s100);color:var(--s800);min-height
 .hb-sp:active{background:rgba(255,255,255,.14)}
 .ldot{width:5px;height:5px;background:var(--g400);border-radius:50%;animation:blink 1.4s infinite}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
+
+/* ══ PONER AL DÍA ══ */
+.fh-badge{display:inline-block;background:#C0503C;color:#fff;font-family:var(--mono);font-size:9px;
+  font-weight:700;border-radius:100px;padding:2px 7px;margin-left:5px;vertical-align:2px}
+.fx-prog{background:var(--w);border:1px solid var(--s200);border-radius:var(--r-md);
+  box-shadow:var(--sh-sm);padding:14px 15px;margin-bottom:14px}
+.fx-prog-hd{display:flex;align-items:baseline;justify-content:space-between;gap:8px;margin-bottom:9px}
+.fx-prog-hd span{font-size:11.5px;font-weight:700;color:var(--s600)}
+.fx-prog-hd b{font-size:15px;font-weight:800;color:var(--s800);font-variant-numeric:tabular-nums}
+.fx-prog-bar{height:7px;border-radius:4px;background:var(--s200);overflow:hidden}
+.fx-prog-bar>div{height:100%;border-radius:4px;transition:width .45s var(--ease,ease)}
+.fx-prog-s{font-size:10.5px;color:var(--s500);margin-top:9px;line-height:1.5}
+.fx-warn{background:#FBF1DE;border:1px solid #F0DCB0;color:#7A5A16;border-radius:var(--r-md);
+  padding:11px 14px;font-size:11.5px;line-height:1.5;margin-bottom:14px}
+.fx-sec{font-size:10.5px;font-weight:800;color:var(--s600);text-transform:uppercase;
+  letter-spacing:.07em;margin:20px 0 9px;display:flex;align-items:center;gap:10px}
+.fx-sec::after{content:'';flex:1;height:1px;background:var(--s200)}
+.fx-nota{font-size:10.5px;color:var(--s500);line-height:1.5;margin-bottom:10px}
+.fx-bulk{width:100%;display:block;text-align:left;background:var(--g800);color:#fff;border:none;
+  border-radius:var(--r-md);padding:13px 15px;margin-bottom:12px;cursor:pointer;font-family:var(--font)}
+.fx-bulk:active{background:var(--g900)}
+.fx-bulk b{display:block;font-size:13.5px;font-weight:800}
+.fx-bulk span{display:block;font-size:10.5px;color:rgba(255,255,255,.62);margin-top:3px;line-height:1.4}
+.fx-card{background:var(--w);border:1px solid var(--s200);border-radius:var(--r-md);
+  box-shadow:var(--sh-sm);padding:13px 14px;margin-bottom:9px}
+.fx-card-t{font-size:13px;font-weight:800;color:var(--s800);letter-spacing:-.01em}
+.fx-card-t em{font-style:normal;font-family:var(--mono);font-size:9.5px;color:var(--s400);
+  font-weight:500;margin-left:5px}
+.fx-card-s{font-size:10.5px;color:var(--s500);margin-top:3px;line-height:1.45}
+.fx-sug{font-size:11px;color:var(--g700);margin-top:8px;line-height:1.45}
+.fx-sug b{font-weight:800}
+.fx-sug em{font-style:normal;font-family:var(--mono);font-size:9.5px;color:var(--s400)}
+.fx-sug.apagado{color:var(--s400)}
+.fx-row{display:flex;gap:6px;margin-top:10px}
+.fx-sel{flex:1;min-width:0;font-family:var(--font);font-size:12px;font-weight:600;color:var(--s800);
+  border:1px solid var(--s200);border-radius:9px;padding:8px 9px;background:var(--s50)}
+.fx-btn{flex-shrink:0;font-family:var(--font);font-size:11.5px;font-weight:700;padding:8px 14px;
+  border-radius:9px;border:1px solid var(--g700);background:var(--g700);color:#fff;cursor:pointer}
+.fx-btn:active{background:var(--g900);border-color:var(--g900)}
+.fx-formas{display:flex;align-items:center;flex-wrap:wrap;gap:6px;margin-top:8px}
+.fx-forma{background:var(--s100);border-radius:7px;padding:4px 9px;font-size:11.5px;
+  font-weight:700;color:var(--s700)}
+.fx-forma em{font-style:normal;font-family:var(--mono);font-size:9px;color:var(--s400);margin-left:3px}
+.fx-vs{font-size:10px;color:var(--s400);font-weight:600}
+.fx-listos{background:var(--g50);border:1px solid var(--g100);border-radius:var(--r-md);padding:10px 13px}
+.fx-listo{font-size:10.5px;color:var(--s600);padding:5px 0;border-bottom:1px solid var(--g100);
+  display:flex;justify-content:space-between;gap:10px;line-height:1.4}
+.fx-listo:last-child{border-bottom:none}
+.fx-listo b{color:var(--s800)}
+.fx-listo span{font-family:var(--mono);font-size:9.5px;color:var(--g700);text-align:right;flex-shrink:0}
 
 /* ══ FENOLOGÍA: menú, estación y vista histórica ══ */
 .fh-sig{display:inline-block;font-family:var(--mono);font-size:8.5px;font-weight:700;
@@ -1054,10 +1104,27 @@ body.drawer-open{overflow:hidden}
         </div>
         <svg class="fh-opt-ar" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><polyline points="9 18 15 12 9 6"/></svg>
       </div>
+      <div class="fh-opt" onclick="abrirPonerAlDia()">
+        <div class="fh-opt-ico" style="background:#FBF1DE;color:#B8791F"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.1 2.1 0 013 3L12 15l-4 1 1-4z"/></svg></div>
+        <div class="fh-opt-tx">
+          <div class="fh-opt-t">Poner al día <span id="fh-fix-badge" class="fh-badge" style="display:none"></span></div>
+          <div class="fh-opt-s">Asignar la estación a registros antiguos, unificar nombres y corregir datos mal puestos</div>
+        </div>
+        <svg class="fh-opt-ar" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><polyline points="9 18 15 12 9 6"/></svg>
+      </div>
       <div class="sel-card" style="cursor:pointer;margin-top:12px" onclick="toggleFenoGuide2()">
         <div class="sel-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg></div>
         <div class="sel-content"><div class="sel-sublabel">Guía de referencia</div><div style="font-size:13px;font-weight:700;color:var(--g800)">Ver ficha de estados fenológicos</div></div>
       </div>
+    </div>
+
+    <!-- FENOLOGÍA · PONER AL DÍA -->
+    <div class="view" id="view-feno-fix">
+      <div class="sec-hdr">
+        <div class="sec-back" onclick="openSec('feno')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg></div>
+        <div><div class="sec-hdr-title">Poner al día</div><div class="sec-hdr-sub">Corregir registros ya guardados</div></div>
+      </div>
+      <div id="fx-body"></div>
     </div>
 
     <!-- FENOLOGÍA · HISTÓRICA -->
@@ -1496,6 +1563,22 @@ function prepararFotos(){
       })
       .catch(function(){});
   }
+  /* Relleno único: los registros anteriores a la 4.3 no traen código de
+     estado, temporada ni semana. Se completan a partir de lo que ya
+     tienen, sin tocar nada más. Los grados-día quedan para cuando
+     tengan estación. */
+  var faltan=fenologicos.filter(function(r){return r.cod==null||!r.temp||!r.sem;});
+  if(faltan.length){
+    faltan.forEach(function(r){
+      var f=String(r.fecha||'').slice(0,10);
+      if(r.cod==null)r.cod=fenoCod(r.estado);
+      if(!r.sigla)r.sigla=fenoSigla(r.estado);
+      if(f){ if(!r.temp)r.temp=temporadaTxt(f); if(!r.sem)r.sem=fenoWeekNum(f); }
+    });
+    guardarFeno();
+    console.log('Código y temporada completados en',faltan.length,'registros');
+  }
+
   return mover.then(fotosTodas).then(function(mapa){
     fenologicos.forEach(function(r){
       var f=mapa[String(r.id)];
@@ -2216,6 +2299,14 @@ function codDeReg(r){
 function renderFenoHubResumen(){
   var el=document.getElementById('fh-hub-resumen');
   if(!el)return;
+  /* aviso de lo que falta corregir */
+  cargarClima().then(function(){
+    var b=document.getElementById('fh-fix-badge');
+    if(!b)return;
+    var n=fenologicos.filter(function(r){return !r.est;}).length;
+    if(n){ b.textContent=n; b.style.display='inline-block'; }
+    else { b.style.display='none'; }
+  }).catch(function(){});
   var hoy=hoyISOfeno(), ini=inicioTemporada(hoy);
   var temp=fenologicos.filter(function(r){return r.fecha&&String(r.fecha).slice(0,10)>=ini;});
   var ctel={}, vari={};
@@ -2246,6 +2337,329 @@ function filaFenoExtra(r){
   return {'Estacion':r.est||'','Origen Estacion':r.estSrc||'',
     'GDD Base 10':r.gdd10!=null?r.gdd10:'','GDD Base 4,5':r.gdd45!=null?r.gdd45:'',
     'GDD Desde':r.gddDesde||'','GDD Dias':r.gddDias!=null?r.gddDias:''};
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   PONER AL DÍA
+   Corrige registros ya guardados: les asigna la estación climática,
+   unifica nombres escritos de varias formas y detecta productores que
+   no calzan con la base de cuarteles. Todo por lote, para no tener que
+   editar de a uno.
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* Recalcula lo derivado de un registro: código de estado, temporada,
+   semana y grados-día. Se usa cada vez que se edita algo. */
+function recalcularRegistro(rec){
+  if(!rec)return rec;
+  var f=String(rec.fecha||'').slice(0,10);
+  rec.cod=fenoCod(rec.estado);
+  rec.sigla=fenoSigla(rec.estado);
+  if(f){ rec.temp=temporadaTxt(f); rec.sem=fenoWeekNum(f); }
+  if(rec.est&&CLIMA&&f){
+    var desde=inicioTemporada(f);
+    var a10=gddAcum(rec.est,desde,f,10), a45=gddAcum(rec.est,desde,f,4.5);
+    rec.gdd10=a10?a10.gdd:null;
+    rec.gdd45=a45?a45.gdd:null;
+    rec.gddDesde=desde;
+    rec.gddDias=a10?a10.dias:(a45?a45.dias:null);
+  }else{
+    rec.gdd10=null;rec.gdd45=null;rec.gddDesde=null;rec.gddDias=null;
+  }
+  return rec;
+}
+
+function normTxt(s){
+  return String(s==null?'':s).toLowerCase()
+    .normalize('NFD').replace(/[̀-ͯ]/g,'')
+    .replace(/[^a-z0-9]/g,'');
+}
+
+/* ── Análisis: qué hay que arreglar ── */
+function analizarRegistros(){
+  var grupos={}, variantes={}, prodsBase={}, prodFuera={};
+  cuartelesDB.forEach(function(c){ prodsBase[normTxt(c.R_Social)]=c.R_Social; });
+
+  fenologicos.forEach(function(r){
+    var k=(r.prod||'Sin productor')+'\u0000'+(r.ctel||'S/C');
+    var g=grupos[k]||(grupos[k]={prod:r.prod||'Sin productor',ctel:r.ctel||'S/C',
+                                 regs:[],varis:{},conEst:0,gps:null});
+    g.regs.push(r);
+    if(r.vari)g.varis[r.vari]=1;
+    if(r.est)g.conEst++;
+    if(!g.gps&&r.gps&&r.gps.lat!=null)g.gps=r.gps;
+
+    ['vari','prod','ctel'].forEach(function(campo){
+      var v=r[campo]; if(!v)return;
+      var n=campo+'|'+normTxt(v);
+      (variantes[n]=variantes[n]||{campo:campo,formas:{},n:0});
+      variantes[n].formas[v]=(variantes[n].formas[v]||0)+1;
+      variantes[n].n++;
+    });
+
+    if(r.prod&&cuartelesDB.length&&!prodsBase[normTxt(r.prod)]){
+      var pf=prodFuera[r.prod]||(prodFuera[r.prod]={prod:r.prod,n:0,sug:''});
+      pf.n++;
+    }
+  });
+
+  /* propuesta de estación para cada grupo */
+  Object.keys(grupos).forEach(function(k){
+    var g=grupos[k];
+    g.pend=g.regs.length-g.conEst;
+    g.sug=''; g.sugOrigen='';
+    var rec=estacionRecordada(g.prod,g.ctel);
+    if(rec&&CLIMA&&CLIMA.estaciones.indexOf(rec)>=0){ g.sug=rec; g.sugOrigen='cuartel'; return; }
+    if(g.gps&&CLIMA){
+      var c=estacionCercana(g.gps.lat,g.gps.lng);
+      if(c){ g.sug=c.est; g.sugOrigen='gps'; g.km=c.km; return; }
+    }
+    var z=estacionPorZona(g.prod,g.ctel);
+    if(z&&CLIMA&&CLIMA.estaciones.indexOf(z)>=0){ g.sug=z; g.sugOrigen='zona'; }
+  });
+
+  /* nombres escritos de más de una forma */
+  var vars=[];
+  Object.keys(variantes).forEach(function(n){
+    var v=variantes[n], formas=Object.keys(v.formas);
+    if(formas.length<2)return;
+    formas.sort(function(a,b){
+      var d=v.formas[b]-v.formas[a];
+      if(d)return d;
+      return b.length-a.length;
+    });
+    vars.push({campo:v.campo,formas:formas,conteos:v.formas,sugerida:formas[0]});
+  });
+
+  /* productores que no están en la base, con su candidato más parecido */
+  var fuera=Object.keys(prodFuera).map(function(p){
+    var o=prodFuera[p], np=normTxt(p), mejor='', mp=0;
+    Object.keys(prodsBase).forEach(function(nb){
+      var s=similitud(np,nb);
+      if(s>mp){mp=s;mejor=prodsBase[nb];}
+    });
+    o.sug=(mp>=0.55)?mejor:'';
+    o.score=mp;
+    return o;
+  });
+
+  var lista=Object.keys(grupos).map(function(k){return grupos[k];})
+    .sort(function(a,b){ return (b.pend-a.pend)||(a.prod<b.prod?-1:1); });
+
+  return {grupos:lista, variantes:vars, prodFuera:fuera,
+          total:fenologicos.length,
+          sinEst:fenologicos.filter(function(r){return !r.est;}).length};
+}
+
+/* Parecido entre dos textos (bigramas). Sirve para proponer el
+   productor correcto cuando está mal escrito. */
+function similitud(a,b){
+  if(!a||!b)return 0;
+  if(a===b)return 1;
+  var bg=function(s){var o={};for(var i=0;i<s.length-1;i++)o[s.substr(i,2)]=1;return o;};
+  var A=bg(a),B=bg(b),inter=0,ka=Object.keys(A),kb=Object.keys(B);
+  ka.forEach(function(k){if(B[k])inter++;});
+  return (2*inter)/((ka.length+kb.length)||1);
+}
+
+/* ── Pantalla ── */
+function abrirPonerAlDia(){
+  showV('feno-fix');
+  setHdr('Poner al día','CORREGIR REGISTROS');
+  document.getElementById('bnav').style.display='none';
+  cargarClima().then(renderFix).catch(renderFix);
+}
+
+function renderFix(){
+  var el=document.getElementById('fx-body');
+  if(!el)return;
+  if(!fenologicos.length){
+    el.innerHTML='<div class="fh-vacio">Todavía no hay registros fenológicos que corregir.</div>';
+    return;
+  }
+  var a=analizarRegistros();
+  var completos=a.total-a.sinEst;
+  var pct=a.total?Math.round(completos/a.total*100):0;
+  var conSug=a.grupos.filter(function(g){return g.pend>0&&g.sug;});
+  var sinSug=a.grupos.filter(function(g){return g.pend>0&&!g.sug;});
+  var listos=a.grupos.filter(function(g){return g.pend===0;});
+
+  var h='';
+  /* avance */
+  h+='<div class="fx-prog">'+
+       '<div class="fx-prog-hd"><span>Registros con estación</span><b>'+completos+' de '+a.total+'</b></div>'+
+       '<div class="fx-prog-bar"><div style="width:'+Math.max(2,pct)+'%;background:'+
+         (pct>=100?'#4F9E68':pct>=50?'#E0A73C':'#C0503C')+'"></div></div>'+
+       (a.sinEst?'<div class="fx-prog-s">Sin estación no se calculan los grados-día de esos registros.</div>'
+                :'<div class="fx-prog-s" style="color:var(--g700)">Todos los registros tienen estación asignada.</div>')+
+     '</div>';
+
+  if(!CLIMA){
+    h+='<div class="fx-warn">No se pudieron leer los datos climáticos, así que no hay sugerencias ni cálculo de grados-día. Puedes igual corregir nombres.</div>';
+  }
+
+  /* 1 · estación */
+  if(conSug.length||sinSug.length){
+    h+='<div class="fx-sec">1 · Asignar estación</div>';
+    if(conSug.length){
+      var nRegs=conSug.reduce(function(s,g){return s+g.pend;},0);
+      h+='<button class="fx-bulk" onclick="fixAplicarSugeridas()">'+
+           '<b>Aceptar las '+conSug.length+' sugerencias</b>'+
+           '<span>'+nRegs+' registro'+(nRegs===1?'':'s')+' · puedes revisar uno por uno más abajo</span>'+
+         '</button>';
+    }
+    conSug.concat(sinSug).forEach(function(g,i){ h+=fixGrupoHTML(g,i); });
+  }
+
+  /* 2 · nombres */
+  if(a.variantes.length){
+    h+='<div class="fx-sec">2 · Unificar nombres</div>'+
+       '<div class="fx-nota">El mismo nombre escrito de dos formas se cuenta como dos cosas distintas en los gráficos y filtros.</div>';
+    a.variantes.forEach(function(v,i){
+      var lbl={vari:'Variedad',prod:'Razón social',ctel:'Cuartel'}[v.campo];
+      h+='<div class="fx-card">'+
+        '<div class="fx-card-t">'+lbl+'</div>'+
+        '<div class="fx-formas">'+v.formas.map(function(f){
+          return '<span class="fx-forma">'+f+' <em>'+v.conteos[f]+'</em></span>';
+        }).join('<span class="fx-vs">y</span>')+'</div>'+
+        '<div class="fx-row">'+
+          '<select class="fx-sel" id="fx-uni-'+i+'">'+v.formas.map(function(f){
+            return '<option value="'+f.replace(/"/g,'&quot;')+'">'+f+'</option>';
+          }).join('')+'</select>'+
+          '<button class="fx-btn" onclick="fixUnificar(\''+v.campo+'\','+i+','+
+            JSON.stringify(v.formas).replace(/"/g,'&quot;')+')">Unificar</button>'+
+        '</div></div>';
+    });
+  }
+
+  /* 3 · productores fuera de la base */
+  if(a.prodFuera.length){
+    h+='<div class="fx-sec">3 · Productores que no están en la base</div>'+
+       '<div class="fx-nota">Escritos distinto a como figuran en cuarteles.json, o puestos por error. Corregirlos permite deducir la zona del cuartel.</div>';
+    a.prodFuera.forEach(function(p,i){
+      h+='<div class="fx-card">'+
+        '<div class="fx-card-t">'+p.prod+' <em>'+p.n+' registro'+(p.n===1?'':'s')+'</em></div>'+
+        (p.sug?'<div class="fx-sug">Se parece a <b>'+p.sug+'</b></div>'
+              :'<div class="fx-sug apagado">Sin coincidencia clara en la base</div>')+
+        '<div class="fx-row">'+
+          '<select class="fx-sel" id="fx-prod-'+i+'">'+
+            '<option value="">— dejar como está —</option>'+
+            (p.sug?'<option value="'+p.sug.replace(/"/g,'&quot;')+'" selected>'+p.sug+'</option>':'')+
+            cuartelesDB.map(function(c){return c.R_Social;})
+              .filter(function(v,k,arr){return arr.indexOf(v)===k&&v!==p.sug;}).sort()
+              .map(function(v){return '<option value="'+v.replace(/"/g,'&quot;')+'">'+v+'</option>';}).join('')+
+          '</select>'+
+          '<button class="fx-btn" onclick="fixRenombrarProd('+JSON.stringify(p.prod).replace(/"/g,'&quot;')+','+i+')">Cambiar</button>'+
+        '</div></div>';
+    });
+  }
+
+  /* ya listos */
+  if(listos.length){
+    h+='<div class="fx-sec">Ya están listos ('+listos.length+')</div>';
+    h+='<div class="fx-listos">'+listos.map(function(g){
+      return '<div class="fx-listo"><b>'+g.ctel+'</b> · '+g.prod+
+        '<span>'+(g.regs[0].est||'')+'</span></div>';
+    }).join('')+'</div>';
+  }
+
+  el.innerHTML=h;
+}
+
+function fixGrupoHTML(g,i){
+  var varis=Object.keys(g.varis).join(', ')||'—';
+  var origen={gps:'por GPS del registro',cuartel:'usada antes en este cuartel',zona:'por la zona del cuartel'}[g.sugOrigen]||'';
+  var km=(g.sugOrigen==='gps'&&g.km!=null)?(' · a '+g.km.toFixed(1)+' km'):'';
+  return '<div class="fx-card">'+
+    '<div class="fx-card-t">Cuartel '+g.ctel+' <em>'+g.pend+' sin estación</em></div>'+
+    '<div class="fx-card-s">'+g.prod+' · '+varis+'</div>'+
+    (g.sug?'<div class="fx-sug">Sugerida: <b>'+g.sug+'</b> <em>'+origen+km+'</em></div>'
+          :'<div class="fx-sug apagado">Sin GPS ni zona conocida — elígela tú</div>')+
+    '<div class="fx-row">'+
+      '<select class="fx-sel" id="fx-est-'+i+'">'+
+        '<option value="">— elegir estación —</option>'+
+        ((CLIMA&&CLIMA.estaciones)||[]).map(function(e){
+          return '<option value="'+e.replace(/"/g,'&quot;')+'"'+(e===g.sug?' selected':'')+'>'+e+'</option>';
+        }).join('')+
+      '</select>'+
+      '<button class="fx-btn" onclick="fixAplicarGrupo('+JSON.stringify(g.prod).replace(/"/g,'&quot;')+','+
+        JSON.stringify(g.ctel).replace(/"/g,'&quot;')+','+i+')">Aplicar</button>'+
+    '</div></div>';
+}
+
+/* ── Acciones ── */
+function fixGuardar(msg,n){
+  fenologicos.forEach(function(r){ if(r._tocado){ recalcularRegistro(r); delete r._tocado; } });
+  if(!guardarFeno()){
+    alert('No se pudo guardar: el almacenamiento del navegador está lleno.\n\nDescarga un Backup y usa Respaldo · Liberar espacio.');
+    return;
+  }
+  showT(msg);
+  _estCache={};
+  popFenoFilterSelect();
+  renderFix();
+  renderHubSummary();
+}
+
+function fixAplicarGrupo(prod,ctel,i){
+  var sel=document.getElementById('fx-est-'+i);
+  var est=sel?sel.value:'';
+  if(!est){showT('Elige una estación primero');return;}
+  var n=0;
+  fenologicos.forEach(function(r){
+    if((r.prod||'Sin productor')===prod&&(r.ctel||'S/C')===ctel){
+      r.est=est; r.estSrc='corregido'; r._tocado=1; n++;
+    }
+  });
+  recordarEstacion(prod,ctel,est);
+  fixGuardar(n+' registro'+(n===1?'':'s')+' con estación '+est,n);
+}
+
+function fixAplicarSugeridas(){
+  var a=analizarRegistros();
+  var conSug=a.grupos.filter(function(g){return g.pend>0&&g.sug;});
+  if(!conSug.length){showT('No hay sugerencias que aplicar');return;}
+  var nR=conSug.reduce(function(s,g){return s+g.pend;},0);
+  if(!confirm('Se va a asignar la estación sugerida a '+nR+' registro'+(nR===1?'':'s')+
+              ', en '+conSug.length+' cuartel'+(conSug.length===1?'':'es')+'.\n\n'+
+              'Puedes cambiar cualquiera después, uno por uno.\n\n¿Continuar?'))return;
+  var n=0;
+  conSug.forEach(function(g){
+    fenologicos.forEach(function(r){
+      if((r.prod||'Sin productor')===g.prod&&(r.ctel||'S/C')===g.ctel&&!r.est){
+        r.est=g.sug; r.estSrc='sugerido'; r._tocado=1; n++;
+      }
+    });
+    recordarEstacion(g.prod,g.ctel,g.sug);
+  });
+  fixGuardar(n+' registro'+(n===1?'':'s')+' actualizado'+(n===1?'':'s'),n);
+}
+
+function fixUnificar(campo,i,formas){
+  var sel=document.getElementById('fx-uni-'+i);
+  var destino=sel?sel.value:'';
+  if(!destino){showT('Elige con cuál quedarte');return;}
+  var n=0;
+  fenologicos.forEach(function(r){
+    if(formas.indexOf(r[campo])>=0&&r[campo]!==destino){ r[campo]=destino; r._tocado=1; n++; }
+  });
+  if(!n){showT('Ya estaban todos igual');return;}
+  fixGuardar(n+' registro'+(n===1?'':'s')+' unificado'+(n===1?'':'s')+' a "'+destino+'"',n);
+}
+
+function fixRenombrarProd(viejo,i){
+  var sel=document.getElementById('fx-prod-'+i);
+  var nuevo=sel?sel.value:'';
+  if(!nuevo){showT('Elige la razón social correcta');return;}
+  var n=0;
+  fenologicos.forEach(function(r){ if(r.prod===viejo){ r.prod=nuevo; r._tocado=1; n++; } });
+  fixGuardar(n+' registro'+(n===1?'':'s')+' pasado a "'+nuevo+'"',n);
+}
+
+/* Cuenta lo pendiente, para el aviso del menú de Fenología. */
+function fixPendientes(){
+  var sinEst=fenologicos.filter(function(r){return !r.est;}).length;
+  var a=(cuartelesDB.length||fenologicos.length)?analizarRegistros():{variantes:[],prodFuera:[]};
+  return sinEst+a.variantes.length+a.prodFuera.length;
 }
 
 var gps = null;
@@ -3585,7 +3999,7 @@ function renderFenoCurve(){
   wrap.innerHTML=html;
 }
 var feEditingId=null;
-function feEdit(id){feEditingId=id;renderFenoList();}
+function feEdit(id){feEditingId=id;cargarClima().then(renderFenoList).catch(renderFenoList);}
 function feEditCancel(){feEditingId=null;renderFenoList();}
 function feEditSave(id){
   var rec=fenologicos.find(function(r){return r.id===id;});
@@ -3599,6 +4013,14 @@ function feEditSave(id){
   var fechaVal=g('fee-fecha-'+id);
   if(fechaVal)rec.fecha=fechaVal;
   rec.notas=g('fee-notas-'+id);
+  var estEl2=document.getElementById('fee-est-'+id);
+  if(estEl2){
+    rec.est=estEl2.value||null;
+    rec.estSrc=rec.est?'editado':null;
+    if(rec.est)recordarEstacion(rec.prod,rec.ctel,rec.est);
+  }
+  recalcularRegistro(rec);
+  _estCache={};
   feEditingId=null;
   if(!guardarFeno()){
     alert('No se pudo guardar el cambio: el almacenamiento del navegador está lleno.\n\nDescarga un Backup y usa Respaldo · Liberar espacio.');
@@ -3632,6 +4054,12 @@ function renderFenoList(){
         '</div>'+
         '<select class="fe-edit-field" id="fee-estado-'+r.id+'">'+estOpts+'</select>'+
         '<input class="fe-edit-field" id="fee-fecha-'+r.id+'" type="date" value="'+r.fecha+'">'+
+        '<select class="fe-edit-field" id="fee-est-'+r.id+'">'+
+          '<option value="">— sin estación —</option>'+
+          ((CLIMA&&CLIMA.estaciones)||(r.est?[r.est]:[])).map(function(e){
+            return '<option value="'+e.replace(/"/g,'&quot;')+'"'+(e===r.est?' selected':'')+'>'+e+'</option>';
+          }).join('')+
+        '</select>'+
         '<textarea class="fe-edit-field" id="fee-notas-'+r.id+'" placeholder="Notas" style="min-height:44px">'+(r.notas||'')+'</textarea>'+
         '<div style="display:flex;gap:6px;margin-top:2px">'+
           '<button onclick="feEditSave('+r.id+')" style="flex:1;padding:7px;border:none;border-radius:7px;background:var(--g600);color:#fff;font-size:11.5px;font-weight:700;cursor:pointer">✓ Guardar cambios</button>'+
