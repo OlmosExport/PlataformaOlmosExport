@@ -1,5 +1,5 @@
 /* Service Worker · Plataforma Exportadora Los Olmos */
-const CACHE = 'olmos-plataforma-v9';
+const CACHE = 'olmos-plataforma-v10';
 const CORE = ['./','./index.html','./clima.html','./tecnica.html',
   './datos.json','./config.json','./heladas_comunas.json','./cuarteles.json','./manifest.webmanifest',
   './icon-192.png','./icon-512.png','./apple-touch-icon.png',

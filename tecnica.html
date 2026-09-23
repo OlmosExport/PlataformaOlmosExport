@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Plataforma de Campo · Exportadora Los Olmos</title>
 <meta name="theme-color" content="#14301C">
-<meta name="app-version" content="4.3">
+<meta name="app-version" content="4.4">
 <link rel="manifest" href="./manifest.webmanifest">
 <link rel="apple-touch-icon" href="./apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -1797,6 +1797,29 @@ function prepararEstacion(){
   });
 }
 
+/* ── Fotos en el DOM ──
+   Pegar la foto como data:URI mete ~360 KB de texto por imagen dentro
+   del HTML. Con 14 fotos eso son 9 MB que el navegador rearma en cada
+   filtro, y en el teléfono se congela. Se convierte una sola vez a una
+   URL de blob (unos 45 caracteres) y se reutiliza. */
+var _fotoURL={};
+function fotoSrc(r){
+  if(!r||!r.foto)return '';
+  if(_fotoURL[r.id])return _fotoURL[r.id];
+  try{
+    var i=r.foto.indexOf(','); if(i<0)return r.foto;
+    var cab=r.foto.slice(0,i), b64=r.foto.slice(i+1);
+    var tipo=(cab.match(/data:([^;]+)/)||[,'image/jpeg'])[1];
+    var bin=atob(b64), n=bin.length, buf=new Uint8Array(n);
+    for(var k=0;k<n;k++)buf[k]=bin.charCodeAt(k);
+    _fotoURL[r.id]=URL.createObjectURL(new Blob([buf],{type:tipo}));
+    return _fotoURL[r.id];
+  }catch(e){ return r.foto; }
+}
+function soltarFotoURL(id){
+  if(_fotoURL[id]){ try{URL.revokeObjectURL(_fotoURL[id]);}catch(e){} delete _fotoURL[id]; }
+}
+
 /* Estación de un registro. Los registros anteriores a esta versión no
    la traen guardada, pero muchos sí tienen GPS: en ese caso se deduce
    la más cercana al vuelo, sin tocar el registro guardado. */
@@ -3416,6 +3439,7 @@ function delFeno(id){
   if(!confirm('¿Eliminar este registro fenológico?'))return;
   fenologicos=fenologicos.filter(function(r){return r.id!==id;});
   guardarFeno();
+  soltarFotoURL(id);
   fotoBorrar(id).then(actualizarEspacio);
   popFenoFilterSelect();
   renderFenoList();
@@ -3468,6 +3492,10 @@ function onFenoFilterChange(){
   matching.forEach(function(r){groupKeys[fenoKey(r)]=1;});
   var nGroups=Object.keys(groupKeys).length;
   fenoFilterKey=(nGroups===1)?Object.keys(groupKeys)[0]:'';
+  /* si estamos en Fenología Histórica hay que rehacer la vista completa:
+     indicadores, curvas y avance por cuartel, no solo la galería */
+  var vh=document.getElementById('view-feno-hist');
+  if(vh&&vh.classList.contains('active')){ renderHist(); return; }
   renderFenoVariedadGallery();
   renderFenoCalendar();
   renderFenoCurve();
@@ -3515,7 +3543,7 @@ function renderFenoVariedadGallery(){
     var cardsHtml=items.map(function(r){
       var idx=FENO_ESTADOS.indexOf(r.estado);
       var pos=idx>=0?(idx/(n-1)*100):50;
-      var photo=r.foto?'<img class="fv-card-photo" src="'+r.foto+'">':'<div class="fv-card-photo-ph"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg></div>';
+      var photo=r.foto?'<img class="fv-card-photo" loading="lazy" src="'+fotoSrc(r)+'">':'<div class="fv-card-photo-ph"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg></div>';
       return '<div class="fv-card" onclick="showFenoDetail('+r.id+')">'+photo+
         '<div class="fv-card-body">'+
           '<div class="fv-card-ctel">'+(r.ctel||'S/C')+'</div>'+
@@ -3592,7 +3620,7 @@ function renderFenoList(){
     return;
   }
   el.innerHTML=fenologicos.map(function(r){
-    var foto=r.foto?'<img src="'+r.foto+'" style="width:52px;height:52px;object-fit:cover;border-radius:8px;flex-shrink:0">':'<div style="width:52px;height:52px;border-radius:8px;background:var(--s100);display:flex;align-items:center;justify-content:center;flex-shrink:0;color:var(--s400)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg></div>';
+    var foto=r.foto?'<img loading="lazy" src="'+fotoSrc(r)+'" style="width:52px;height:52px;object-fit:cover;border-radius:8px;flex-shrink:0">':'<div style="width:52px;height:52px;border-radius:8px;background:var(--s100);display:flex;align-items:center;justify-content:center;flex-shrink:0;color:var(--s400)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg></div>';
     var gpsTxt=r.gps?r.gps.lat.toFixed(4)+', '+r.gps.lng.toFixed(4):'Sin GPS';
     if(feEditingId===r.id){
       var estOpts=FENO_ESTADOS.map(function(e){return '<option value="'+e+'"'+(e===r.estado?' selected':'')+'>'+e+'</option>';}).join('');
@@ -3708,7 +3736,7 @@ function showFenoDetail(id){
   var body=document.getElementById('feno-modal-body');
   if(!modal||!body)return;
   body.innerHTML=
-    (r.foto?'<img src="'+r.foto+'" style="width:100%;border-radius:12px;margin-bottom:12px;display:block">':'')+
+    (r.foto?'<img src="'+fotoSrc(r)+'" style="width:100%;border-radius:12px;margin-bottom:12px;display:block">':'')+
     '<div style="display:inline-block;background:'+fenoEstadoColor(r.estado)+';color:#1E5B33;font-size:11px;font-weight:800;padding:5px 11px;border-radius:20px;margin-bottom:8px">'+r.estado+'</div>'+
     '<div style="font-size:15px;font-weight:800;color:var(--g800)">'+(r.ctel||'S/C')+' · '+(r.vari||'—')+'</div>'+
     '<div style="font-size:12px;color:var(--s500);margin-bottom:8px">'+(r.prod||'')+'</div>'+
@@ -4205,7 +4233,7 @@ function liberarEspacio(){
   if(!confirm('Se van a borrar '+conFoto.length+' foto'+(conFoto.length===1?'':'s')+' de este dispositivo.\n\nLos registros fenológicos NO se tocan: quedan todos, solo sin su foto.\n\n⚠️ Si no descargaste el Backup, esas fotos se pierden para siempre.\n\n¿Descargaste el Backup?'))return;
   if(!confirm('Última confirmación: ¿borrar las '+conFoto.length+' fotos?'))return;
   Promise.all(conFoto.map(function(r){return fotoBorrar(r.id);})).then(function(){
-    conFoto.forEach(function(r){r.foto=null;r.hasFoto=false;});
+    conFoto.forEach(function(r){soltarFotoURL(r.id);r.foto=null;r.hasFoto=false;});
     guardarFeno();
     renderFenoList();renderFenoVariedadGallery();renderFenoCalendar();renderHubSummary();
     actualizarEspacio();
