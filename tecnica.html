@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Plataforma de Campo · Exportadora Los Olmos</title>
 <meta name="theme-color" content="#14301C">
-<meta name="app-version" content="4.0">
+<meta name="app-version" content="4.1">
 <link rel="manifest" href="./manifest.webmanifest">
 <link rel="apple-touch-icon" href="./apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -641,7 +641,20 @@ body.drawer-open{overflow:hidden}
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:5px;vertical-align:middle"><path d="M22 12A10 10 0 014 12M2 12l4-4M2 12l4 4"/></svg>Sincronizar con Nube
           </button>
         </div>
-        <div style="font-size:10px;color:var(--s400);margin-top:6px">Los datos se guardan automáticamente en el navegador. Usa Backup para transferir entre dispositivos. Sincroniza para respaldar en Google Sheets.</div>
+        <div id="espacio-box" style="margin-top:9px;padding:9px 11px;border-radius:9px;background:var(--s50);border:1px solid var(--s200)">
+          <div style="display:flex;justify-content:space-between;align-items:baseline;gap:8px">
+            <span style="font-size:10.5px;font-weight:700;color:var(--s600)">Espacio usado</span>
+            <span id="espacio-txt" style="font-family:var(--mono);font-size:10px;color:var(--s500)">calculando…</span>
+          </div>
+          <div style="height:5px;border-radius:3px;background:var(--s200);margin-top:6px;overflow:hidden">
+            <div id="espacio-bar" style="height:100%;width:0%;background:var(--g500);border-radius:3px;transition:width .4s"></div>
+          </div>
+          <div id="espacio-sub" style="font-size:9.5px;color:var(--s400);margin-top:5px;line-height:1.45"></div>
+        </div>
+        <button class="bak-btn" id="btn-liberar" onclick="liberarEspacio()" style="width:100%;margin-top:6px;display:none;background:#FBF1DE;border-color:#E0A73C;color:#7A5A16">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:5px;vertical-align:middle"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg>Liberar espacio (soltar fotos)
+        </button>
+        <div style="font-size:10px;color:var(--s400);margin-top:6px">Los datos se guardan en este dispositivo. Descargar el Backup te da una copia, pero <b>no libera espacio</b>. Sincroniza para respaldar los conteos en Google Sheets.</div>
       </div>
     </div>
 
@@ -1193,6 +1206,111 @@ try{informes=JSON.parse(localStorage.getItem('olo4_inf')||'[]');}catch(e){inform
 try{labores=JSON.parse(localStorage.getItem('olo4_lab')||'[]');}catch(e){labores=[];}
 try{fenologicos=JSON.parse(localStorage.getItem('olo4_feno')||'[]');}catch(e){fenologicos=[];}
 var feGPS=null, fePhoto=null;
+
+/* ═══════════════════════════════════════════════════════════════════
+   FOTOS EN INDEXEDDB
+   Las fotos ya no viven en localStorage. Ese almacén tiene un tope de
+   unos 5 MB y con 14 fotos quedaba lleno: la app dejaba de guardar
+   registros. IndexedDB da cientos de MB, así que las fotos van ahí y
+   en localStorage solo quedan los registros, que pesan muy poco.
+   Los registros siguen teniendo r.foto en memoria, así que todo el
+   resto de la app (galería, calendario, detalle, Excel) no cambia.
+   ═══════════════════════════════════════════════════════════════════ */
+var IDB=null, IDB_LISTA=false;
+function idbAbrir(){
+  return new Promise(function(res){
+    if(IDB)return res(IDB);
+    if(!window.indexedDB)return res(null);
+    try{
+      var req=indexedDB.open('olmos_campo',1);
+      req.onupgradeneeded=function(e){
+        var db=e.target.result;
+        if(!db.objectStoreNames.contains('fotos'))db.createObjectStore('fotos');
+      };
+      req.onsuccess=function(e){IDB=e.target.result;res(IDB);};
+      req.onerror=function(){res(null);};
+      req.onblocked=function(){res(null);};
+    }catch(e){res(null);}
+  });
+}
+function idbOp(modo,fn){
+  return idbAbrir().then(function(db){
+    if(!db)return null;
+    return new Promise(function(res){
+      try{
+        var tx=db.transaction('fotos',modo);
+        var st=tx.objectStore('fotos');
+        var r=fn(st);
+        tx.oncomplete=function(){res(r&&'result' in r?r.result:true);};
+        tx.onerror=function(){res(null);};
+        tx.onabort=function(){res(null);};
+      }catch(e){res(null);}
+    });
+  }).catch(function(){return null;});
+}
+function fotoGuardar(id,dataURL){return idbOp('readwrite',function(st){return st.put(dataURL,String(id));});}
+function fotoBorrar(id){return idbOp('readwrite',function(st){return st.delete(String(id));});}
+function fotosTodas(){
+  return idbAbrir().then(function(db){
+    if(!db)return {};
+    return new Promise(function(res){
+      var out={};
+      try{
+        var tx=db.transaction('fotos','readonly');
+        var st=tx.objectStore('fotos');
+        var cur=st.openCursor();
+        cur.onsuccess=function(e){
+          var c=e.target.result;
+          if(c){out[c.key]=c.value;c.continue();}
+        };
+        tx.oncomplete=function(){res(out);};
+        tx.onerror=function(){res(out);};
+      }catch(e){res(out);}
+    });
+  }).catch(function(){return {};});
+}
+
+/* Guarda los registros en localStorage SIN las fotos (van aparte). */
+function guardarFeno(){
+  var livianos=fenologicos.map(function(r){
+    var c={};for(var k in r){if(k!=='foto')c[k]=r[k];}
+    c.hasFoto=!!r.foto;
+    return c;
+  });
+  return saveLS('olo4_feno',livianos);
+}
+
+/* Arranque: mueve a IndexedDB las fotos que hoy están en localStorage
+   (libera el espacio de inmediato) y vuelve a colgar todas las fotos
+   en los registros que ya están en memoria. */
+function prepararFotos(){
+  var pendientes=fenologicos.filter(function(r){return r.foto;});
+  var mover=Promise.resolve();
+  if(pendientes.length){
+    mover=Promise.all(pendientes.map(function(r){return fotoGuardar(r.id,r.foto);}))
+      .then(function(){
+        /* recién ahora se reescribe localStorage sin fotos: si algo falló
+           arriba, las fotos siguen donde estaban y no se pierde nada */
+        guardarFeno();
+        console.log('Fotos movidas a IndexedDB:',pendientes.length);
+      })
+      .catch(function(){});
+  }
+  return mover.then(fotosTodas).then(function(mapa){
+    fenologicos.forEach(function(r){
+      var f=mapa[String(r.id)];
+      if(f)r.foto=f;
+      else if(!r.foto&&r.hasFoto)r.foto=null;
+    });
+    IDB_LISTA=true;
+    try{
+      popFenoFilterSelect();renderFenoList();
+      renderFenoVariedadGallery();renderFenoCalendar();renderHubSummary();
+    }catch(e){}
+    actualizarEspacio();
+  }).catch(function(){IDB_LISTA=true;});
+}
+
 var gps = null;
 var mapObj = null, mapPins = [];
 var momentoC = 'pre', tipoC = 'cf', tipoU = 'pre';
@@ -2316,28 +2434,27 @@ function saveFeno(){
     ts:new Date().toISOString()
   };
   fenologicos.unshift(rec);
-  if(!saveLS('olo4_feno',fenologicos)){
-    // Sin espacio: lo más pesado es la foto — reintenta guardar el registro sin ella
-    // en vez de dejar el botón "Guardar" sin efecto y el registro perdido en silencio.
-    if(rec.foto){
-      rec.foto=null;
-      if(saveLS('olo4_feno',fenologicos)){
-        showT('Registro guardado sin foto (memoria llena)');
-        alert('El dispositivo se quedó sin espacio de almacenamiento local, así que el registro se guardó SIN la foto.\n\nPara volver a adjuntar fotos: sincroniza con la nube y descarga un Backup, así puedes liberar espacio en el navegador.');
-      }else{
-        fenologicos.shift();
-        alert('No se pudo guardar el registro: el almacenamiento local del dispositivo está lleno.\n\nSincroniza con la nube y libera espacio (Respaldo · Descargar Backup) antes de seguir registrando.');
-        resetFenoForm();
-        return;
+
+  /* El registro (texto) va a localStorage y pesa menos de 1 KB.
+     La foto va a IndexedDB, que tiene muchísimo más espacio. */
+  if(!guardarFeno()){
+    fenologicos.shift();
+    alert('No se pudo guardar el registro.\n\nEl almacenamiento del navegador está lleno incluso para el texto, que es algo muy poco habitual.\n\nDescarga un Backup y luego usa Respaldo · Liberar espacio.');
+    resetFenoForm();
+    return;
+  }
+  showT('Registro fenológico guardado · '+ctel+' · '+estado);
+
+  if(rec.foto){
+    fotoGuardar(rec.id,rec.foto).then(function(ok){
+      if(ok===null){
+        rec.foto=null;
+        guardarFeno();
+        renderFenoList();renderFenoVariedadGallery();
+        alert('El registro quedó guardado, pero no se pudo guardar la foto: el dispositivo no tiene espacio.\n\nDescarga un Backup y usa Respaldo · Liberar espacio.');
       }
-    }else{
-      fenologicos.shift();
-      alert('No se pudo guardar el registro: el almacenamiento local del dispositivo está lleno.\n\nSincroniza con la nube y libera espacio (Respaldo · Descargar Backup) antes de seguir registrando.');
-      resetFenoForm();
-      return;
-    }
-  }else{
-    showT('Registro fenológico guardado · '+ctel+' · '+estado);
+      actualizarEspacio();
+    });
   }
   resetFenoForm();
   popFenoFilterSelect();
@@ -2350,7 +2467,8 @@ function saveFeno(){
 function delFeno(id){
   if(!confirm('¿Eliminar este registro fenológico?'))return;
   fenologicos=fenologicos.filter(function(r){return r.id!==id;});
-  saveLS('olo4_feno',fenologicos);
+  guardarFeno();
+  fotoBorrar(id).then(actualizarEspacio);
   popFenoFilterSelect();
   renderFenoList();
   renderFenoVariedadGallery();
@@ -2506,8 +2624,8 @@ function feEditSave(id){
   if(fechaVal)rec.fecha=fechaVal;
   rec.notas=g('fee-notas-'+id);
   feEditingId=null;
-  if(!saveLS('olo4_feno',fenologicos)){
-    alert('No se pudo guardar el cambio: el almacenamiento local del dispositivo está lleno.\n\nSincroniza con la nube y libera espacio antes de seguir editando.');
+  if(!guardarFeno()){
+    alert('No se pudo guardar el cambio: el almacenamiento del navegador está lleno.\n\nDescarga un Backup y usa Respaldo · Liberar espacio.');
   }else{
     showT('Registro actualizado');
   }
@@ -2690,7 +2808,9 @@ function importFenoXL(ev){
         });
         added++;
       });
-      saveLS('olo4_feno',fenologicos);
+      guardarFeno();
+      Promise.all(fenologicos.filter(function(r){return r.foto;})
+        .map(function(r){return fotoGuardar(r.id,r.foto);})).then(actualizarEspacio);
       popFenoFilterSelect();
       renderFenoList();renderFenoVariedadGallery();renderFenoCalendar();renderHubSummary();
       showT(added+' registro'+(added!==1?'s':'')+' cargado'+(added!==1?'s':'')+' desde Excel');
@@ -3077,9 +3197,71 @@ function delReg(id){
 }
 
 // ===== BACKUP / RESTORE =====
+/* ── Indicador de espacio ──
+   localStorage no informa cuánto queda, así que se mide lo que ocupan
+   nuestras propias llaves contra el tope habitual de 5 MB. Para las
+   fotos se usa la estimación del navegador, que sí existe. */
+function actualizarEspacio(){
+  var txt=document.getElementById('espacio-txt');
+  if(!txt)return;
+  var bytesLS=0;
+  try{
+    ['olo4','olo4_inf','olo4_lab','olo4_feno','olo4_poly'].forEach(function(k){
+      var v=localStorage.getItem(k);
+      if(v)bytesLS+=v.length;
+    });
+  }catch(e){}
+  var TOPE=5*1024*1024;
+  var pct=Math.min(100,Math.round(bytesLS/TOPE*100));
+  var mb=function(b){return (b/1024/1024).toFixed(b<1024*1024?2:1)+' MB';};
+  txt.textContent=mb(bytesLS)+' de 5 MB en textos';
+  var bar=document.getElementById('espacio-bar');
+  if(bar){
+    bar.style.width=Math.max(2,pct)+'%';
+    bar.style.background=pct>=85?'#C0503C':pct>=60?'#E0A73C':'#4F9E68';
+  }
+  var btn=document.getElementById('btn-liberar');
+  var sub=document.getElementById('espacio-sub');
+  var conFoto=fenologicos.filter(function(r){return r.foto;}).length;
+  var base=conFoto+' foto'+(conFoto===1?'':'s')+' guardada'+(conFoto===1?'':'s')+' aparte, sin ocupar ese espacio.';
+  if(sub)sub.textContent=base;
+  if(btn)btn.style.display=(pct>=70||conFoto>0)?'block':'none';
+  if(navigator.storage&&navigator.storage.estimate){
+    navigator.storage.estimate().then(function(e){
+      if(sub&&e&&e.usage!=null){
+        sub.textContent=base+' En total la app ocupa '+mb(e.usage)+
+          (e.quota?' de '+mb(e.quota)+' disponibles.':'.');
+      }
+    }).catch(function(){});
+  }
+}
+
+/* Botón de emergencia: suelta las fotos y deja los registros intactos. */
+function liberarEspacio(){
+  var conFoto=fenologicos.filter(function(r){return r.foto;});
+  if(!conFoto.length){showT('No hay fotos guardadas que soltar');return;}
+  if(!confirm('Se van a borrar '+conFoto.length+' foto'+(conFoto.length===1?'':'s')+' de este dispositivo.\n\nLos registros fenológicos NO se tocan: quedan todos, solo sin su foto.\n\n⚠️ Si no descargaste el Backup, esas fotos se pierden para siempre.\n\n¿Descargaste el Backup?'))return;
+  if(!confirm('Última confirmación: ¿borrar las '+conFoto.length+' fotos?'))return;
+  Promise.all(conFoto.map(function(r){return fotoBorrar(r.id);})).then(function(){
+    conFoto.forEach(function(r){r.foto=null;r.hasFoto=false;});
+    guardarFeno();
+    renderFenoList();renderFenoVariedadGallery();renderFenoCalendar();renderHubSummary();
+    actualizarEspacio();
+    showT(conFoto.length+' foto'+(conFoto.length===1?'':'s')+' borrada'+(conFoto.length===1?'':'s')+' · registros intactos');
+  });
+}
+
 function backupDL(){
+  if(!IDB_LISTA){
+    showT('Espera un segundo, se están cargando las fotos…');
+    setTimeout(backupDL,900);
+    return;
+  }
   var poligonosData=[];
   try{poligonosData=JSON.parse(localStorage.getItem('olo4_poly')||'[]');}catch(e){poligonosData=[];}
+  /* fenologicos ya trae las fotos colgadas desde IndexedDB, así que el
+     respaldo sale completo igual que antes */
+  var conFoto=fenologicos.filter(function(r){return r.foto;}).length;
   var data={regs:regs,informes:informes,labores:labores,fenologicos:fenologicos,poligonos:poligonosData,ts:new Date().toISOString()};
   var blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
   var a=document.createElement('a');
@@ -3087,7 +3269,7 @@ function backupDL(){
   a.download='Olmos_Backup_'+new Date().toLocaleDateString('es-CL').replace(/\//g,'_')+'.json';
   document.body.appendChild(a);a.click();document.body.removeChild(a);
   URL.revokeObjectURL(a.href);
-  showT('Backup descargado · '+regs.length+' conteos, '+fenologicos.length+' fenológicos, '+poligonosData.length+' polígonos');
+  showT('Backup descargado · '+regs.length+' conteos, '+fenologicos.length+' fenológicos ('+conFoto+' con foto), '+poligonosData.length+' polígonos');
 }
 function backupRest(ev){
   var file=ev.target.files[0];if(!file)return;
@@ -3098,10 +3280,36 @@ function backupRest(ev){
       if(!data.regs)throw new Error('Formato inválido');
       var nFeno=(data.fenologicos||[]).length;
       var nPoly=(data.poligonos||[]).length;
-      if(!confirm('¿Restaurar respaldo? ('+data.regs.length+' conteos, '+nFeno+' fenológicos, '+nPoly+' polígonos). Se reemplazarán todos los datos actuales.'))return;
-      regs=data.regs||[];informes=data.informes||[];labores=data.labores||[];fenologicos=data.fenologicos||[];
-      var okAll=saveLS('olo4',regs)&saveLS('olo4_inf',informes)&saveLS('olo4_lab',labores)&saveLS('olo4_feno',fenologicos)&saveLS('olo4_poly',data.poligonos||[]);
-      if(!okAll)alert('El respaldo se cargó en pantalla, pero el dispositivo no tiene espacio suficiente para guardarlo todo de forma permanente. Libera espacio (borra fotos antiguas del navegador) y vuelve a restaurar el backup.');
+      /* Fusionar en vez de reemplazar: así restaurar un respaldo antiguo
+         nunca borra lo que se registró después de hacerlo. */
+      var hayDatos=regs.length||fenologicos.length||informes.length||labores.length;
+      var fusionar=false;
+      if(hayDatos){
+        var r=prompt('El respaldo trae '+data.regs.length+' conteos, '+nFeno+' fenológicos y '+nPoly+' polígonos.\n\nEn este dispositivo ya hay '+regs.length+' conteos y '+fenologicos.length+' fenológicos.\n\nEscribe:\n   SUMAR      para juntar ambos sin perder nada (recomendado)\n   REEMPLAZAR para borrar lo de este dispositivo y dejar solo el respaldo');
+        if(r===null)return;
+        r=r.trim().toUpperCase();
+        if(r==='SUMAR')fusionar=true;
+        else if(r==='REEMPLAZAR')fusionar=false;
+        else{showT('No se restauró nada: escribe SUMAR o REEMPLAZAR');return;}
+      }
+      var unir=function(actuales,nuevos){
+        if(!fusionar)return nuevos||[];
+        var vistos={};
+        actuales.forEach(function(x){vistos[x.id]=true;});
+        return actuales.concat((nuevos||[]).filter(function(x){return !vistos[x.id];}));
+      };
+      var fenoNuevos=data.fenologicos||[];
+      regs=unir(regs,data.regs);
+      informes=unir(informes,data.informes);
+      labores=unir(labores,data.labores);
+      fenologicos=unir(fenologicos,fenoNuevos);
+
+      /* Las fotos del respaldo van a IndexedDB, no a localStorage. */
+      Promise.all(fenoNuevos.filter(function(x){return x.foto;})
+        .map(function(x){return fotoGuardar(x.id,x.foto);})).then(actualizarEspacio);
+
+      var okAll=saveLS('olo4',regs)&saveLS('olo4_inf',informes)&saveLS('olo4_lab',labores)&guardarFeno()&saveLS('olo4_poly',data.poligonos||[]);
+      if(!okAll)alert('El respaldo se cargó en pantalla, pero no cupo entero en el almacenamiento del navegador. Usa Respaldo · Liberar espacio y vuelve a restaurarlo.');
       renderR();renderDash();popMapFilters();
       popFenoFilterSelect();
       renderFenoList();renderFenoVariedadGallery();renderFenoCalendar();popPolySelects();renderHubSummary();
@@ -3169,7 +3377,7 @@ function subirInforme(){
   document.getElementById('ia-text').textContent=texto;
   document.getElementById('ia-result').style.display='block';
   informes.unshift({id:Date.now(),prod:prod,ctel:ctel,fecha:fecha,texto:texto,h:new Date().toLocaleTimeString('es-CL',{hour:'2-digit',minute:'2-digit'})});
-  if(!saveLS('olo4_inf',informes)){informes.shift();alert('No se pudo guardar el informe: el almacenamiento local del dispositivo está lleno.\n\nSincroniza con la nube y libera espacio antes de seguir registrando.');return;}
+  if(!saveLS('olo4_inf',informes)){informes.shift();alert('No se pudo guardar el informe: el almacenamiento del navegador está lleno.\n\nVe a Respaldo, descarga un Backup y luego usa \u00ab Liberar espacio \u00bb.');return;}
   renderInf();renderHubSummary();showT('Informe subido sin IA');
 }
 /* La clave de la IA no viaja dentro de la app: se pide una vez por
@@ -3223,7 +3431,7 @@ async function genInforme(){
     document.getElementById('ia-text').textContent=text;
     document.getElementById('ia-result').style.display='block';
     informes.unshift({id:Date.now(),prod:prod,ctel:ctel,fecha:fecha,texto:text,h:new Date().toLocaleTimeString('es-CL',{hour:'2-digit',minute:'2-digit'})});
-    if(!saveLS('olo4_inf',informes)){informes.shift();alert('No se pudo guardar el informe: el almacenamiento local del dispositivo está lleno.\n\nSincroniza con la nube y libera espacio antes de seguir registrando.');return;}
+    if(!saveLS('olo4_inf',informes)){informes.shift();alert('No se pudo guardar el informe: el almacenamiento del navegador está lleno.\n\nVe a Respaldo, descarga un Backup y luego usa \u00ab Liberar espacio \u00bb.');return;}
     renderInf();renderHubSummary();showT('Informe generado');
   }catch(err){showT('Error: '+(err.message||'conexión'));}
   finally{
@@ -3257,7 +3465,7 @@ function saveLabor(){
   var now=new Date();
   var lab={id:Date.now(),agro:agro,prod:document.getElementById('cl-prod').value.trim()||'—',ctel:document.getElementById('cl-ctel').value.trim()||'—',fecha:document.getElementById('cl-fecha').value,labor:selectedLabor,obs:document.getElementById('cl-obs').value.trim(),h:now.toLocaleTimeString('es-CL',{hour:'2-digit',minute:'2-digit'})};
   labores.unshift(lab);
-  if(!saveLS('olo4_lab',labores)){labores.shift();alert('No se pudo guardar la labor: el almacenamiento local del dispositivo está lleno.\n\nSincroniza con la nube y libera espacio antes de seguir registrando.');return;}
+  if(!saveLS('olo4_lab',labores)){labores.shift();alert('No se pudo guardar la labor: el almacenamiento del navegador está lleno.\n\nVe a Respaldo, descarga un Backup y luego usa \u00ab Liberar espacio \u00bb.');return;}
   renderCL();
   document.getElementById('cl-obs').value='';
   document.querySelectorAll('.labor-btn').forEach(function(b){b.classList.remove('sel');});
@@ -3467,6 +3675,10 @@ function renderFitoAlternativas(){
 
 // ===== ARRANQUE AUTOMÁTICO (sin login) =====
 init();
+/* Mueve a IndexedDB las fotos que estén en localStorage y vuelve a
+   colgarlas en los registros. Va después de init() para que la app ya
+   esté dibujada: las fotos aparecen solas un instante después. */
+prepararFotos();
 </script>
 </body>
 </html>

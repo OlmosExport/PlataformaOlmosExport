@@ -1,6 +1,6 @@
 PLATAFORMA EXPORTADORA LOS OLMOS
 ================================
-Versión 4.0 · Departamento Técnico
+Versión 4.1 · Departamento Técnico
 
 
 QUÉ HAY EN LA CARPETA (todo junto, sin subcarpetas)
@@ -83,11 +83,23 @@ DÓNDE SE GUARDAN LOS DATOS DE CADA PLATAFORMA
                    Los registros fenológicos, informes y labores viven SOLO en
                    el teléfono de cada técnico. La única copia es el Backup.
                    Conviene descargar el Backup seguido.
+                   Al restaurar un Backup la app pregunta si SUMAR (junta todo
+                   sin perder nada) o REEMPLAZAR. Casi siempre es SUMAR.
 
-  Ojo con el espacio: las fotos del registro fenológico pesan mucho y el
-  navegador tiene un límite de unos 5 MB. Cuando se llena, la app avisa y
-  guarda el registro sin la foto. Si eso empieza a pasar seguido, hay que
-  mover las fotos fuera del navegador.
+  ESPACIO (corregido en la versión 4.1)
+
+  Antes las fotos se guardaban junto a los registros, en un almacén con
+  tope de 5 MB. Con 14 fotos quedaba lleno y la app dejaba de guardar.
+
+  Ahora las fotos van a un almacén aparte del navegador, con cientos de MB.
+  La primera vez que cada técnico abra la versión 4.1, las fotos que tenga
+  se mueven solas y el espacio queda libre. No hay que hacer nada.
+
+  En Respaldo hay un indicador que muestra cuánto se está usando, y un
+  botón "Liberar espacio" que borra SOLO las fotos y deja los registros.
+  Ese botón es para emergencias: úsalo después de descargar el Backup.
+
+  Descargar el Backup te da una copia, pero NO libera espacio.
 
 
 CLAVES
