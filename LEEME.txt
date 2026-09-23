@@ -1,6 +1,6 @@
 PLATAFORMA EXPORTADORA LOS OLMOS
 ================================
-Versión 4.1 · Departamento Técnico
+Versión 4.2 · Departamento Técnico
 
 
 QUÉ HAY EN LA CARPETA (todo junto, sin subcarpetas)
@@ -13,6 +13,7 @@ QUÉ HAY EN LA CARPETA (todo junto, sin subcarpetas)
   datos.json            Todos los datos climáticos. Es lo único que se
                         reemplaza al actualizar cada semana.
   config.json           Estaciones ocultas para todo el equipo.
+  cuarteles.json        Base de productores y cuarteles (244 cuarteles).
   heladas_comunas.json  Reporte de heladas por comuna.
 
   manifest.webmanifest  Datos de la app instalable.
@@ -20,6 +21,16 @@ QUÉ HAY EN LA CARPETA (todo junto, sin subcarpetas)
   icon-192.png
   icon-512.png
   apple-touch-icon.png  Íconos de la app en el celular.
+
+
+ACTUALIZAR LA BASE DE PRODUCTORES
+
+  La base vive en cuarteles.json y viaja con la app, así funciona sin
+  señal. Para cambiarla hay que generar el archivo de nuevo desde el
+  Excel y subirlo al repositorio.
+
+  Si cuarteles.json no está, la app recurre a la planilla de Google
+  como antes.
 
 
 ACTUALIZAR LOS DATOS CLIMÁTICOS (lo habitual, una vez por semana)
@@ -45,6 +56,39 @@ CAMBIAR LAS ESTACIONES VISIBLES
   2. Activa o desactiva estaciones (el cambio se ve al instante en tu equipo).
   3. Presiona "config.json" para descargarlo y súbelo a GitHub.
      Sin ese paso, el cambio queda solo en tu navegador.
+
+
+FENOLOGÍA (desde la versión 4.2)
+
+  En el menú, "Fenología" abre dos opciones:
+
+    Registrar Fenología    El formulario de siempre, ahora con la estación
+                           climática del cuartel.
+    Fenología Histórica    Avance por cuartel, curva de grados-día y
+                           comparación entre fechas.
+
+  LA ESTACIÓN CLIMÁTICA
+
+  Al registrar, la app propone una estación en este orden:
+    1. La que usaste la última vez en ese cuartel.
+    2. La más cercana a tu GPS (si capturaste el punto).
+    3. La zona del cuartel, según cuarteles.json.
+  Siempre puedes cambiarla en la lista. Lo que elijas a mano queda
+  recordado para ese cuartel.
+
+  LOS GRADOS-DÍA
+
+  Se acumulan desde el 1 de julio hasta la fecha del registro, con los
+  mismos datos de la Plataforma Climática (datos.json). Se guardan en
+  base 10 °C y en base 4,5 °C, y quedan pegados al registro.
+
+  Si el registro es de hoy pero datos.json está desactualizado, la app
+  avisa hasta qué día llega el clima. Eso significa que hay que subir el
+  Excel de la semana.
+
+  Los registros hechos antes de la 4.2 no traen estación guardada, pero
+  si tienen GPS la app deduce la más cercana para poder mostrarlos en el
+  historial.
 
 
 LA CLAVE DE LA IA (informe de visita)

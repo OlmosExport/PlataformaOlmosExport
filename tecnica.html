@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Plataforma de Campo · Exportadora Los Olmos</title>
 <meta name="theme-color" content="#14301C">
-<meta name="app-version" content="4.1">
+<meta name="app-version" content="4.2">
 <link rel="manifest" href="./manifest.webmanifest">
 <link rel="apple-touch-icon" href="./apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -50,6 +50,104 @@ body{font-family:var(--font);background:var(--s100);color:var(--s800);min-height
 .hb-sp:active{background:rgba(255,255,255,.14)}
 .ldot{width:5px;height:5px;background:var(--g400);border-radius:50%;animation:blink 1.4s infinite}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
+
+/* ══ FENOLOGÍA: menú, estación y vista histórica ══ */
+.fh-hubres{background:var(--w);border:1px solid var(--s200);border-radius:var(--r-md);
+  box-shadow:var(--sh-sm);padding:14px 16px;margin-bottom:12px}
+.fh-hubres-row{display:flex;gap:6px}
+.fh-hubres-row>div{flex:1;text-align:center}
+.fh-hubres-row b{display:block;font-size:22px;font-weight:800;color:var(--g800);letter-spacing:-.02em;
+  font-variant-numeric:tabular-nums;line-height:1}
+.fh-hubres-row span{display:block;font-size:10px;color:var(--s500);font-weight:600;margin-top:3px}
+.fh-hubres-s{font-size:10px;color:var(--s400);font-family:var(--mono);margin-top:10px;
+  padding-top:9px;border-top:1px solid var(--s150);line-height:1.5}
+
+.fh-opt{display:flex;align-items:center;gap:13px;background:var(--w);border:1px solid var(--s200);
+  border-radius:var(--r-md);box-shadow:var(--sh-sm);padding:16px;margin-bottom:10px;cursor:pointer;
+  transition:transform .14s,box-shadow .14s}
+.fh-opt:active{transform:scale(.985);box-shadow:var(--sh-md)}
+.fh-opt-ico{width:44px;height:44px;border-radius:13px;display:flex;align-items:center;
+  justify-content:center;flex-shrink:0}
+.fh-opt-ico svg{width:22px;height:22px}
+.fh-opt-tx{flex:1;min-width:0}
+.fh-opt-t{font-size:15px;font-weight:800;color:var(--s800);letter-spacing:-.015em}
+.fh-opt-s{font-size:11px;color:var(--s500);margin-top:3px;line-height:1.45}
+.fh-opt-ar{width:17px;height:17px;color:var(--s400);flex-shrink:0}
+
+/* vista previa de grados-día en el registro */
+.gdd-prev{margin-top:9px;background:var(--g50);border:1px solid var(--g200);
+  border-radius:var(--r-md);padding:13px 14px}
+.gdd-prev.vacio{background:var(--s50);border-color:var(--s200)}
+.gdd-prev-hd{display:flex;align-items:baseline;justify-content:space-between;gap:8px;margin-bottom:9px}
+.gdd-prev-t{font-size:10.5px;font-weight:800;color:var(--g800);text-transform:uppercase;letter-spacing:.06em}
+.gdd-prev-est{font-family:var(--mono);font-size:9.5px;color:var(--s500);text-align:right}
+.gdd-prev-nums{display:flex;gap:10px}
+.gdd-prev-n{flex:1;background:var(--w);border-radius:10px;padding:9px 11px;border:1px solid var(--g100)}
+.gdd-prev-n b{display:block;font-size:21px;font-weight:800;color:var(--g700);line-height:1;
+  letter-spacing:-.03em;font-variant-numeric:tabular-nums}
+.gdd-prev-n.alt b{color:var(--g500)}
+.gdd-prev-n span{display:block;font-size:9.5px;color:var(--s500);font-weight:600;margin-top:4px}
+.gdd-prev-s{font-size:10px;color:var(--s500);margin-top:9px;font-family:var(--mono);line-height:1.5}
+
+/* rango de fechas */
+.fh-rango{background:var(--w);border:1px solid var(--s200);border-radius:var(--r-md);
+  box-shadow:var(--sh-sm);padding:12px 13px;margin-bottom:12px}
+.fh-rango-presets{display:flex;gap:6px;margin-bottom:10px}
+.fh-pill{flex:1;font-family:var(--font);font-size:11px;font-weight:700;padding:7px 4px;
+  border-radius:100px;border:1px solid var(--s200);background:var(--s50);color:var(--s600);cursor:pointer}
+.fh-pill:active{background:var(--g700);color:#fff;border-color:var(--g700)}
+.fh-rango-fechas{display:flex;gap:8px}
+.fh-rango-fechas label{flex:1;font-size:9.5px;font-weight:700;color:var(--s500);
+  text-transform:uppercase;letter-spacing:.05em;display:block}
+.fh-rango-fechas input{display:block;width:100%;margin-top:4px;font-family:var(--font);font-size:12.5px;
+  font-weight:600;color:var(--s800);border:1px solid var(--s200);border-radius:9px;padding:7px 9px;
+  background:var(--s50)}
+
+.fh-kpis{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+.fh-kpi{background:var(--w);border:1px solid var(--s200);border-left:3px solid var(--c,var(--g500));
+  border-radius:var(--r-md);box-shadow:var(--sh-sm);padding:11px 13px}
+.fh-kpi-v{font-size:22px;font-weight:800;color:var(--s800);line-height:1;letter-spacing:-.03em;
+  font-variant-numeric:tabular-nums}
+.fh-kpi-l{font-size:10px;color:var(--s500);font-weight:700;margin-top:5px}
+.fh-kpi-s{font-size:9px;color:var(--s400);font-family:var(--mono);margin-top:3px;line-height:1.4}
+
+.fh-base-sw{display:inline-flex;gap:3px;background:var(--s100);border-radius:100px;padding:2px}
+.fh-base-btn{font-family:var(--mono);font-size:9.5px;font-weight:600;padding:4px 9px;border-radius:100px;
+  border:none;background:transparent;color:var(--s500);cursor:pointer}
+.fh-base-btn.on{background:var(--w);color:var(--g700);box-shadow:var(--sh-sm)}
+
+.fh-gdd{background:var(--w);border:1px solid var(--s200);border-radius:var(--r-md);
+  box-shadow:var(--sh-sm);padding:12px}
+.fh-legs{display:flex;flex-wrap:wrap;gap:9px;margin-top:9px}
+.fh-leg{display:inline-flex;align-items:center;gap:5px;font-size:9.5px;color:var(--s600);font-weight:600}
+.fh-leg i{width:9px;height:3px;border-radius:2px;display:inline-block}
+.fh-gdd-msg{font-size:11px;color:#B8791F;line-height:1.5;margin-top:6px}
+.fh-gdd-msg:empty{display:none}
+.fh-gdd-pie{font-size:9.5px;color:var(--s400);font-family:var(--mono);margin-top:8px;line-height:1.5}
+
+/* avance por cuartel */
+.fh-card{background:var(--w);border:1px solid var(--s200);border-radius:var(--r-md);
+  box-shadow:var(--sh-sm);padding:14px 15px;margin-bottom:9px}
+.fh-card-hd{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;
+  padding-bottom:11px;border-bottom:1px solid var(--s150);margin-bottom:11px}
+.fh-card-t{font-size:14px;font-weight:800;color:var(--s800);letter-spacing:-.015em}
+.fh-card-s{font-size:10.5px;color:var(--s500);margin-top:2px;line-height:1.4}
+.fh-card-gdd{text-align:right;flex-shrink:0}
+.fh-card-gdd b{display:block;font-size:17px;font-weight:800;color:var(--g700);line-height:1;
+  font-variant-numeric:tabular-nums;letter-spacing:-.02em}
+.fh-card-gdd span{display:block;font-size:9px;color:var(--s400);font-weight:600;margin-top:2px}
+.fh-track{position:relative}
+.fh-step{position:relative;padding-left:22px;padding-bottom:12px;cursor:pointer}
+.fh-step:last-child{padding-bottom:0}
+.fh-dot{position:absolute;left:0;top:3px;width:11px;height:11px;border-radius:50%;
+  border:2px solid var(--w);box-shadow:0 0 0 1.5px var(--s200);z-index:1}
+.fh-line{position:absolute;left:5px;top:14px;bottom:-3px;width:1.5px;background:var(--s200)}
+.fh-step-e{font-size:12.5px;font-weight:700;color:var(--s800);line-height:1.3}
+.fh-step-f{font-size:10px;color:var(--s500);font-family:var(--mono);margin-top:2px}
+.fh-card-est{font-size:9.5px;color:var(--s400);font-family:var(--mono);margin-top:11px;
+  padding-top:9px;border-top:1px solid var(--s150)}
+.fh-vacio{background:var(--s50);border:1px dashed var(--s300);border-radius:var(--r-md);
+  padding:22px 16px;text-align:center;font-size:12px;color:var(--s500);line-height:1.5}
 
 /* BOTTOM NAV */
 .bottom-nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;background:var(--w);border-top:1px solid var(--s200);display:flex;box-shadow:0 -4px 24px rgba(0,0,0,.08);z-index:100;padding-bottom:env(safe-area-inset-bottom)}
@@ -493,7 +591,7 @@ body.drawer-open{overflow:hidden}
 
       <div class="dnav-lbl">Registro de campo</div>
       <button class="dnav-btn" onclick="closeDrawer();openSec('informe')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg><span>Informe de Visita</span></button>
-      <button class="dnav-btn" onclick="closeDrawer();openSec('fenologia')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/><circle cx="12" cy="12" r="4"/></svg><span>Registro Fenológico</span></button>
+      <button class="dnav-btn" onclick="closeDrawer();openSec('feno')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/><circle cx="12" cy="12" r="4"/></svg><span>Fenología</span></button>
       <button class="dnav-btn" onclick="closeDrawer();openSec('checklist')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><polyline points="9 16 11 18 15 14"/></svg><span>Check List</span></button>
 
       <div class="dnav-lbl">Fitosanitario</div>
@@ -611,9 +709,9 @@ body.drawer-open{overflow:hidden}
           <div class="hub-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></div>
           <div><div class="hub-card-title">Informe de Visita</div><div class="hub-card-sub">Registro técnico con IA</div></div>
         </div>
-        <div class="hub-card" data-cat="feno" onclick="openSec('fenologia')">
+        <div class="hub-card" data-cat="feno" onclick="openSec('feno')">
           <div class="hub-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/><circle cx="12" cy="12" r="4"/></svg></div>
-          <div><div class="hub-card-title">Registro Fenológico</div><div class="hub-card-sub">Estados fenológicos · Cerezos</div></div>
+          <div><div class="hub-card-title">Fenología</div><div class="hub-card-sub">Registrar e historial · Cerezos</div></div>
         </div>
         <div class="hub-card" data-cat="check" onclick="openSec('checklist')">
           <div class="hub-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><polyline points="9 16 11 18 15 14"/></svg></div>
@@ -864,8 +962,8 @@ body.drawer-open{overflow:hidden}
     <!-- REGISTRO FENOLOGICO -->
     <div class="view" id="view-fenologia">
       <div class="sec-hdr">
-        <div class="sec-back" onclick="goHub()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg></div>
-        <div><div class="sec-hdr-title">Registro Fenológico</div><div class="sec-hdr-sub">Cerezos · Estados por cuartel</div></div>
+        <div class="sec-back" onclick="openSec('feno')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg></div>
+        <div><div class="sec-hdr-title">Registrar Fenología</div><div class="sec-hdr-sub">Cerezos · Estado por cuartel</div></div>
       </div>
 
       <div style="display:flex;gap:6px;margin-bottom:10px">
@@ -898,7 +996,7 @@ body.drawer-open{overflow:hidden}
 
       <div class="flabel">Estado fenológico y fecha</div>
       <div class="sel-card"><div class="sel-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/><circle cx="12" cy="12" r="4"/></svg></div><div class="sel-content"><div class="sel-sublabel">Estado observado</div><select class="sel-input" id="fe-estado" style="border:none;background:transparent;padding:0;width:100%"><option value="">Selecciona un estado...</option><option value="Yema Hinchada">Yema Hinchada</option><option value="Puntas Verdes">Puntas Verdes</option><option value="Botón Verde Cerrado">Botón Verde Cerrado</option><option value="Ramillete Expuesto">Ramillete Expuesto</option><option value="Ramillete en Expansión">Ramillete en Expansión</option><option value="Botón Blanco">Botón Blanco</option><option value="Flor Abierta">Flor Abierta</option><option value="Caída de Pétalos">Caída de Pétalos</option><option value="Caída de Collar y Restos Florales">Caída de Collar y Restos Florales</option><option value="Frutos Verdes">Frutos Verdes</option><option value="Pasmado de Frutos">Pasmado de Frutos</option><option value="Fruto Color Pajizo">Fruto Color Pajizo</option><option value="Inicio de Pinta">Inicio de Pinta</option><option value="Cosecha / Madurez comercial">Cosecha / Madurez comercial</option></select></div></div>
-      <div class="sel-card"><div class="sel-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div><div class="sel-content"><div class="sel-sublabel">Fecha del registro</div><input class="sel-input" type="date" id="fe-fecha" style="border:none;background:transparent;padding:0;width:100%"></div></div>
+      <div class="sel-card"><div class="sel-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div><div class="sel-content"><div class="sel-sublabel">Fecha del registro</div><input class="sel-input" type="date" id="fe-fecha" onchange="try{vistaPreviaGDD();}catch(e){}" style="border:none;background:transparent;padding:0;width:100%"></div></div>
 
       <div class="flabel">Punto de referencia y foto (opcional)</div>
       <div class="gps-bar" style="margin-bottom:8px"><div class="gps-dot" id="fe-gps-dot"></div><span class="gps-txt" id="fe-gps-txt">Sin punto capturado</span><button class="planta-gps-btn" style="margin-left:auto" onclick="capFenoGPS()"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M1 12h4M19 12h4"/></svg>Capturar GPS</button></div>
@@ -912,15 +1010,97 @@ body.drawer-open{overflow:hidden}
       <div class="flabel">Notas (opcional)</div>
       <textarea class="sel-input" id="fe-notas" placeholder="Observaciones adicionales..." style="width:100%;min-height:60px;border:1px solid var(--s200);border-radius:10px;padding:10px;font-family:var(--font);font-size:13px;resize:vertical"></textarea>
 
+      <div class="flabel" style="margin-top:16px">Estación climática</div>
+      <div class="sel-card">
+        <div class="sel-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v6M5.6 5.6l4.2 4.2M2 12h6M18.4 5.6l-4.2 4.2M22 12h-6"/><circle cx="12" cy="14" r="3"/><path d="M12 17v5"/></svg></div>
+        <div class="sel-content">
+          <div class="sel-sublabel">Estación para los grados-día</div>
+          <select class="sel-input" id="fe-est" onchange="onEstManual()" style="border:none;background:transparent;padding:0;width:100%;font-weight:700"><option value="">Cargando estaciones…</option></select>
+        </div>
+      </div>
+      <div id="fe-est-nota" style="font-size:10.5px;margin:5px 2px 0;line-height:1.45;color:var(--s400)"></div>
+      <div id="fe-gdd-prev" class="gdd-prev" style="display:none"></div>
+
       <button class="btn-submit" onclick="saveFeno()" style="margin-top:14px"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>Guardar Registro Fenológico</button>
 
-      <div class="flabel" style="margin-top:18px">Estado actual por variedad</div>
+    </div>
+
+    <!-- FENOLOGÍA · MENÚ -->
+    <div class="view" id="view-feno-hub">
+      <div class="sec-hdr">
+        <div class="sec-back" onclick="goHub()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg></div>
+        <div><div class="sec-hdr-title">Fenología</div><div class="sec-hdr-sub">Cerezos · Registro y análisis</div></div>
+      </div>
+      <div id="fh-hub-resumen" class="fh-hubres"></div>
+      <div class="fh-opt" onclick="openSec('fenologia')">
+        <div class="fh-opt-ico" style="background:#FBEDEA;color:#C0503C"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/><circle cx="12" cy="12" r="4"/></svg></div>
+        <div class="fh-opt-tx">
+          <div class="fh-opt-t">Registrar Fenología</div>
+          <div class="fh-opt-s">Estado observado, foto, GPS y la estación climática del cuartel</div>
+        </div>
+        <svg class="fh-opt-ar" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><polyline points="9 18 15 12 9 6"/></svg>
+      </div>
+      <div class="fh-opt" onclick="abrirFenoHist()">
+        <div class="fh-opt-ico" style="background:#E4EFF6;color:#2E6B8F"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><polyline points="7 14 11 10 15 13 21 6"/></svg></div>
+        <div class="fh-opt-tx">
+          <div class="fh-opt-t">Fenología Histórica</div>
+          <div class="fh-opt-s">Avance por cuartel, grados-día acumulados y comparación entre fechas</div>
+        </div>
+        <svg class="fh-opt-ar" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><polyline points="9 18 15 12 9 6"/></svg>
+      </div>
+      <div class="sel-card" style="cursor:pointer;margin-top:12px" onclick="toggleFenoGuide2()">
+        <div class="sel-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg></div>
+        <div class="sel-content"><div class="sel-sublabel">Guía de referencia</div><div style="font-size:13px;font-weight:700;color:var(--g800)">Ver ficha de estados fenológicos</div></div>
+      </div>
+    </div>
+
+    <!-- FENOLOGÍA · HISTÓRICA -->
+    <div class="view" id="view-feno-hist">
+      <div class="sec-hdr">
+        <div class="sec-back" onclick="openSec('feno')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg></div>
+        <div><div class="sec-hdr-title">Fenología Histórica</div><div class="sec-hdr-sub">Avance y grados-día acumulados</div></div>
+      </div>
+
+      <div class="fh-rango">
+        <div class="fh-rango-presets">
+          <button class="fh-pill" onclick="fhRango('temporada')">Temporada</button>
+          <button class="fh-pill" onclick="fhRango('90')">90 días</button>
+          <button class="fh-pill" onclick="fhRango('30')">30 días</button>
+          <button class="fh-pill" onclick="fhRango('todo')">Todo</button>
+        </div>
+        <div class="fh-rango-fechas">
+          <label>Desde<input type="date" id="fh-desde" onchange="fhFechaManual()"></label>
+          <label>Hasta<input type="date" id="fh-hasta" onchange="fhFechaManual()"></label>
+        </div>
+      </div>
+
+      <div id="fh-kpis" class="fh-kpis"></div>
+
+      <div class="flabel" style="margin-top:16px;display:flex;align-items:center;justify-content:space-between">
+        <span>Acumulación de grados-día</span>
+        <span class="fh-base-sw">
+          <button class="fh-base-btn on" data-b="10" onclick="fhSetBase(10)">base 10</button>
+          <button class="fh-base-btn" data-b="4.5" onclick="fhSetBase(4.5)">base 4,5</button>
+        </span>
+      </div>
+      <div id="fh-gdd-wrap" class="fh-gdd">
+        <canvas id="fh-gdd-canvas" style="width:100%;height:210px;display:block"></canvas>
+        <div id="fh-gdd-leg" class="fh-legs"></div>
+        <div class="fh-gdd-msg"></div>
+        <div class="fh-gdd-pie">Los puntos marcan cada registro fenológico sobre la curva de su estación.</div>
+      </div>
+
+      <div class="flabel" style="margin-top:18px">Filtros</div>
       <div class="feno-filter-row">
         <select class="feno-filter-sel" id="feno-filter-prod" onchange="onFenoFilterChange()"><option value="">Todas las razones sociales</option></select>
         <select class="feno-filter-sel" id="feno-filter-vari" onchange="onFenoFilterChange()"><option value="">Todas las variedades</option></select>
         <select class="feno-filter-sel" id="feno-filter-ctel" onchange="onFenoFilterChange()"><option value="">Todos los cuarteles</option></select>
       </div>
 
+      <div class="flabel" style="margin-top:18px">Avance por cuartel</div>
+      <div id="fh-linea"></div>
+
+      <div class="flabel" style="margin-top:18px">Estado actual por variedad</div>
       <div id="feno-variedad-gallery" style="margin-bottom:14px"></div>
 
       <div id="feno-curve-wrap" style="display:none;margin-bottom:14px"></div>
@@ -938,6 +1118,12 @@ body.drawer-open{overflow:hidden}
         <span style="font-size:10px;color:var(--s400);font-weight:600">Toca ✎ para editar y unificar nombres</span>
       </div>
       <div id="feno-list"></div>
+
+
+      <div style="display:flex;gap:6px;margin:16px 0 4px">
+        <button class="btn-exp" onclick="exportFenoXL()" style="flex:1"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Descargar Excel</button>
+        <button class="btn-exp" onclick="document.getElementById('feno-imp-input').click()" style="flex:1;background:var(--g700);color:#fff"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>Cargar Excel</button>
+      </div>
     </div>
 
     <!-- REGISTROS -->
@@ -1311,6 +1497,606 @@ function prepararFotos(){
   }).catch(function(){IDB_LISTA=true;});
 }
 
+
+/* ═══════════════════════════════════════════════════════════════════
+   PUENTE CON LA PLATAFORMA CLIMÁTICA
+   Lee el mismo datos.json que usa la Climática, que vive en esta
+   carpeta. Sirve para dos cosas: saber cuál es la estación más
+   cercana al cuartel y calcular los grados-día acumulados.
+   Se carga solo cuando hace falta, para no pesar en el arranque.
+   ═══════════════════════════════════════════════════════════════════ */
+var CLIMA=null, CLIMA_ERR=null, CLIMA_PROM=null;
+/* Temporada fenológica: del 1 de julio al 30 de junio. */
+var FENO_MES_INI=7;
+
+function temporadaFeno(fechaISO){
+  var y=+String(fechaISO).slice(0,4), m=+String(fechaISO).slice(5,7);
+  return m>=FENO_MES_INI?y:y-1;
+}
+function inicioTemporada(fechaISO){ return temporadaFeno(fechaISO)+'-07-01'; }
+
+function cargarClima(){
+  if(CLIMA)return Promise.resolve(CLIMA);
+  if(CLIMA_PROM)return CLIMA_PROM;
+  CLIMA_PROM=Promise.all([
+    fetch('./datos.json').then(function(r){if(!r.ok)throw new Error('HTTP '+r.status);return r.json();}),
+    fetch('./config.json').then(function(r){return r.ok?r.json():{};}).catch(function(){return {};})
+  ]).then(function(res){
+    var j=res[0], cfg=res[1]||{};
+    var off={};
+    (cfg.off||[]).forEach(function(e){off[e]=true;});
+    try{
+      var g=localStorage.getItem('olmos_cfg');
+      if(g){off={};(JSON.parse(g).off||[]).forEach(function(e){off[e]=true;});}
+    }catch(e){}
+    var ests=Object.keys(j.gdd||{}).filter(function(e){return !off[e];}).sort();
+    CLIMA={gdd:j.gdd||{},coords:j.coords||{},meta:j.meta||{},estaciones:ests};
+    CLIMA_ERR=null;
+    return CLIMA;
+  }).catch(function(e){
+    CLIMA_ERR=e.message||'no se pudo leer datos.json';
+    CLIMA_PROM=null;
+    throw e;
+  });
+  return CLIMA_PROM;
+}
+
+/* Distancia en km entre dos puntos (fórmula del semiverseno). */
+function distKm(lat1,lng1,lat2,lng2){
+  var R=6371, rad=Math.PI/180;
+  var dLat=(lat2-lat1)*rad, dLng=(lng2-lng1)*rad;
+  var a=Math.sin(dLat/2)*Math.sin(dLat/2)+
+        Math.cos(lat1*rad)*Math.cos(lat2*rad)*Math.sin(dLng/2)*Math.sin(dLng/2);
+  return R*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));
+}
+
+/* Estación más cercana a un punto, entre las visibles y con coordenada. */
+function estacionCercana(lat,lng){
+  if(!CLIMA)return null;
+  var mejor=null, md=Infinity;
+  CLIMA.estaciones.forEach(function(e){
+    var c=CLIMA.coords[e];
+    if(!c||c.length<2)return;
+    var d=distKm(lat,lng,c[0],c[1]);
+    if(d<md){md=d;mejor=e;}
+  });
+  return mejor?{est:mejor,km:md}:null;
+}
+
+/* Grados-día acumulados de una estación entre dos fechas.
+   base: 10 usa la columna GDD base 10 °C; 4.5 usa la de base 4,5 °C.
+   Devuelve null si la estación no tiene datos en ese tramo. */
+function gddAcum(est,desde,hasta,base){
+  if(!CLIMA)return null;
+  var arr=CLIMA.gdd[est];
+  if(!arr||!arr.length)return null;
+  var col=(base===4.5?1:2), suma=0, dias=0, ultima='';
+  for(var i=0;i<arr.length;i++){
+    var f=arr[i][0];
+    if(f<desde)continue;
+    if(f>hasta)break;
+    var v=arr[i][col];
+    if(v==null)continue;
+    suma+=v;dias++;ultima=f;
+  }
+  if(!dias)return null;
+  return {gdd:Math.round(suma*10)/10,dias:dias,desde:desde,hasta:ultima};
+}
+
+/* Serie diaria acumulada, para el gráfico del historial. */
+function gddSerie(est,desde,hasta,base){
+  if(!CLIMA)return [];
+  var arr=CLIMA.gdd[est]||[], col=(base===4.5?1:2), acc=0, out=[];
+  for(var i=0;i<arr.length;i++){
+    var f=arr[i][0];
+    if(f<desde)continue;
+    if(f>hasta)break;
+    var v=arr[i][col];
+    if(v==null)continue;
+    acc+=v;
+    out.push([f,Math.round(acc*10)/10]);
+  }
+  return out;
+}
+
+/* Última fecha con dato climático (para avisar si el registro va adelantado). */
+function ultimoDatoClima(est){
+  if(!CLIMA)return '';
+  var a=CLIMA.gdd[est];
+  return (a&&a.length)?a[a.length-1][0]:'';
+}
+
+/* ── Estación de un cuartel ──
+   Prioridad: 1) lo que el técnico eligió a mano para ese cuartel,
+   2) el GPS del momento, 3) el nombre de la zona en la base de
+   cuarteles. Lo elegido a mano se recuerda por cuartel. */
+var ESTxCUARTEL={};
+try{ESTxCUARTEL=JSON.parse(localStorage.getItem('olo4_estctel')||'{}');}catch(e){ESTxCUARTEL={};}
+function claveCuartel(prod,ctel){
+  return String(prod||'').trim().toUpperCase()+'||'+String(ctel||'').trim().toUpperCase();
+}
+function recordarEstacion(prod,ctel,est){
+  if(!est)return;
+  ESTxCUARTEL[claveCuartel(prod,ctel)]=est;
+  try{localStorage.setItem('olo4_estctel',JSON.stringify(ESTxCUARTEL));}catch(e){}
+}
+function estacionRecordada(prod,ctel){ return ESTxCUARTEL[claveCuartel(prod,ctel)]||''; }
+
+/* Zonas de la base de cuarteles que corresponden sin ambigüedad a una
+   estación. Solo las seguras: el resto se resuelve por GPS o a mano. */
+var ZONA_EST={
+  'chimbarongo':'Chimbarongo',
+  'los lingues':'Antumapu - Los Lingues',
+  'manantiales':'Manantiales',
+  'rauco':'Rauco',
+  'sagrada familia':'Sagrada Familia',
+  'santa cruz':'Santa Cruz',
+  'tinguiririca':'Tinguiririca',
+  'lolol':'Santa Teresa de Quiahue - Lolol',
+  'talc':'Talcarehue',
+  'roma':'Roma San Pedro',
+  'la javierana':'Roma San Pedro',
+  'santa teresa':'Tinguiririca'
+};
+function estacionPorZona(prod,ctel){
+  if(!cuartelesDB.length)return '';
+  var p=String(prod||'').trim().toUpperCase(), c=String(ctel||'').trim().toUpperCase();
+  var fila=null;
+  for(var i=0;i<cuartelesDB.length;i++){
+    var r=cuartelesDB[i];
+    if(String(r.R_Social||'').trim().toUpperCase()===p &&
+       String(r.Cuartel||'').trim().toUpperCase()===c){fila=r;break;}
+  }
+  if(!fila){
+    for(var k=0;k<cuartelesDB.length;k++){
+      if(String(cuartelesDB[k].R_Social||'').trim().toUpperCase()===p){fila=cuartelesDB[k];break;}
+    }
+  }
+  if(!fila)return '';
+  var z=String(fila.Zona||'').trim().toLowerCase();
+  if(ZONA_EST[z])return ZONA_EST[z];
+  for(var key in ZONA_EST){ if(z.indexOf(key)>=0)return ZONA_EST[key]; }
+  return '';
+}
+
+
+/* ═══════════════════════════════════════════════════════════════════
+   ESTACIÓN EN EL REGISTRO FENOLÓGICO
+   ═══════════════════════════════════════════════════════════════════ */
+var feEstSrc='';   // de dónde salió la estación: gps | cuartel | zona | manual
+
+function llenarSelectEstaciones(){
+  var sel=document.getElementById('fe-est');
+  if(!sel)return;
+  var actual=sel.value;
+  sel.innerHTML='<option value="">— Sin estación —</option>'+
+    CLIMA.estaciones.map(function(e){
+      return '<option value="'+e.replace(/"/g,'&quot;')+'">'+e+'</option>';
+    }).join('');
+  if(actual)sel.value=actual;
+}
+
+function notaEstacion(txt,tono){
+  var el=document.getElementById('fe-est-nota');
+  if(!el)return;
+  el.textContent=txt||'';
+  el.style.color=tono==='ok'?'var(--g700)':tono==='warn'?'#B8791F':'var(--s400)';
+}
+
+/* Propone una estación sin pisar lo que el técnico ya eligió a mano. */
+function sugerirEstacion(forzar){
+  var sel=document.getElementById('fe-est');
+  if(!sel||!CLIMA)return;
+  if(feEstSrc==='manual'&&!forzar)return;
+  var prod=(document.getElementById('fe-prod')||{}).value||'';
+  var ctel=(document.getElementById('fe-ctel')||{}).value||'';
+
+  var rec=estacionRecordada(prod,ctel);
+  if(rec&&CLIMA.estaciones.indexOf(rec)>=0){
+    sel.value=rec;feEstSrc='cuartel';
+    notaEstacion('Estación usada la última vez en este cuartel','ok');
+    return;
+  }
+  if(feGPS){
+    var c=estacionCercana(feGPS.lat,feGPS.lng);
+    if(c){
+      sel.value=c.est;feEstSrc='gps';
+      notaEstacion('La más cercana a tu ubicación · a '+c.km.toFixed(1)+' km',
+                   c.km>25?'warn':'ok');
+      if(c.km>25)notaEstacion('La más cercana está a '+c.km.toFixed(1)+' km — confirma si corresponde','warn');
+      return;
+    }
+  }
+  var z=estacionPorZona(prod,ctel);
+  if(z&&CLIMA.estaciones.indexOf(z)>=0){
+    sel.value=z;feEstSrc='zona';
+    notaEstacion('Sugerida por la zona del cuartel · confírmala','warn');
+    return;
+  }
+  if(!sel.value)notaEstacion('Captura el GPS o elige la estación de la lista','');
+}
+
+function onEstManual(){
+  var sel=document.getElementById('fe-est');
+  if(!sel)return;
+  feEstSrc=sel.value?'manual':'';
+  if(sel.value){
+    notaEstacion('Elegida a mano · se recordará para este cuartel','ok');
+    vistaPreviaGDD();
+  }else{
+    notaEstacion('Sin estación no se calculan los grados-día','');
+    var p=document.getElementById('fe-gdd-prev');
+    if(p)p.style.display='none';
+  }
+}
+
+/* Muestra los grados-día acumulados antes de guardar. */
+function vistaPreviaGDD(){
+  var box=document.getElementById('fe-gdd-prev');
+  if(!box)return;
+  var sel=document.getElementById('fe-est');
+  var est=sel?sel.value:'';
+  var fecha=(document.getElementById('fe-fecha')||{}).value||hoyISOfeno();
+  if(!est||!CLIMA){box.style.display='none';return;}
+  var desde=inicioTemporada(fecha);
+  var a10=gddAcum(est,desde,fecha,10), a45=gddAcum(est,desde,fecha,4.5);
+  if(!a10&&!a45){
+    box.style.display='block';
+    box.className='gdd-prev vacio';
+    box.innerHTML='<div class="gdd-prev-t">Sin datos climáticos</div>'+
+      '<div class="gdd-prev-s">'+est+' no tiene registros entre el 1 de julio y esta fecha.</div>';
+    return;
+  }
+  var ult=ultimoDatoClima(est);
+  var atrasado=ult&&ult<fecha;
+  box.style.display='block';
+  box.className='gdd-prev';
+  box.innerHTML=
+    '<div class="gdd-prev-hd"><span class="gdd-prev-t">Grados-día acumulados</span>'+
+      '<span class="gdd-prev-est">'+est+'</span></div>'+
+    '<div class="gdd-prev-nums">'+
+      '<div class="gdd-prev-n"><b>'+(a10?a10.gdd.toLocaleString('es-CL'):'—')+'</b><span>base 10 °C</span></div>'+
+      '<div class="gdd-prev-n alt"><b>'+(a45?a45.gdd.toLocaleString('es-CL'):'—')+'</b><span>base 4,5 °C</span></div>'+
+    '</div>'+
+    '<div class="gdd-prev-s">Desde el 1 de julio · '+((a10||a45).dias)+' días'+
+      (atrasado?' · <b style="color:#B8791F">el clima llega hasta el '+fmtCorta(ult)+'</b>':'')+'</div>';
+}
+
+function hoyISOfeno(){
+  var d=new Date();
+  return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+}
+function fmtCorta(f){
+  if(!f)return '';
+  var p=String(f).slice(0,10).split('-');
+  return p.length<3?f:p[2]+'/'+p[1];
+}
+
+/* Se llama al entrar a Registrar Fenología. */
+function prepararEstacion(){
+  cargarClima().then(function(){
+    llenarSelectEstaciones();
+    sugerirEstacion(false);
+    vistaPreviaGDD();
+  }).catch(function(){
+    notaEstacion('No se pudieron leer los datos climáticos — el registro igual se guarda','warn');
+  });
+}
+
+/* Estación de un registro. Los registros anteriores a esta versión no
+   la traen guardada, pero muchos sí tienen GPS: en ese caso se deduce
+   la más cercana al vuelo, sin tocar el registro guardado. */
+var _estCache={};
+function estDeReg(r){
+  if(!r)return '';
+  if(r.est)return r.est;
+  if(_estCache[r.id]!==undefined)return _estCache[r.id];
+  var e='';
+  if(r.gps&&r.gps.lat!=null&&r.gps.lng!=null&&CLIMA){
+    var c=estacionCercana(r.gps.lat,r.gps.lng);
+    if(c&&c.km<=60)e=c.est;
+  }
+  _estCache[r.id]=e;
+  return e;
+}
+/* Grados-día de un registro: los guardados, o calculados al vuelo. */
+function gddDeReg(r,base){
+  if(!r)return null;
+  var g=(base===4.5?r.gdd45:r.gdd10);
+  if(g!=null)return g;
+  var e=estDeReg(r);
+  if(!e||!CLIMA)return null;
+  var f=String(r.fecha).slice(0,10);
+  var a=gddAcum(e,inicioTemporada(f),f,base);
+  return a?a.gdd:null;
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   FENOLOGÍA HISTÓRICA
+   ═══════════════════════════════════════════════════════════════════ */
+var fhDesde='', fhHasta='', fhBase=10;
+
+function abrirFenoHist(){
+  showV('feno-hist');
+  setHdr('Fenología Histórica','ANÁLISIS · CEREZOS');
+  document.getElementById('bnav').style.display='none';
+  var hoy=hoyISOfeno();
+  if(!fhDesde){fhDesde=inicioTemporada(hoy);fhHasta=hoy;}
+  var d=document.getElementById('fh-desde'), h=document.getElementById('fh-hasta');
+  if(d)d.value=fhDesde;
+  if(h)h.value=fhHasta;
+  popFenoFilterSelect();
+  cargarClima().then(renderHist).catch(renderHist);
+}
+
+function fhRango(preset){
+  var hoy=hoyISOfeno();
+  if(preset==='temporada'){fhDesde=inicioTemporada(hoy);fhHasta=hoy;}
+  else if(preset==='30'){var d=new Date();d.setDate(d.getDate()-30);fhDesde=d.toISOString().slice(0,10);fhHasta=hoy;}
+  else if(preset==='90'){var e=new Date();e.setDate(e.getDate()-90);fhDesde=e.toISOString().slice(0,10);fhHasta=hoy;}
+  else if(preset==='todo'){fhDesde='2000-01-01';fhHasta=hoy;}
+  document.getElementById('fh-desde').value=fhDesde;
+  document.getElementById('fh-hasta').value=fhHasta;
+  renderHist();
+}
+function fhFechaManual(){
+  fhDesde=document.getElementById('fh-desde').value||fhDesde;
+  fhHasta=document.getElementById('fh-hasta').value||fhHasta;
+  if(fhDesde>fhHasta){var t=fhDesde;fhDesde=fhHasta;fhHasta=t;
+    document.getElementById('fh-desde').value=fhDesde;
+    document.getElementById('fh-hasta').value=fhHasta;}
+  renderHist();
+}
+function fhSetBase(b){
+  fhBase=b;
+  document.querySelectorAll('.fh-base-btn').forEach(function(x){
+    x.classList.toggle('on',+x.dataset.b===b);
+  });
+  renderHist();
+}
+
+function fhFiltrados(){
+  var fp=(document.getElementById('feno-filter-prod')||{}).value||'';
+  var fv=(document.getElementById('feno-filter-vari')||{}).value||'';
+  var fc=(document.getElementById('feno-filter-ctel')||{}).value||'';
+  return fenologicos.filter(function(r){
+    if(!r||!r.fecha)return false;
+    var f=String(r.fecha).slice(0,10);
+    if(f<fhDesde||f>fhHasta)return false;
+    if(fp&&r.prod!==fp)return false;
+    if(fv&&r.vari!==fv)return false;
+    if(fc&&r.ctel!==fc)return false;
+    return true;
+  }).sort(function(a,b){return a.fecha<b.fecha?1:-1;});
+}
+
+function renderHist(){
+  var regsF=fhFiltrados();
+  renderHistKPIs(regsF);
+  renderHistGDD(regsF);
+  renderHistLinea(regsF);
+  renderFenoVariedadGallery();
+  renderFenoCalendar();
+  renderFenoList();
+}
+
+function renderHistKPIs(rf){
+  var box=document.getElementById('fh-kpis');
+  if(!box)return;
+  var ctel={}, vari={}, conFoto=0;
+  rf.forEach(function(r){
+    ctel[(r.prod||'')+'|'+(r.ctel||'')]=1;
+    if(r.vari)vari[r.vari]=1;
+    if(r.foto)conFoto++;
+  });
+  /* Grados-día del rango, promediando las estaciones que aparecen
+     en los registros filtrados. Si no hay ninguna, no se muestra. */
+  var ests={};
+  rf.forEach(function(r){var e=estDeReg(r);if(e)ests[e]=1;});
+  var lista=Object.keys(ests), sum=0, n=0;
+  lista.forEach(function(e){
+    var a=gddAcum(e,fhDesde,fhHasta,fhBase);
+    if(a){sum+=a.gdd;n++;}
+  });
+  var gddTxt=n?Math.round(sum/n).toLocaleString('es-CL'):'—';
+  var gddSub=n?('promedio de '+n+(n===1?' estación':' estaciones')):'sin estación en los registros';
+
+  box.innerHTML=
+    kpiHTML(rf.length,'Registros','#2C7A46')+
+    kpiHTML(Object.keys(ctel).length,'Cuarteles','#4F9E68')+
+    kpiHTML(Object.keys(vari).length,'Variedades','#2E6B8F')+
+    kpiHTML(gddTxt,'GDD base '+(fhBase===4.5?'4,5':'10')+' °C','#E0A73C',gddSub);
+}
+function kpiHTML(v,l,c,sub){
+  return '<div class="fh-kpi" style="--c:'+c+'">'+
+    '<div class="fh-kpi-v">'+v+'</div>'+
+    '<div class="fh-kpi-l">'+l+'</div>'+
+    (sub?'<div class="fh-kpi-s">'+sub+'</div>':'')+'</div>';
+}
+
+/* Curva de acumulación de grados-día con los registros marcados encima. */
+function renderHistGDD(rf){
+  var wrap=document.getElementById('fh-gdd-wrap');
+  var cv=document.getElementById('fh-gdd-canvas');
+  if(!wrap||!cv)return;
+  if(!CLIMA){
+    wrap.style.display='block';
+    wrap.querySelector('.fh-gdd-msg').textContent=
+      'No se pudieron leer los datos climáticos (datos.json). El resto del historial funciona igual.';
+    cv.style.display='none';
+    return;
+  }
+  var ests={};
+  rf.forEach(function(r){var e=estDeReg(r);if(e)ests[e]=1;});
+  var lista=Object.keys(ests).sort();
+  var msg=wrap.querySelector('.fh-gdd-msg');
+  if(!lista.length){
+    wrap.style.display='block';
+    cv.style.display='none';
+    msg.textContent='Los registros de este rango no tienen estación ni GPS, así que no se pueden cruzar con el clima. Los nuevos sí la van a guardar.';
+    return;
+  }
+  msg.textContent='';
+  cv.style.display='block';
+  wrap.style.display='block';
+  dibujarCurvaGDD(cv,lista,rf);
+}
+
+/* Dibujo a mano en canvas: la app no carga librerías de gráficos. */
+function dibujarCurvaGDD(cv,estaciones,rf){
+  var dpr=window.devicePixelRatio||1;
+  var W=cv.clientWidth||330, H=210;
+  cv.width=W*dpr; cv.height=H*dpr;
+  var g=cv.getContext('2d');
+  g.setTransform(dpr,0,0,dpr,0,0);
+  g.clearRect(0,0,W,H);
+
+  var series=estaciones.slice(0,6).map(function(e){
+    return {est:e,pts:gddSerie(e,fhDesde,fhHasta,fhBase)};
+  }).filter(function(s){return s.pts.length>1;});
+  if(!series.length){
+    g.fillStyle='#9AA79C';g.font='12px Inter,sans-serif';g.textAlign='center';
+    g.fillText('Sin datos climáticos en este rango',W/2,H/2);
+    return;
+  }
+  var ml=40, mr=10, mt=14, mb=26;
+  var pw=W-ml-mr, ph=H-mt-mb;
+  var todas=series.reduce(function(a,s){return a.concat(s.pts);},[]);
+  var maxY=Math.max.apply(null,todas.map(function(p){return p[1];}))||1;
+  var f0=series[0].pts[0][0], f1=series[0].pts[series[0].pts.length-1][0];
+  series.forEach(function(s){
+    if(s.pts[0][0]<f0)f0=s.pts[0][0];
+    if(s.pts[s.pts.length-1][0]>f1)f1=s.pts[s.pts.length-1][0];
+  });
+  var t0=new Date(f0+'T00:00:00').getTime(), t1=new Date(f1+'T00:00:00').getTime();
+  var span=Math.max(1,t1-t0);
+  var X=function(f){return ml+(new Date(f+'T00:00:00').getTime()-t0)/span*pw;};
+  var Y=function(v){return mt+ph-(v/maxY)*ph;};
+
+  /* rejilla */
+  g.strokeStyle='#ECF0EA';g.lineWidth=1;
+  g.fillStyle='#9AA79C';g.font='9px "IBM Plex Mono",monospace';g.textAlign='right';
+  for(var i=0;i<=4;i++){
+    var v=maxY*i/4, y=Y(v);
+    g.beginPath();g.moveTo(ml,y);g.lineTo(W-mr,y);g.stroke();
+    g.fillText(Math.round(v).toLocaleString('es-CL'),ml-5,y+3);
+  }
+  var COL=['#2C7A46','#2E6B8F','#E0A73C','#C0503C','#8FD6A4','#6B7A6E'];
+  series.forEach(function(s,k){
+    g.strokeStyle=COL[k%COL.length];g.lineWidth=2;g.beginPath();
+    s.pts.forEach(function(p,i){ i?g.lineTo(X(p[0]),Y(p[1])):g.moveTo(X(p[0]),Y(p[1])); });
+    g.stroke();
+  });
+  /* marcas de los registros fenológicos */
+  rf.forEach(function(r){
+    var e=estDeReg(r);
+    if(!e)return;
+    var k=estaciones.indexOf(e);
+    if(k<0||k>=series.length)return;
+    var f=String(r.fecha).slice(0,10);
+    if(f<f0||f>f1)return;
+    var v=gddDeReg(r,fhBase);
+    if(v==null)return;
+    var x=X(f), y=Y(v);
+    g.fillStyle='#fff';g.strokeStyle=COL[k%COL.length];g.lineWidth=2;
+    g.beginPath();g.arc(x,y,4,0,6.3);g.fill();g.stroke();
+  });
+  /* eje de fechas */
+  g.fillStyle='#9AA79C';g.font='9px "IBM Plex Mono",monospace';
+  g.textAlign='left';g.fillText(fmtCorta(f0),ml,H-8);
+  g.textAlign='right';g.fillText(fmtCorta(f1),W-mr,H-8);
+
+  var leg=document.getElementById('fh-gdd-leg');
+  if(leg)leg.innerHTML=series.map(function(s,k){
+    return '<span class="fh-leg"><i style="background:'+COL[k%COL.length]+'"></i>'+s.est+'</span>';
+  }).join('');
+}
+
+/* Línea de tiempo: cada cuartel-variedad con sus estados en orden. */
+function renderHistLinea(rf){
+  var el=document.getElementById('fh-linea');
+  if(!el)return;
+  if(!rf.length){
+    el.innerHTML='<div class="fh-vacio">No hay registros en este rango. Cambia las fechas o los filtros.</div>';
+    return;
+  }
+  var grupos={};
+  rf.forEach(function(r){
+    var k=(r.prod||'Sin productor')+'|'+(r.ctel||'S/C')+'|'+(r.vari||'—');
+    (grupos[k]=grupos[k]||[]).push(r);
+  });
+  var claves=Object.keys(grupos).sort();
+  el.innerHTML=claves.map(function(k){
+    var p=k.split('|'), items=grupos[k].slice().sort(function(a,b){return a.fecha<b.fecha?-1:1;});
+    var ult=items[items.length-1];
+    var gddU=gddDeReg(ult,fhBase);
+    var estU=estDeReg(ult);
+    return '<div class="fh-card">'+
+      '<div class="fh-card-hd">'+
+        '<div><div class="fh-card-t">'+p[2]+'</div>'+
+        '<div class="fh-card-s">'+p[0]+' · Cuartel '+p[1]+'</div></div>'+
+        (gddU!=null?'<div class="fh-card-gdd"><b>'+gddU.toLocaleString('es-CL')+'</b><span>°D</span></div>':'')+
+      '</div>'+
+      '<div class="fh-track">'+items.map(function(r,i){
+        var g=gddDeReg(r,fhBase);
+        return '<div class="fh-step" onclick="showFenoDetail('+r.id+')">'+
+          '<div class="fh-dot" style="background:'+fenoEstadoColor(r.estado)+'"></div>'+
+          (i<items.length-1?'<div class="fh-line"></div>':'')+
+          '<div class="fh-step-b">'+
+            '<div class="fh-step-e">'+r.estado+'</div>'+
+            '<div class="fh-step-f">'+fmtCorta(r.fecha)+(g!=null?' · '+g.toLocaleString('es-CL')+' °D':'')+
+            (r.foto?' · 📷':'')+'</div>'+
+          '</div></div>';
+      }).join('')+'</div>'+
+      (estU?'<div class="fh-card-est">Estación: '+estU+(ult.est?'':' · deducida del GPS')+'</div>':'')+
+    '</div>';
+  }).join('');
+}
+
+function fenoEstadoColor(e){
+  if(typeof fenoColor==='function')return fenoColor(e);
+  var m={'Yema Hinchada':'#8B6F47','Yema Algodón':'#C9B896','Botón Verde':'#6B9E5F',
+    'Botón Rosado':'#E8A0B8','Flor Abierta':'#F5F0E8','Caída de Pétalos':'#D9C7A8',
+    'Cuaja':'#7CB342','Fruto Verde':'#558B2F','Pinta':'#E57373','Cosecha':'#8E2434'};
+  return m[e]||'#4F9E68';
+}
+
+/* Resumen que se ve al entrar al menú de Fenología. */
+function renderFenoHubResumen(){
+  var el=document.getElementById('fh-hub-resumen');
+  if(!el)return;
+  var hoy=hoyISOfeno(), ini=inicioTemporada(hoy);
+  var temp=fenologicos.filter(function(r){return r.fecha&&String(r.fecha).slice(0,10)>=ini;});
+  var ctel={}, vari={};
+  temp.forEach(function(r){ctel[(r.prod||'')+'|'+(r.ctel||'')]=1;if(r.vari)vari[r.vari]=1;});
+  var ult=temp.slice().sort(function(a,b){return a.fecha<b.fecha?1:-1;})[0];
+  el.innerHTML=
+    '<div class="fh-hubres-row">'+
+      '<div><b>'+temp.length+'</b><span>registros</span></div>'+
+      '<div><b>'+Object.keys(ctel).length+'</b><span>cuarteles</span></div>'+
+      '<div><b>'+Object.keys(vari).length+'</b><span>variedades</span></div>'+
+    '</div>'+
+    '<div class="fh-hubres-s">Temporada desde el 1 de julio'+
+      (ult?' · último registro '+fmtCorta(ult.fecha)+' en '+(ult.vari||'—'):'')+'</div>';
+}
+
+/* La ficha de estados se muestra dentro del menú. */
+function toggleFenoGuide2(){
+  openSec('fenologia');
+  setTimeout(function(){
+    var w=document.getElementById('feno-guide-wrap');
+    if(w&&w.style.display==='none')toggleFenoGuide();
+    if(w)w.scrollIntoView({behavior:'smooth',block:'center'});
+  },160);
+}
+
+/* La exportación a Excel también lleva estación y grados-día. */
+function filaFenoExtra(r){
+  return {'Estacion':r.est||'','Origen Estacion':r.estSrc||'',
+    'GDD Base 10':r.gdd10!=null?r.gdd10:'','GDD Base 4,5':r.gdd45!=null?r.gdd45:'',
+    'GDD Desde':r.gddDesde||'','GDD Dias':r.gddDias!=null?r.gddDias:''};
+}
+
 var gps = null;
 var mapObj = null, mapPins = [];
 var momentoC = 'pre', tipoC = 'cf', tipoU = 'pre';
@@ -1325,6 +2111,20 @@ var fenoFilterKey = '';
 
 // ===== INIT =====
 async function cargarCuarteles(){
+  /* Primero el archivo que viaja con la app: es instantáneo y funciona
+     sin señal. Si no está, se recurre a la planilla de Google. */
+  try{
+    var rl=await fetch('./cuarteles.json');
+    if(rl.ok){
+      var jl=await rl.json();
+      if(Array.isArray(jl)&&jl.length){
+        cuartelesDB=jl;
+        popCuartelesDatalists();
+        renderHubSummary();
+        return;
+      }
+    }
+  }catch(e){}
   try{
     var resp=await fetch('https://script.google.com/macros/s/AKfycbyEGlXGsdJQYX5GDpMSTG2vSVPdmtNmwjXhtyunEG_hBnIjdsQmpjlisr72rRzW3K3C/exec?token=olmos2026&sheet=CUARTELES');
     var j=await resp.json();
@@ -1537,12 +2337,17 @@ function openSec(s){
   }else if(s==='checklist'){
     showV('checklist');setHdr('Check List','LABORES SEMANALES');
     document.getElementById('bnav').style.display='none';
+  }else if(s==='feno'){
+    showV('feno-hub');setHdr('Fenología','REGISTRO Y ANÁLISIS');
+    document.getElementById('bnav').style.display='none';
+    renderFenoHubResumen();
   }else if(s==='fenologia'){
-    showV('fenologia');setHdr('Registro Fenológico','ESTADOS · CEREZOS');
+    showV('fenologia');setHdr('Registrar Fenología','ESTADO POR CUARTEL');
     document.getElementById('bnav').style.display='none';
     popPolySelects();
     var feFecha=document.getElementById('fe-fecha');
     if(feFecha&&!feFecha.value)feFecha.value=new Date().toISOString().slice(0,10);
+    prepararEstacion();
     popFenoFilterSelect();
     renderFenoList();
     renderFenoVariedadGallery();
@@ -2360,7 +3165,7 @@ function capFenoGPS(){
   var txt=document.getElementById('fe-gps-txt');
   if(txt)txt.textContent='Capturando...';
   var done=function(lat,lng,acc,sim){
-    feGPS={lat:lat,lng:lng,acc:acc,ts:Date.now(),sim:sim};
+    feGPS={lat:lat,lng:lng,acc:acc,ts:Date.now(),sim:sim}; try{sugerirEstacion(false);vistaPreviaGDD();}catch(e){}
     if(dot)dot.className='gps-dot '+(sim?'sim':'ok');
     if(txt)txt.textContent=lat.toFixed(5)+', '+lng.toFixed(5)+(sim?' (aprox.)':'');
   };
@@ -2427,12 +3232,23 @@ function saveFeno(){
   var fecha=document.getElementById('fe-fecha').value||new Date().toISOString().slice(0,10);
   var notas=document.getElementById('fe-notas').value.trim();
   if(!estado){showT('Selecciona un estado fenológico');return;}
+  var est=(document.getElementById('fe-est')||{}).value||'';
+  var desde=inicioTemporada(fecha);
+  var a10=est?gddAcum(est,desde,fecha,10):null;
+  var a45=est?gddAcum(est,desde,fecha,4.5):null;
   var rec={
     id:Date.now(),prod:prod,ctel:ctel,vari:vari,estado:estado,fecha:fecha,notas:notas,
     gps:feGPS?{lat:feGPS.lat,lng:feGPS.lng,acc:feGPS.acc,sim:feGPS.sim}:null,
     foto:fePhoto||null,
+    est:est||null,
+    estSrc:est?(feEstSrc||'manual'):null,
+    gdd10:a10?a10.gdd:null,
+    gdd45:a45?a45.gdd:null,
+    gddDesde:est?desde:null,
+    gddDias:a10?a10.dias:(a45?a45.dias:null),
     ts:new Date().toISOString()
   };
+  if(est)recordarEstacion(prod,ctel,est);
   fenologicos.unshift(rec);
 
   /* El registro (texto) va a localStorage y pesa menos de 1 KB.
@@ -2443,7 +3259,7 @@ function saveFeno(){
     resetFenoForm();
     return;
   }
-  showT('Registro fenológico guardado · '+ctel+' · '+estado);
+  showT('Guardado · '+ctel+' · '+estado+(rec.gdd10!=null?' · '+rec.gdd10.toLocaleString('es-CL')+' °D':''));
 
   if(rec.foto){
     fotoGuardar(rec.id,rec.foto).then(function(ok){
@@ -2769,6 +3585,8 @@ function exportFenoXL(){
     return {
       'Fecha':r.fecha,'Razón Social':r.prod,'Cuartel':r.ctel,'Variedad':r.vari,'Estado Fenológico':r.estado,
       'Notas':r.notas||'','Con Foto':r.foto?'Sí':'No','GPS Lat':r.gps?r.gps.lat:'','GPS Lng':r.gps?r.gps.lng:'',
+      'Estacion':r.est||'','GDD Base 10':r.gdd10!=null?r.gdd10:'','GDD Base 4,5':r.gdd45!=null?r.gdd45:'',
+      'GDD Desde':r.gddDesde||'','GDD Dias':r.gddDias!=null?r.gddDias:'',
       'Foto (base64)':r.foto||''
     };
   });
