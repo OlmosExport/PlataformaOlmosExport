@@ -1,6 +1,6 @@
 PLATAFORMA EXPORTADORA LOS OLMOS
 ================================
-Versión 4.2 · Departamento Técnico
+Versión 4.3 · Departamento Técnico
 
 
 QUÉ HAY EN LA CARPETA (todo junto, sin subcarpetas)
@@ -75,6 +75,28 @@ FENOLOGÍA (desde la versión 4.2)
     3. La zona del cuartel, según cuarteles.json.
   Siempre puedes cambiarla en la lista. Lo que elijas a mano queda
   recordado para ese cuartel.
+
+  CÓDIGO DE ESTADO, TEMPORADA Y SEMANA (desde la 4.3)
+
+  Cada registro guarda ahora, además del nombre del estado:
+    cod     0 a 13, según el orden fenológico (0 Yema Hinchada … 13 Cosecha)
+    sigla   YH, PV, BVC, RE, REx, BB, FA, CdP, CdC, FV, PaF, FCP, IP, CO
+    temp    temporada, por ejemplo 2026-2027 (del 1 de julio al 30 de junio)
+    sem     número de semana
+
+  El código es lo que permite graficar el avance y comparar temporadas.
+  Los registros anteriores se numeran solos a partir del nombre del estado.
+
+  LA CURVA DE AVANCE
+
+  En Fenología Histórica, el eje horizontal son los grados-día acumulados
+  y el vertical el estado fenológico. Así se comparan cuarteles aunque
+  hayan sido visitados en fechas distintas: si dos van con los mismos
+  grados-día pero uno está más adelantado, la diferencia es de variedad,
+  portainjerto o manejo, no de clima.
+
+  Muestra hasta 8 cuarteles a la vez; con más, usa los filtros.
+
 
   LOS GRADOS-DÍA
 
