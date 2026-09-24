@@ -1,6 +1,6 @@
 PLATAFORMA EXPORTADORA LOS OLMOS
 ================================
-Versión 4.5 · Departamento Técnico
+Versión 4.6 · Departamento Técnico
 
 
 QUÉ HAY EN LA CARPETA (todo junto, sin subcarpetas)
@@ -151,6 +151,19 @@ LA CLAVE DE LA IA (informe de visita)
 
   Si la clave deja de funcionar, la app la borra sola y la vuelve a pedir en
   el siguiente intento.
+
+
+ANTES DE PUBLICAR: CORRER LAS PRUEBAS
+
+  En la carpeta del repositorio:
+
+      python3 pruebas/verificar.py
+
+  Tarda segundos y revisa 13 cosas. Si sale algún ERROR, no publiques.
+  Los detalles están en pruebas/LEEME.txt.
+
+  Además, GitHub las corre solo con cada cambio que subas y te avisa
+  por correo si algo falla.
 
 
 REVISIÓN RÁPIDA DESPUÉS DE PUBLICAR (2 minutos)

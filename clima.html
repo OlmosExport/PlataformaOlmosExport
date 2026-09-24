@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Plataforma Agroclimática · Exportadora Los Olmos</title>
-<meta name="app-version" content="4.5">
+<meta name="app-version" content="4.6">
 <meta name="app-build" content="2026-08-06-01">
 <meta name="theme-color" content="#1B4F8A">
 <meta name="description" content="Grados-día y eventos de helada de la red de estaciones de Exportadora Los Olmos.">
@@ -2723,17 +2723,9 @@ const CARDS={
   datos:{t:'Actualización de datos',ic:'<path d="M12 16V4M7 9l5-5 5 5"/><path d="M4 16v3a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-3"/>',
     p:{exp:'Sube el Excel de la base climática y deja la plataforma con los últimos registros.'}}
 };
-function buildMenuCards(){
-  if(!document.getElementById('mcards'))return;
-  const list=S.role==='exp'?['gdd','frio','helada','mapa','datos']:['gdd','frio','helada'];
-  document.getElementById('mcards').innerHTML=list.map(k=>`
-    <button class="mcard" onclick="go('${k}')">
-      <div class="ic"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#2C7A46" stroke-width="1.9"
-        stroke-linecap="round" stroke-linejoin="round">${CARDS[k].ic}</svg></div>
-      <h3>${CARDS[k].t}</h3><p>${CARDS[k].p[S.role]||CARDS[k].p.exp}</p>
-      <div class="go"><span>Abrir reporte →</span><span>›</span></div>
-    </button>`).join('');
-}
+/* buildMenuCards se eliminó: nunca se llamaba y el contenedor 'mcards'
+   no existe desde un rediseño anterior. El objeto CARDS queda por si
+   se reutilizan las descripciones. */
 
 /* ═══ guías ═══ */
 const GUIAS={
@@ -5995,8 +5987,9 @@ document.getElementById('btnSave').onclick=()=>{
    Al publicar un cambio: sube el número y agrega la línea
    correspondiente al principio de APP_HISTORIAL.
    ═══════════════════════════════════════════════════ */
-const APP_VERSION="4.5";
+const APP_VERSION="4.6";
 const APP_HISTORIAL=[
+  ['4.6','Verificación automática antes de publicar y limpieza de código sin uso'],
   ['4.5','Poner al día: corregir registros antiguos y asignar estaciones por lote'],
   ['4.4','Los filtros de fenología ya no congelan la app y ahora filtran todo'],
   ['4.3','Curva de avance fenológico y código de estado para comparar temporadas'],

@@ -1,0 +1,81 @@
+PRUEBAS DE LA PLATAFORMA
+========================
+
+Para qué sirven
+---------------
+
+Para que un cambio en la app no llegue roto al equipo. Cada revisión
+está acá porque alguna vez algo se rompió por eso: la app en blanco por
+un error de sintaxis, el filtro que congelaba el teléfono, una clave de
+API publicada en un repositorio público, botones que no hacían nada.
+
+Antes de publicar cualquier cambio, corre esto. Si algo falla, no subas.
+
+
+Los tres archivos
+-----------------
+
+  verificar.py   Revisión rápida, sin navegador. Tarda segundos.
+                 Archivos, JSON, sintaxis, claves filtradas, elementos
+                 que no existen, botones rotos, funciones duplicadas,
+                 versiones descuadradas, service worker, enlaces,
+                 datos climáticos, base de cuarteles, estados fenológicos.
+
+  funcional.py   Abre las tres páginas en un navegador de verdad y las
+                 usa. Tarda un par de minutos. Comprueba que los
+                 grados-día cuadren con datos.json, que el filtro filtre
+                 y responda rápido, que guardar un registro deje la
+                 estación y los grados-día pegados, y que las fotos no
+                 inflen la página.
+
+  romper.py      Rompe la app a propósito de ocho formas distintas y
+                 comprueba que verificar.py lo detecte cada vez.
+                 Es la prueba de las pruebas: si una revisión no falla
+                 cuando debería, no sirve de nada.
+
+
+Cómo correrlas
+--------------
+
+  Lo mínimo, antes de cada publicación:
+
+      python3 pruebas/verificar.py
+
+  Lo completo, cuando el cambio es grande:
+
+      pip install playwright
+      playwright install chromium
+      python3 pruebas/funcional.py
+
+  Y si alguna vez tocas las pruebas mismas:
+
+      python3 pruebas/romper.py
+
+  Todas devuelven 0 si pasan y 1 si algo falla.
+
+
+Se corren solas en GitHub
+-------------------------
+
+El archivo .github/workflows/verificar.yml las ejecuta con cada cambio
+que llega al repositorio. Si algo falla, GitHub te avisa por correo y
+marca el cambio con una cruz roja. También puedes lanzarlas a mano
+desde la pestaña Actions del repositorio.
+
+La revisión estructural corre primero. Si falla, las pruebas de
+navegador ni se intentan: no tiene sentido abrir una app que no compila.
+
+
+Avisos y errores
+----------------
+
+  ERROR   detiene la publicación. Hay que corregirlo.
+  AVISO   no detiene nada, pero conviene mirarlo. Por ejemplo, que
+          datos.json lleve más de dos semanas sin actualizarse.
+
+
+Si agregas algo a la app
+------------------------
+
+Agrega también su prueba. Una sección nueva sin prueba es una sección
+que nadie va a notar cuando se rompa.

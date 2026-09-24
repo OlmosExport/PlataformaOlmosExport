@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Plataforma de Campo · Exportadora Los Olmos</title>
 <meta name="theme-color" content="#14301C">
-<meta name="app-version" content="4.5">
+<meta name="app-version" content="4.6">
 <link rel="manifest" href="./manifest.webmanifest">
 <link rel="apple-touch-icon" href="./apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -2283,10 +2283,7 @@ function renderHistLinea(rf){
   }).join('');
 }
 
-function fenoEstadoColor(e){
-  var i=FENO_ESTADOS.indexOf(e);
-  return i>=0?FENO_COLORS[i]:'#9AA79C';
-}
+/* fenoEstadoColor vive más abajo, junto a FENO_ESTADOS y FENO_COLORS. */
 /* Código de estado de un registro: el guardado, o deducido del texto.
    Los registros anteriores a la 4.3 no lo traen. */
 function codDeReg(r){
