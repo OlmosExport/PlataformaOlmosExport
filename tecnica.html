@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Plataforma de Campo · Exportadora Los Olmos</title>
 <meta name="theme-color" content="#14301C">
-<meta name="app-version" content="4.8">
+<meta name="app-version" content="4.9">
 <link rel="manifest" href="./manifest.webmanifest">
 <link rel="apple-touch-icon" href="./apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -600,28 +600,201 @@ body.drawer-open{overflow:hidden}
 .gib-result-val{font-size:19px;font-weight:800;color:var(--g700);font-family:var(--mono);white-space:nowrap}
 .gib-result-unit{font-size:10.5px;color:var(--s400);font-weight:600}
 
-/* ══ FORMATO PC (escritorio ≥900px): sidebar fija + contenido ancho ══ */
+/* ═══════════════════════════════════════════════════════════════════
+   FORMATO ESCRITORIO (≥900px)
+
+   Esta app se diseñó para el teléfono: una sola columna, botones que
+   ocupan el ancho entero y fichas apiladas. En un monitor eso se ve
+   enorme y vacío, y no se parece en nada a Departamento Técnico ni a
+   Requisitos SAG.
+
+   Acá se reacomoda para que las tres se vean iguales. Es solo CSS:
+   no cambia ningún dato, ningún botón ni ninguna cuenta. En el
+   teléfono todo sigue exactamente como estaba.
+   ═══════════════════════════════════════════════════════════════════ */
 @media (min-width:900px){
-  body{max-width:none}
-  #app{display:grid!important;grid-template-columns:268px 1fr;grid-template-rows:auto 1fr;grid-template-areas:"side header" "side main";min-height:100vh}
+
+  /* ── 1 · El armazón ───────────────────────────────────────────── */
+  body{max-width:none;font-size:14px;letter-spacing:-.005em}
+  #app{display:grid!important;grid-template-columns:268px minmax(0,1fr);
+    grid-template-areas:"side main";min-height:100vh}
   .drawer-overlay{display:none!important}
-  .drawer{grid-area:side;position:sticky;top:0;left:auto;bottom:auto;width:268px;max-width:268px;height:100vh;transform:none!important;box-shadow:none;border-right:1px solid rgba(255,255,255,.07)}
-  .drawer-close{display:none}
-  .app-header{grid-area:header;position:sticky;top:0}
-  .burger{display:none}
-  .app-content{grid-area:main;max-width:1180px;width:100%;margin:0 auto;padding:26px 36px 50px;box-sizing:border-box}
-  .bottom-nav{display:none!important}
-  .hub-grid{grid-template-columns:repeat(3,1fr)}
-  .submenu-grid{grid-template-columns:repeat(3,1fr)}
-  .stats-grid{grid-template-columns:repeat(4,1fr)}
-  .hub-greet{padding:26px 26px 24px}
-  .hub-greet-art{width:88px;height:88px}
-  .hub-kpi-row{grid-template-columns:repeat(4,1fr)}
-  .fito-grid{grid-template-columns:repeat(3,1fr)}
-  .fv-cards{display:grid;grid-template-columns:repeat(2,1fr)}
+  .drawer{grid-area:side;position:sticky;top:0;left:auto;bottom:auto;width:268px;
+    max-width:268px;height:100vh;transform:none!important;box-shadow:none;
+    border-right:1px solid rgba(255,255,255,.07)}
+  .drawer-close,.burger,.bottom-nav{display:none!important}
+
+  /* La barra verde de arriba repetía el título y traía un reloj. En las
+     otras dos plataformas no existe: el título vive en el contenido. */
+  .app-header{display:none!important}
+
+  /* Una sola barra de desplazamiento, la de la ventana. Antes el
+     contenido tenía la suya propia, aparte de la de la página. */
+  .app-content{grid-area:main;max-width:1180px;width:100%;margin:0 auto;
+    padding:28px 36px 56px;box-sizing:border-box;overflow:visible}
+
+  /* ── 2 · Rejilla de 12 columnas ───────────────────────────────────
+     Todo ocupa el ancho entero salvo lo que se diga más abajo. Así las
+     fichas se ponen de a tres y dejan de ser barras de lado a lado,
+     sin tocar una sola línea del HTML. */
+  .view.active{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));
+    column-gap:14px;align-content:start}
+  .view.active>*{grid-column:1/-1;min-width:0}
+
+  /* ── 3 · Título de cada sección ───────────────────────────────── */
+  .sec-hdr{margin-bottom:22px;align-items:flex-start}
+  .sec-back{display:none}          /* para volver está el menú de la izquierda */
+  .sec-hdr-title{font-size:25px;letter-spacing:-.025em;line-height:1.15}
+  .sec-hdr-sub{font-size:13px;color:var(--s500);margin-top:4px}
+
+  /* La portada del módulo deja de ser un cartel verde y pasa a ser un
+     título, como en las otras dos plataformas. */
+  .hub-greet,.dash-greet{background:none;border-radius:0;padding:0;
+    margin-bottom:22px;overflow:visible;box-shadow:none}
+  .hub-greet::after,.dash-greet::after{display:none}
+  .hub-greet-art{display:none}
+  .hub-greet-inner{display:block}
+  .hub-g-label,.dash-label{font-family:var(--mono);font-size:10px;font-weight:600;
+    letter-spacing:.13em;color:var(--s400);margin-bottom:6px}
+  .hub-g-title,.dash-title{font-size:25px;font-weight:800;color:var(--s800);
+    letter-spacing:-.025em;line-height:1.15}
+  .hub-g-sub,.dash-sub{font-size:13px;color:var(--s500);margin-top:4px;
+    font-family:var(--font)}
+  .hub-g-tag{font-size:13px;color:var(--s500);margin-top:8px;max-width:70ch;
+    line-height:1.55}
+
+  /* ── 4 · Etiquetas que separan bloques ────────────────────────── */
+  .hub-sec-lbl,.flabel,.fx-sec{font-family:var(--mono);font-size:10px;font-weight:600;
+    letter-spacing:.13em;text-transform:uppercase;color:var(--s400);
+    display:flex;align-items:center;gap:11px;margin:26px 0 12px}
+  .hub-sec-lbl::after,.flabel::after,.fx-sec::after{content:'';flex:1;height:1px;
+    background:var(--s200)}
+  .view.active>.hub-sec-lbl:first-child,.view.active>.flabel:first-child,
+  .sec-hdr+.flabel,.sec-hdr+.hub-sec-lbl{margin-top:0}
+
+  /* ── 5 · Indicadores ──────────────────────────────────────────── */
+  .hub-kpi-row{grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:22px}
+  .stats-grid{grid-template-columns:repeat(4,1fr);gap:12px}
+  .hub-kpi,.stat-c{position:relative;overflow:hidden;padding:15px 16px;gap:0;
+    border-radius:var(--r-md);display:flex;flex-direction:column}
+  .hub-kpi::before,.stat-c::before{content:'';position:absolute;left:0;top:0;bottom:0;
+    width:3px;background:var(--kc,var(--g500))}
+  .hub-kpi-ic,.stat-icon{display:none}
+  .hub-kpi-lbl,.stat-lbl{order:1;font-size:10.5px;font-weight:700;color:var(--s500);
+    margin:0 0 8px;line-height:1.3}
+  .hub-kpi-val,.stat-val{order:2;font-size:26px;font-family:var(--font);font-weight:800;
+    color:var(--s800);letter-spacing:-.03em;font-variant-numeric:tabular-nums;line-height:1}
+  .stat-bar{order:3;margin-top:10px}
+  /* el color de la barra sigue al que ya tenía el icono de cada tarjeta */
+  #hub-kpi-row .hub-kpi:nth-child(1){--kc:var(--blue)}
+  #hub-kpi-row .hub-kpi:nth-child(2){--kc:var(--g700)}
+  #hub-kpi-row .hub-kpi:nth-child(3){--kc:var(--amber)}
+  #hub-kpi-row .hub-kpi:nth-child(4){--kc:var(--orange)}
+
+  /* ── 6 · Tarjetas de módulo ───────────────────────────────────── */
+  .hub-grid,.submenu-grid,.fito-grid{grid-template-columns:repeat(3,1fr);gap:14px}
+  .hub-card,.sm-card{border-radius:18px;padding:20px;min-height:0;gap:0;
+    transition:transform .24s cubic-bezier(.22,.61,.36,1),box-shadow .24s,border-color .24s}
+  .hub-card:hover,.sm-card:hover{transform:translateY(-3px);box-shadow:var(--sh-lg);
+    border-color:var(--g200)}
+  .hub-card:active,.sm-card:active{transform:translateY(-1px)}
+  .hub-card-icon,.sm-card-icon{width:46px;height:46px;border-radius:14px;margin-bottom:14px}
+  .hub-card-icon svg,.sm-card-icon svg{width:24px;height:24px}
+  .hub-card-title,.sm-card-title{font-size:16px;font-weight:800;letter-spacing:-.02em}
+  .hub-card-sub{font-size:11.5px;color:var(--s500);margin-top:5px;line-height:1.5}
+  .hub-card::after,.sm-card::after{content:'Entrar \00a0→';margin-top:auto;
+    padding-top:12px;border-top:1px solid var(--s200);font-size:12px;font-weight:700;
+    color:var(--g700);display:block;padding-left:0}
+
+  /* ── 7 · Filas de menú (Fenología, Fitosanitario) ─────────────────
+     Eran barras de lado a lado; de a tres se leen igual que las
+     tarjetas del inicio. */
+  .view.active>.fh-opt{grid-column:span 4;flex-direction:column;align-items:flex-start;
+    gap:0;padding:20px;border-radius:18px;margin-bottom:14px;
+    transition:transform .24s cubic-bezier(.22,.61,.36,1),box-shadow .24s,border-color .24s}
+  .view.active>.fh-opt:hover{transform:translateY(-3px);box-shadow:var(--sh-lg);
+    border-color:var(--g200)}
+  .view.active>.fh-opt .fh-opt-ico{width:46px;height:46px;border-radius:14px;
+    margin-bottom:14px}
+  .view.active>.fh-opt .fh-opt-ico svg{width:24px;height:24px}
+  .view.active>.fh-opt .fh-opt-t{font-size:16px}
+  .view.active>.fh-opt .fh-opt-s{font-size:11.5px;line-height:1.5;margin-top:5px}
+  .view.active>.fh-opt .fh-opt-ar{display:none}
+  .view.active>.fh-opt::after{content:'Abrir \00a0→';margin-top:auto;padding-top:12px;
+    width:100%;border-top:1px solid var(--s200);font-size:12px;font-weight:700;
+    color:var(--g700)}
+
+  /* ── 8 · Campos de formulario, de a tres ──────────────────────── */
+  .view.active>.sel-card{grid-column:span 4;margin-bottom:12px}
+  .view.active>.gps-bar,.view.active>.gdd-prev{grid-column:span 6}
+  .view.active>.iv-card{grid-column:span 6}
+  .view.active>.ia-bar{grid-column:span 6}
+  .view.active>.ia-result,.view.active>.est-result{grid-column:span 6}
+  .view.active>.cl-form{grid-column:span 8}
+  .view.active>.coming-soon{grid-column:span 6}
+  .sel-input{font-size:14px}
+
+  /* ── 9 · Botones ──────────────────────────────────────────────────
+     Un botón de 1.100 px de ancho no se ve como un botón. */
+  .view.active>.btn-submit{grid-column:9/-1;padding:13px 20px;font-size:13.5px;
+    border-radius:var(--r-md)}
+  .btn-exp{flex:0 0 auto!important;padding:9px 15px!important}
+  .fx-bulk{width:auto;display:inline-block;min-width:380px}
+
+  /* ── 9b · Indicadores chicos y filtros (Base Productores) ────────
+     Eran cajitas centradas de 8 px y controles sueltos sin etiqueta.
+     Se alinean con las tarjetas y con la barra de filtros de las
+     otras dos plataformas. */
+  .view.active>div[style*="padding:6px 14px"]{padding:0!important}
+  .kpi-box{flex:1 1 0;min-width:0;text-align:left;padding:15px 16px;
+    position:relative;overflow:hidden;border-radius:var(--r-md);box-shadow:var(--sh-sm)}
+  .kpi-box::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;
+    background:var(--g500)}
+  .kpi-val{font-size:26px;font-weight:800;color:var(--s800);letter-spacing:-.03em;
+    font-variant-numeric:tabular-nums;line-height:1;order:2}
+  .kpi-lbl{font-size:10.5px;font-weight:700;color:var(--s500);text-transform:none;
+    letter-spacing:0;margin:0 0 8px}
+  .kpi-box{display:flex;flex-direction:column}
+  .form-input{padding:9px 11px;font-size:12.5px;font-weight:600;border-width:1px;
+    border-radius:9px;background:var(--s50)}
+  .form-input:focus{outline:2px solid var(--g300);outline-offset:-1px;box-shadow:none}
+  .view.active div:has(>.kpi-box){gap:12px!important;margin-bottom:14px!important}
+  .view.active div:has(>.form-input){gap:10px!important;margin-bottom:16px!important}
+
+  /* ── 9c · Interruptores y bloques del conteo ─────────────────────
+     Un par de opciones no necesita 1.100 px: se quedan del ancho de
+     su contenido, como un interruptor de verdad. */
+  .mt-wrap{flex-direction:row;gap:18px;flex-wrap:wrap;margin-bottom:0}
+  .mt-group{flex:0 0 auto;min-width:230px}
+  .mt-label{font-family:var(--mono);font-size:9.5px;letter-spacing:.11em;margin-bottom:5px}
+  .mt-btn{padding:8px 16px;font-size:10.5px}
+  .tipo-toggle{max-width:420px}
+  .view.active>.mt-wrap{grid-column:1/-1;margin-bottom:16px}
+  .view.active>.plantas-sec{grid-column:span 7;padding:16px 18px}
+  .view.active>.prom-panel{grid-column:span 5;border-radius:var(--r-md)}
+  .prom-panel{margin-bottom:0}
+  .view.active>.gps-bar{padding:10px 14px;border-radius:9px;align-self:start}
+
+  /* ── 10 · Respaldo ────────────────────────────────────────────────
+     Tres botones de ancho completo, uno encima de otro, pesaban más
+     que todo lo demás de la página. */
+  .bak-card{border-radius:var(--r-md);padding:18px 20px;margin-top:22px}
+  .bak-actions{gap:10px;flex-wrap:wrap}
+  .bak-btn{flex:0 0 auto;min-width:190px;padding:10px 18px;font-size:12px;
+    border-width:1px;border-radius:9px}
+  .bak-card>div[style*="margin-top:6px"]{margin-top:10px!important}
+  .bak-card>div[style*="margin-top:6px"]>.bak-btn{flex:0 0 auto!important;min-width:210px}
+  #espacio-box{margin-top:16px!important;padding:12px 14px!important}
+
+  /* ── 11 · Tablas y gráficos ───────────────────────────────────── */
+  .chart-card,.avg-panel,.prom-panel{border-radius:var(--r-md)}
+  .fv-cards{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+  .reg-item,.cl-item{border-radius:var(--r-md)}
 }
+
 @media (min-width:1200px){
-  .app-content{padding:30px 44px 56px}
+  .app-content{padding:30px 44px 60px}
+  .view.active>.fh-opt{grid-column:span 4}
 }
 </style>
 </head>
@@ -655,7 +828,7 @@ body.drawer-open{overflow:hidden}
 
       <div class="dnav-lbl">Estimación</div>
       <button class="dnav-btn" onclick="closeDrawer();document.getElementById('h-home').style.display='block';showEstCer()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg><span>Estimación Cerezos</span></button>
-      <button class="dnav-btn" onclick="closeDrawer();document.getElementById('h-home').style.display='block';showV('est-uva');setHdr('Estimación Uva de Mesa','CÁLCULO PRODUCTIVO');document.getElementById('bnav').style.display='none'"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg><span>Estimación Uva de Mesa</span></button>
+      <button class="dnav-btn" onclick="closeDrawer();document.getElementById('h-home').style.display='block';showV('est-uva');setHdr('Estimación Uva de Mesa','Cálculo productivo en kilos por hectárea');document.getElementById('bnav').style.display='none'"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg><span>Estimación Uva de Mesa</span></button>
 
       <div class="dnav-lbl">Datos</div>
       <button class="dnav-btn" onclick="closeDrawer();document.getElementById('h-home').style.display='block';document.getElementById('bnav').style.display='flex';navTo('dashboard',0)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg><span>Dashboard</span></button>
@@ -683,8 +856,8 @@ body.drawer-open{overflow:hidden}
     <div class="h-logo"><img id="headerLogo" alt="Exportadora Los Olmos"></div>
     <div class="h-sep"></div>
     <div class="h-info">
-      <div class="h-title" id="h-title">Departamento Técnico</div>
-      <div class="h-sub" id="h-sub">SELECCIONA UN MÓDULO</div>
+      <div class="h-title" id="h-title">Plataforma de Campo</div>
+      <div class="h-sub" id="h-sub">Elige un módulo</div>
     </div>
     <div class="h-right">
       <span class="hb hb-sp" id="h-home" onclick="goHub()" style="display:none">Inicio</span>
@@ -700,7 +873,7 @@ body.drawer-open{overflow:hidden}
         <div class="hub-greet-inner">
           <div class="hub-greet-text">
             <div class="hub-g-label">Exportadora Los Olmos · 2026</div>
-            <div class="hub-g-title">Departamento Técnico</div>
+            <div class="hub-g-title">Plataforma de Campo</div>
             <div class="hub-g-sub" id="hub-date">—</div>
             <div class="hub-g-tag">Información técnica de campo para una producción más eficiente y sustentable.</div>
           </div>
@@ -816,7 +989,7 @@ body.drawer-open{overflow:hidden}
     <div class="view" id="view-conteos-hub">
       <div class="sec-hdr">
         <div class="sec-back" onclick="goHub()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg></div>
-        <div><div class="sec-hdr-title">Conteos</div><div class="sec-hdr-sub">Selecciona especie</div></div>
+        <div><div class="sec-hdr-title">Conteos</div><div class="sec-hdr-sub">Elige la especie que vas a contar</div></div>
       </div>
       <div class="submenu-grid">
         <div class="sm-card" onclick="openConteo('cerezos')">
@@ -1131,7 +1304,7 @@ body.drawer-open{overflow:hidden}
     <div class="view" id="view-feno-hist">
       <div class="sec-hdr">
         <div class="sec-back" onclick="openSec('feno')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg></div>
-        <div><div class="sec-hdr-title">Fenología Histórica</div><div class="sec-hdr-sub">Avance y grados-día acumulados</div></div>
+        <div><div class="sec-hdr-title">Fenología Histórica</div><div class="sec-hdr-sub">Avance por cuartel y grados-día acumulados</div></div>
       </div>
 
       <div class="fh-rango">
@@ -1279,7 +1452,7 @@ body.drawer-open{overflow:hidden}
     <div class="view" id="view-estimacion">
       <div class="sec-hdr">
         <div class="sec-back" onclick="goHub()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg></div>
-        <div><div class="sec-hdr-title">Estimación</div><div class="sec-hdr-sub">Selecciona especie</div></div>
+        <div><div class="sec-hdr-title">Estimación</div><div class="sec-hdr-sub">Elige la especie que vas a contar</div></div>
       </div>
       <div class="submenu-grid">
         <div class="sm-card" onclick="showEstCer()"><div class="sm-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="8" cy="16" r="4"/><circle cx="16" cy="13" r="4"/><path d="M8 12c0-4 2-7 4-9"/></svg></div><div class="sm-card-title">Cerezos</div></div>
@@ -1355,7 +1528,7 @@ body.drawer-open{overflow:hidden}
     <div class="view" id="view-base-prod">
     <div class="sec-hdr">
       <div class="sec-back" onclick="goHub()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg></div>
-      <div><div class="sec-hdr-title">Base Productores</div><div class="sec-hdr-sub">MATRIZ DE CAMPO</div></div>
+      <div><div class="sec-hdr-title">Base Productores</div><div class="sec-hdr-sub">Productores, cuarteles, variedades y superficie</div></div>
     </div>
     <div style="padding:6px 14px">
       <div style="display:flex;gap:6px;margin-bottom:8px;flex-wrap:wrap">
@@ -1380,7 +1553,7 @@ body.drawer-open{overflow:hidden}
   <div class="view" id="view-fito-hub">
     <div class="sec-hdr">
       <div class="sec-back" onclick="goHub()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg></div>
-      <div><div class="sec-hdr-title">Programa Fitosanitario</div><div class="sec-hdr-sub">CEREZOS · TEMPORADA 2026-27</div></div>
+      <div><div class="sec-hdr-title">Programa Fitosanitario</div><div class="sec-hdr-sub">Cerezos · temporada 2026-27</div></div>
     </div>
     <div class="fito-beta">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#B8791F" stroke-width="2" style="flex-shrink:0;margin-top:1px"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
@@ -1405,7 +1578,7 @@ body.drawer-open{overflow:hidden}
   <div class="view" id="view-fito-programa">
     <div class="sec-hdr">
       <div class="sec-back" onclick="showV('fito-hub')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg></div>
-      <div><div class="sec-hdr-title">Programa Cerezos 2026-27</div><div class="sec-hdr-sub">BETA · PROGRAMA FITOSANITARIO</div></div>
+      <div><div class="sec-hdr-title">Programa Cerezos 2026-27</div><div class="sec-hdr-sub">Programa fitosanitario · en construcción</div></div>
     </div>
     <div class="fito-beta"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#B8791F" stroke-width="2" style="flex-shrink:0;margin-top:1px"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg><div><strong>BETA:</strong> puede contener errores. Programa referencial para huertos adultos de cerezos; consulta al Depto. Técnico antes de aplicar.</div></div>
     <div class="sel-card"><div class="sel-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div><div class="sel-content"><input class="sel-input" type="text" id="fito-prog-search" placeholder="Buscar producto, objetivo, época, ingrediente..." oninput="renderFitoPrograma()" style="border:none;background:transparent;padding:0;width:100%"></div></div>
@@ -1415,7 +1588,7 @@ body.drawer-open{overflow:hidden}
   <div class="view" id="view-fito-giberelico">
     <div class="sec-hdr">
       <div class="sec-back" onclick="showV('fito-hub')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg></div>
-      <div><div class="sec-hdr-title">Calculadora Giberélico</div><div class="sec-hdr-sub">BETA · ÁCIDO GIBERÉLICO</div></div>
+      <div><div class="sec-hdr-title">Calculadora Giberélico</div><div class="sec-hdr-sub">Ácido giberélico · en construcción</div></div>
     </div>
     <div class="fito-beta"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#B8791F" stroke-width="2" style="flex-shrink:0;margin-top:1px"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg><div><strong>BETA:</strong> calculadora de referencia según el cuadro del Depto. Técnico. Verifica siempre la dosis final con el Depto. Técnico antes de aplicar.</div></div>
     <div class="flabel">Datos de la aplicación</div>
@@ -1429,7 +1602,7 @@ body.drawer-open{overflow:hidden}
   <div class="view" id="view-fito-alternativas">
     <div class="sec-hdr">
       <div class="sec-back" onclick="showV('fito-hub')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg></div>
-      <div><div class="sec-hdr-title">Alternativas de Aplicación</div><div class="sec-hdr-sub">BETA · SUSTITUTOS AL PROGRAMA</div></div>
+      <div><div class="sec-hdr-title">Alternativas de Aplicación</div><div class="sec-hdr-sub">Sustitutos al programa · en construcción</div></div>
     </div>
     <div class="fito-beta"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#B8791F" stroke-width="2" style="flex-shrink:0;margin-top:1px"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg><div><strong>BETA:</strong> puede contener errores. Productos alternativos equivalentes a los del programa base; confirma dosis con el Depto. Técnico.</div></div>
     <div id="fito-alt-list"></div>
@@ -1938,7 +2111,7 @@ var fhDesde='', fhHasta='', fhBase=10;
 
 function abrirFenoHist(){
   showV('feno-hist');
-  setHdr('Fenología Histórica','ANÁLISIS · CEREZOS');
+  setHdr('Fenología Histórica','Avance por cuartel y grados-día acumulados');
   document.getElementById('bnav').style.display='none';
   var hoy=hoyISOfeno();
   if(!fhDesde){fhDesde=inicioTemporada(hoy);fhHasta=hoy;}
@@ -2461,7 +2634,7 @@ function similitud(a,b){
 /* ── Pantalla ── */
 function abrirPonerAlDia(){
   showV('feno-fix');
-  setHdr('Poner al día','CORREGIR REGISTROS');
+  setHdr('Poner al día','Corregir registros ya guardados, por lote');
   document.getElementById('bnav').style.display='none';
   cargarClima().then(renderFix).catch(renderFix);
 }
@@ -2873,8 +3046,8 @@ function showV(name){
 }
 function goHub(){
   showV('hub');
-  document.getElementById('h-title').textContent='Departamento Técnico';
-  document.getElementById('h-sub').textContent='SELECCIONA UN MÓDULO';
+  document.getElementById('h-title').textContent='Plataforma de Campo';
+  document.getElementById('h-sub').textContent='Elige un módulo';
   document.getElementById('h-home').style.display='none';
   document.getElementById('bnav').style.display='none';
   renderHubSummary();
@@ -2890,21 +3063,21 @@ function openSec(s){
     document.getElementById('cs-plantas').textContent=regs.reduce(function(s,r){return s+r.np;},0);
     document.getElementById('cs-bar').style.width=Math.min(100,regs.length)+'%';
   }else if(s==='base-prod'){
-    showV('base-prod');setHdr('Base Productores','MATRIZ DE CAMPO');
+    showV('base-prod');setHdr('Base Productores','Productores, cuarteles, variedades y superficie');
     document.getElementById('bnav').style.display='none';
     renderBaseProd();
   }else if(s==='informe'){
-    showV('informe');setHdr('Informe de Visita','REGISTRO TÉCNICO');
+    showV('informe');setHdr('Informe de Visita','Registro técnico de la visita a terreno');
     document.getElementById('bnav').style.display='none';
   }else if(s==='checklist'){
-    showV('checklist');setHdr('Check List','LABORES SEMANALES');
+    showV('checklist');setHdr('Check List','Labores de la semana por cuartel');
     document.getElementById('bnav').style.display='none';
   }else if(s==='feno'){
-    showV('feno-hub');setHdr('Fenología','REGISTRO Y ANÁLISIS');
+    showV('feno-hub');setHdr('Fenología','Cerezos · registro y análisis');
     document.getElementById('bnav').style.display='none';
     renderFenoHubResumen();
   }else if(s==='fenologia'){
-    showV('fenologia');setHdr('Registrar Fenología','ESTADO POR CUARTEL');
+    showV('fenologia');setHdr('Registrar Fenología','Cerezos · estado observado por cuartel');
     document.getElementById('bnav').style.display='none';
     popPolySelects();
     var feFecha=document.getElementById('fe-fecha');
@@ -2916,10 +3089,10 @@ function openSec(s){
     renderFenoCalendar();
     renderFenoCurve();
   }else if(s==='estimacion'){
-    showV('estimacion');setHdr('Estimación','CÁLCULO PRODUCTIVO');
+    showV('estimacion');setHdr('Estimación','Elige la especie con la que vas a trabajar');
     document.getElementById('bnav').style.display='none';
   }else if(s==='fito'){
-    showV('fito-hub');setHdr('Programa Fitosanitario','BETA · CEREZOS 2026-27');
+    showV('fito-hub');setHdr('Programa Fitosanitario','Cerezos 2026-27 · en construcción');
     document.getElementById('bnav').style.display='none';
   }
 }
@@ -2927,18 +3100,18 @@ function showFitoView(which){
   document.getElementById('h-home').style.display='block';
   document.getElementById('bnav').style.display='none';
   if(which==='programa'){
-    showV('fito-programa');setHdr('Programa Cerezos 2026-27','BETA · PROGRAMA FITOSANITARIO');
+    showV('fito-programa');setHdr('Programa Cerezos 2026-27','Programa fitosanitario · en construcción');
     renderFitoPrograma();
   }else if(which==='giberelico'){
-    showV('fito-giberelico');setHdr('Calculadora Giberélico','BETA · ÁCIDO GIBERÉLICO');
+    showV('fito-giberelico');setHdr('Calculadora Giberélico','Ácido giberélico · en construcción');
     calcGiberelico();
   }else if(which==='alternativas'){
-    showV('fito-alternativas');setHdr('Alternativas de Aplicación','BETA · SUSTITUTOS AL PROGRAMA');
+    showV('fito-alternativas');setHdr('Alternativas de Aplicación','Sustitutos al programa · en construcción');
     renderFitoAlternativas();
   }
 }
 function showEstCer(){
-  showV('est-cer');setHdr('Estimación Cerezos','CÁLCULO PRODUCTIVO');
+  showV('est-cer');setHdr('Estimación Cerezos','Cálculo productivo en kilos por hectárea');
   document.getElementById('bnav').style.display='none';
   setTimeout(function(){popEstFilters();autoFillCF();},60);
 }
@@ -2946,11 +3119,11 @@ function setHdr(t,s){document.getElementById('h-title').textContent=t;document.g
 function openConteo(sp){
   popPolySelects();
   if(sp==='cerezos'){
-    showV('cerezos');setHdr('Cerezos','CONTEO TÉCNICO');
+    showV('cerezos');setHdr('Cerezos','Conteo técnico por cuartel');
     if(!pC.length)addPC();
     setTimeout(function(){initMiniMap('c');updateMiniMap('c');},80);
   }else{
-    showV('uva');setHdr('Uva de Mesa','CONTEO TÉCNICO');
+    showV('uva');setHdr('Uva de Mesa','Conteo técnico por cuartel');
     if(!pU.length)addPU();
     setTimeout(function(){initMiniMap('u');updateMiniMap('u');},80);
   }
@@ -2958,10 +3131,10 @@ function openConteo(sp){
 function navTo(v,idx){
   showV(v);
   document.querySelectorAll('.ni').forEach(function(b,i){b.classList.toggle('active',i===idx);});
-  if(v==='mapa'){setHdr('Mapa','PUNTOS GPS');setTimeout(initMap,60);}
-  if(v==='poligonos'){setHdr('Polígonos','MAPEO SATELITAL');setTimeout(initPolyMap,60);}
-  if(v==='dashboard'){setHdr('Dashboard','RESUMEN TÉCNICO');renderDash();setTimeout(renderBarChart,60);}
-  if(v==='registros'){setHdr('Registros','HISTORIAL');renderR();}
+  if(v==='mapa'){setHdr('Mapa','Puntos GPS de los registros de terreno');setTimeout(initMap,60);}
+  if(v==='poligonos'){setHdr('Polígonos','Mapeo satelital de los cuarteles');setTimeout(initPolyMap,60);}
+  if(v==='dashboard'){setHdr('Dashboard','Resumen de lo registrado en terreno');renderDash();setTimeout(renderBarChart,60);}
+  if(v==='registros'){setHdr('Registros','Historial de todo lo registrado en terreno');renderR();}
 }
 
 // ===== TIPO =====

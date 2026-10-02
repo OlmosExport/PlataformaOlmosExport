@@ -422,6 +422,103 @@ def correr(pw):
     prueba("Requisitos SAG no da errores", not reales,
            reales[0][:60] if reales else "")
     ctx.close()
+
+    # 7 · Plataforma de Campo: el formato de escritorio
+    ctx = nav.new_context(viewport={"width": 1440, "height": 950})
+    pg = ctx.new_page()
+    fallas = []
+    pg.on("pageerror", lambda e: fallas.append(str(e)))
+    pg.goto("%s/tecnica.html" % BASE, wait_until="domcontentloaded")
+    pg.wait_for_timeout(4500)
+
+    pc = pg.evaluate("""() => ({
+        anchoDoc: document.documentElement.scrollWidth,
+        anchoVent: window.innerWidth,
+        barraArriba: getComputedStyle(document.querySelector('.app-header')).display,
+        navAbajo: getComputedStyle(document.getElementById('bnav')).display,
+        scrollInterno: getComputedStyle(document.querySelector('.app-content')).overflowY,
+        rejilla: getComputedStyle(document.getElementById('view-hub')).display
+    })""")
+    prueba("en el monitor no sobra ancho", pc["anchoDoc"] <= pc["anchoVent"],
+           "%d de %d px" % (pc["anchoDoc"], pc["anchoVent"]))
+    prueba("una sola barra de desplazamiento", pc["scrollInterno"] == "visible",
+           "el contenido ya no tiene la suya")
+    prueba("sin barra superior ni menú inferior duplicados",
+           pc["barraArriba"] == "none" and pc["navAbajo"] == "none")
+    prueba("las secciones usan la rejilla de escritorio", pc["rejilla"] == "grid")
+
+    # las fichas y los campos dejan de ser barras de lado a lado
+    anchos = pg.evaluate("""() => {
+        openSec('feno');
+        const o = [...document.querySelectorAll('#view-feno-hub > .fh-opt')];
+        const cont = document.querySelector('.app-content').clientWidth;
+        return {n: o.length, max: Math.max(...o.map(e => e.offsetWidth)), cont};
+    }""")
+    prueba("las filas de menú se ponen de a tres",
+           anchos["n"] > 0 and anchos["max"] < anchos["cont"] * .4,
+           "%d fichas de %d px en %d" % (anchos["n"], anchos["max"], anchos["cont"]))
+
+    campos = pg.evaluate("""() => {
+        openSec('fenologia');
+        const c = [...document.querySelectorAll('#view-fenologia > .sel-card')];
+        const cont = document.querySelector('.app-content').clientWidth;
+        return {n: c.length, max: Math.max(...c.map(e => e.offsetWidth)), cont};
+    }""")
+    prueba("los campos del formulario se ponen de a tres",
+           campos["n"] > 0 and campos["max"] < campos["cont"] * .4,
+           "%d campos de %d px en %d" % (campos["n"], campos["max"], campos["cont"]))
+
+    # el título ya no dice que esto es el Departamento Técnico
+    titulos = pg.evaluate("""() => {
+        goHub();            // la barra muestra el título de la vista abierta
+        return {
+        hub: document.querySelector('.hub-g-title').textContent.trim(),
+        barra: document.getElementById('h-title').textContent.trim(),
+        mayus: [...document.querySelectorAll('.sec-hdr-sub')]
+                 .map(e => e.textContent.trim())
+                 .filter(t => t && t === t.toUpperCase() && /[A-ZÁÉÍÓÚÑ]{4}/.test(t))
+        };
+    }""")
+    prueba("el módulo se llama Plataforma de Campo",
+           titulos["hub"] == "Plataforma de Campo" and titulos["barra"] == "Plataforma de Campo",
+           "%s · %s" % (titulos["hub"], titulos["barra"]))
+    prueba("ningún subtítulo quedó en mayúsculas", not titulos["mayus"],
+           ", ".join(titulos["mayus"][:3]))
+
+    reales = [f for f in fallas if "librer" not in f.lower()]
+    prueba("la Plataforma de Campo no da errores en el monitor", not reales,
+           reales[0][:60] if reales else "")
+    ctx.close()
+
+    # 8 · ...y en el teléfono sigue tal cual estaba
+    ctx = nav.new_context(viewport={"width": 390, "height": 844})
+    pg = ctx.new_page()
+    fallas = []
+    pg.on("pageerror", lambda e: fallas.append(str(e)))
+    pg.goto("%s/tecnica.html" % BASE, wait_until="domcontentloaded")
+    pg.wait_for_timeout(4500)
+    cel = pg.evaluate("""() => ({
+        anchoDoc: document.documentElement.scrollWidth,
+        anchoVent: window.innerWidth,
+        anchoCuerpo: getComputedStyle(document.body).maxWidth,
+        barraArriba: getComputedStyle(document.querySelector('.app-header')).display,
+        vista: getComputedStyle(document.getElementById('view-hub')).display,
+        portada: getComputedStyle(document.querySelector('.hub-greet')).backgroundColor,
+        iconoKpi: getComputedStyle(document.querySelector('.hub-kpi-ic')).display
+    })""")
+    prueba("en el teléfono no aparece barra lateral de lado",
+           cel["anchoDoc"] <= cel["anchoVent"],
+           "%d de %d px" % (cel["anchoDoc"], cel["anchoVent"]))
+    prueba("el teléfono conserva su formato de 480 px",
+           cel["anchoCuerpo"] == "480px" and cel["vista"] == "block",
+           "%s · %s" % (cel["anchoCuerpo"], cel["vista"]))
+    prueba("el teléfono conserva su barra y su portada verde",
+           cel["barraArriba"] == "flex" and cel["portada"] == "rgb(30, 91, 51)"
+           and cel["iconoKpi"] != "none")
+    reales = [f for f in fallas if "librer" not in f.lower()]
+    prueba("la Plataforma de Campo no da errores en el teléfono", not reales,
+           reales[0][:60] if reales else "")
+    ctx.close()
     nav.close()
 
 

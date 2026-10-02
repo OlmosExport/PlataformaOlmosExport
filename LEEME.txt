@@ -1,6 +1,6 @@
 PLATAFORMA EXPORTADORA LOS OLMOS
 ================================
-Versión 4.8 · Requisitos SAG
+Versión 4.9 · Formato de escritorio en la Plataforma de Campo
 
 
 QUÉ HAY EN LA CARPETA (todo junto, sin subcarpetas)
@@ -244,6 +244,35 @@ REQUISITOS SAG (desde la versión 4.8)
 
   Sale de cuarteles.json, del flujo de cosecha y de las estimaciones. No hay
   una lista aparte que mantener: si agregas un cuartel, el CSG aparece solo.
+
+
+LA PLATAFORMA DE CAMPO EN EL COMPUTADOR (desde la versión 4.9)
+
+  Esa app se diseñó para el teléfono: una sola columna, botones de lado a
+  lado y fichas apiladas. En un monitor se veía enorme y no se parecía a
+  Departamento Técnico ni a Requisitos SAG.
+
+  Desde la 4.9, cuando la pantalla pasa de 900 px:
+
+    · desaparece la barra verde de arriba, que repetía el título y traía
+      un reloj. El título vive en el contenido, como en las otras dos.
+    · queda una sola barra de desplazamiento, la de la ventana. Antes el
+      contenido tenía la suya, aparte de la de la página.
+    · las fichas, las filas de menú y los campos de los formularios se
+      ponen de a tres en vez de ocupar el ancho entero.
+    · los indicadores quedan iguales a los de las otras plataformas:
+      etiqueta arriba, número grande y una franja de color a la izquierda.
+    · los botones se achican al ancho de su texto.
+    · los subtítulos de cada sección quedaron todos en frase; antes la
+      mitad estaba EN MAYÚSCULAS.
+
+  EN EL TELÉFONO NO CAMBIÓ NADA. Todo esto es solo CSS dentro de la regla
+  @media (min-width:900px): no toca ningún dato, ningún botón ni ninguna
+  cuenta. Las pruebas comprueban las dos cosas: que el computador se vea
+  acomodado y que el teléfono siga exactamente como estaba.
+
+  El inicio decía "Departamento Técnico", que es otra plataforma. Ahora
+  dice "Plataforma de Campo".
 
 
 ANTES DE PUBLICAR: CORRER LAS PRUEBAS
