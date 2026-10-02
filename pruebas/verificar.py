@@ -23,8 +23,8 @@ import sys
 import tempfile
 
 RAIZ = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-PAGINAS = ["index.html", "clima.html", "tecnica.html"]
-JSONS = ["datos.json", "config.json", "cuarteles.json",
+PAGINAS = ["index.html", "clima.html", "tecnica.html", "tecnico.html"]
+JSONS = ["datos.json", "config.json", "cuarteles.json", "cosecha.json",
          "heladas_comunas.json", "manifest.webmanifest"]
 OBLIGATORIOS = PAGINAS + JSONS + ["sw.js", "icon-192.png", "icon-512.png",
                                   "apple-touch-icon.png", "LEEME.txt"]
@@ -354,6 +354,39 @@ def r_fenologia():
               ", ".join("%s=%d" % (k, v) for k, v in largos.items()))
 
 
+def r_cosecha():
+    """Que cosecha.json traiga lo que la página de Depto. Técnico espera."""
+    ruta = os.path.join(RAIZ, "cosecha.json")
+    if not os.path.exists(ruta):
+        return
+    try:
+        c = json.load(open(ruta, encoding="utf-8"))
+    except Exception:
+        return
+    for k in ("meta", "flujo", "estimaciones", "kilosSemana"):
+        if k not in c:
+            error("cosecha", "cosecha.json no trae la sección '%s'" % k)
+    if not c.get("flujo"):
+        error("cosecha", "cosecha.json no tiene filas de calendario")
+        return
+    f0 = c["flujo"][0]
+    for campo in ("prod", "vari", "kg", "dias"):
+        if campo not in f0:
+            error("cosecha", "a las filas del calendario les falta '%s'" % campo)
+    # el recálculo de kilos semana tiene que cuadrar con el calendario
+    kg_cal = sum(sum(r.get("dias", {}).values()) for r in c["flujo"])
+    kg_sem = sum(sum(r.get("kg", {}).values()) for r in c.get("kilosSemana", {}).get("filas", []))
+    if kg_cal and abs(kg_cal - kg_sem) > 1:
+        error("cosecha", "Kilos Semana (%s) no cuadra con el calendario (%s)"
+              % (round(kg_sem), round(kg_cal)))
+    xls = c.get("kilosSemanaExcel", {}).get("filas", [])
+    if xls:
+        kx = sum(sum(r.get("kg", {}).values()) for r in xls)
+        if abs(kg_cal - kx) > 1:
+            aviso("cosecha", "la tabla dinámica del Excel está %s kg atrás del calendario"
+                  % f"{abs(kg_cal-kx):,.0f}".replace(",", "."))
+
+
 # ─────────────────────────────────────────────────────────────
 REVISIONES = [
     ("archivos del sitio", r_archivos),
@@ -369,6 +402,7 @@ REVISIONES = [
     ("datos climáticos", r_datos),
     ("base de cuarteles", r_cuarteles),
     ("estados fenológicos", r_fenologia),
+    ("datos de cosecha", r_cosecha),
 ]
 
 

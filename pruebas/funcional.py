@@ -92,7 +92,7 @@ def correr(pw):
     nav = pw.chromium.launch()
 
     # 1 · las tres páginas abren sin errores de JavaScript
-    for pagina in ["index.html", "clima.html", "tecnica.html"]:
+    for pagina in ["index.html", "clima.html", "tecnica.html", "tecnico.html"]:
         ctx = nav.new_context(viewport={"width": 390, "height": 844})
         pg = ctx.new_page()
         fallas = []
@@ -223,6 +223,61 @@ def correr(pw):
 
     reales = [f for f in fallas if "librer" not in f.lower()]
     prueba("ninguna acción provocó un error", not reales,
+           reales[0][:60] if reales else "")
+    ctx.close()
+
+    # 5 · Departamento Técnico
+    ctx = nav.new_context(viewport={"width": 1440, "height": 950})
+    pg = ctx.new_page()
+    fallas = []
+    pg.on("pageerror", lambda e: fallas.append(str(e)))
+    pg.goto("%s/tecnico.html" % BASE, wait_until="domcontentloaded")
+    pg.wait_for_timeout(4000)
+
+    d = pg.evaluate("""() => D ? {flujo: D.flujo.length, est: D.estimaciones.length} : null""")
+    prueba("Depto. Técnico carga cosecha.json", d and d["flujo"] > 0,
+           "%d filas de calendario · %d estimaciones" % (d["flujo"], d["est"]) if d else "")
+
+    soon = pg.evaluate("() => document.querySelectorAll('.esp-c.soon').length")
+    prueba("cinco especies quedan en construcción", soon == 5, "%d marcadas" % soon)
+
+    # los kilos del calendario deben cuadrar con el archivo
+    cos = json.load(open(os.path.join(RAIZ, "cosecha.json"), encoding="utf-8"))
+    kg_arch = sum(sum(r["dias"].values()) for r in cos["flujo"])
+    pg.evaluate("() => ir('flujo')")
+    pg.wait_for_timeout(1800)
+    kg_app = pg.evaluate("""() => {
+        const t = document.querySelector('#t-flujo .tot td:nth-child(4)');
+        return t ? Number(t.textContent.replace(/\./g,'')) : 0;
+    }""")
+    prueba("el calendario suma lo mismo que el archivo",
+           abs(kg_app - kg_arch) < 2, "app %s · archivo %s" % (kg_app, round(kg_arch)))
+
+    # abrir una semana muestra sus días
+    abierta = pg.evaluate("""() => {
+        const s = D.flujo.flatMap(r => Object.keys(r.dias));
+        const sem = new Date(s[0] + 'T00:00:00');
+        const antes = document.querySelectorAll('#t-flujo thead tr').length;
+        const n = [...document.querySelectorAll('#t-flujo thead th.wk')][3];
+        if (n) n.click();
+        return {antes, despues: document.querySelectorAll('#t-flujo thead tr').length};
+    }""")
+    prueba("al abrir una semana aparecen sus días",
+           abierta["despues"] > abierta["antes"],
+           "%d → %d filas de encabezado" % (abierta["antes"], abierta["despues"]))
+
+    # Kilos Semana tiene que cuadrar con el calendario
+    pg.evaluate("() => ir('kilos')")
+    pg.wait_for_timeout(1800)
+    ks = pg.evaluate("""() => {
+        const t = document.querySelector('#t-kilos .tot td:last-child');
+        return t ? Number(t.textContent.replace(/\./g,'')) : 0;
+    }""")
+    prueba("Kilos Semana cuadra con el calendario",
+           abs(ks - kg_arch) < 2, "%s vs %s" % (ks, round(kg_arch)))
+
+    reales = [f for f in fallas if "librer" not in f.lower()]
+    prueba("el Depto. Técnico no da errores", not reales,
            reales[0][:60] if reales else "")
     ctx.close()
     nav.close()

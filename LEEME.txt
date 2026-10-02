@@ -1,6 +1,6 @@
 PLATAFORMA EXPORTADORA LOS OLMOS
 ================================
-Versión 4.6 · Departamento Técnico
+Versión 4.7 · Departamento Técnico
 
 
 QUÉ HAY EN LA CARPETA (todo junto, sin subcarpetas)
@@ -9,11 +9,13 @@ QUÉ HAY EN LA CARPETA (todo junto, sin subcarpetas)
                         dos plataformas. Es lo primero que se abre.
   clima.html            Plataforma Climática (antes se llamaba index.html).
   tecnica.html          Plataforma de Campo.
+  tecnico.html          Departamento Técnico: estimación y flujo de cosecha.
 
   datos.json            Todos los datos climáticos. Es lo único que se
                         reemplaza al actualizar cada semana.
   config.json           Estaciones ocultas para todo el equipo.
   cuarteles.json        Base de productores y cuarteles (244 cuarteles).
+  cosecha.json          Calendario de cosecha, estimaciones y kilos por semana.
   heladas_comunas.json  Reporte de heladas por comuna.
 
   manifest.webmanifest  Datos de la app instalable.
@@ -21,6 +23,29 @@ QUÉ HAY EN LA CARPETA (todo junto, sin subcarpetas)
   icon-192.png
   icon-512.png
   apple-touch-icon.png  Íconos de la app en el celular.
+
+
+ACTUALIZAR EL FLUJO DE COSECHA Y LAS ESTIMACIONES
+
+  Los datos del Departamento Técnico salen del Excel FLUJO_CEREZOS.
+  Para actualizarlos:
+
+      python3 scripts/generar_cosecha.py FLUJO_CEREZOS_2026-2027.xlsx
+
+  Eso genera cosecha.json, que es lo único que se sube. El script lee
+  tres hojas:
+
+      FLUJO COSECHA 2026   el calendario día a día
+      ESTIMACIONES         los momentos de estimación por cuartel
+      KILOS SEMANA         solo para comparar
+
+  Al terminar imprime un control: totales, nombres repetidos, fechas que
+  no calzan y si la tabla dinámica del Excel quedó atrás. Conviene leerlo
+  antes de publicar.
+
+  OJO: la tabla Kilos Semana que ves en la app NO se copia del Excel, se
+  calcula desde el calendario. Así siempre cuadra, aunque la tabla
+  dinámica del Excel esté sin refrescar.
 
 
 ACTUALIZAR LA BASE DE PRODUCTORES

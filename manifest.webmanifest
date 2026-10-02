@@ -34,14 +34,35 @@
       "name": "Plataforma Climática",
       "short_name": "Climática",
       "url": "./clima.html",
-      "icons": [{ "src": "./icon-192.png?v=2", "sizes": "192x192" }]
+      "icons": [
+        {
+          "src": "./icon-192.png?v=2",
+          "sizes": "192x192"
+        }
+      ]
     },
     {
       "name": "Plataforma de Campo",
       "short_name": "Campo",
       "url": "./tecnica.html",
-      "icons": [{ "src": "./icon-192.png?v=2", "sizes": "192x192" }]
+      "icons": [
+        {
+          "src": "./icon-192.png?v=2",
+          "sizes": "192x192"
+        }
+      ]
+    },
+    {
+      "name": "Departamento Técnico",
+      "short_name": "Técnico",
+      "url": "./tecnico.html",
+      "icons": [
+        {
+          "src": "./icon-192.png?v=2",
+          "sizes": "192x192"
+        }
+      ]
     }
   ],
-  "version": "4.6"
+  "version": "4.7"
 }
