@@ -1,0 +1,1409 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Requisitos SAG · Exportadora Los Olmos</title>
+<meta name="description" content="Requisitos por mercado, campañas de mosca de la fruta y agenda de pesticidas de Exportadora Los Olmos.">
+<meta name="app-version" content="4.8">
+<meta name="theme-color" content="#14301C">
+<link rel="manifest" href="./manifest.webmanifest">
+<link rel="apple-touch-icon" href="./apple-touch-icon.png">
+<link rel="icon" href="./icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --g900:#14301C; --g800:#1E5B33; --g700:#2C7A46; --g500:#4F9E68; --g300:#8FD6A4;
+  --g200:#CFE8D8; --g100:#E8F2EA; --g50:#F3F8F4;
+  --ink:#16211A; --mut:#6B7A6E; --mut2:#9AA79C;
+  --line:#E5EAE4; --line2:#ECF0EA; --bg:#F6F8F5; --card:#fff;
+  --blue:#2E6B8F; --blue-s:#E4EFF6; --warn:#E0A73C; --warn-s:#FBF1DE;
+  --red:#C0503C; --red-s:#FBEDEA; --plum:#7B4B6B;
+  --font:'Inter',system-ui,-apple-system,sans-serif;
+  --mono:'IBM Plex Mono',ui-monospace,monospace;
+  --r:14px;
+  --sh1:0 1px 2px rgba(20,32,24,.04);
+  --sh2:0 1px 3px rgba(20,32,24,.05),0 8px 24px -12px rgba(20,32,24,.16);
+  --sh3:0 2px 6px rgba(20,32,24,.06),0 18px 40px -18px rgba(20,32,24,.24);
+  --ease:cubic-bezier(.22,.61,.36,1);
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html{-webkit-text-size-adjust:100%}
+body{font-family:var(--font);background:var(--bg);color:var(--ink);font-size:14px;
+  letter-spacing:-.005em;-webkit-font-smoothing:antialiased;min-height:100vh}
+button{font-family:inherit}
+
+/* ══ ESTRUCTURA ══ */
+.wrap{display:grid;grid-template-columns:238px minmax(0,1fr);min-height:100vh}
+.side{background:linear-gradient(170deg,#1a3c23,var(--g900) 62%,#0f2415);
+  color:#fff;display:flex;flex-direction:column;position:sticky;top:0;height:100vh;overflow-y:auto}
+.s-brand{padding:20px 18px 16px;border-bottom:1px solid rgba(255,255,255,.08);
+  display:flex;align-items:center;gap:10px}
+.s-brand img{width:132px;height:auto}
+.s-nav{padding:14px 10px;flex:1}
+.s-lbl{font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:.14em;
+  text-transform:uppercase;color:rgba(255,255,255,.3);padding:0 8px;margin:14px 0 7px}
+.s-lbl:first-child{margin-top:0}
+.s-item{display:flex;align-items:center;gap:10px;width:100%;padding:9px 10px;border:none;
+  background:transparent;color:rgba(255,255,255,.72);border-radius:9px;cursor:pointer;
+  font-size:13px;font-weight:600;text-align:left;transition:.14s;text-decoration:none}
+.s-item:hover{background:rgba(255,255,255,.07);color:#fff}
+.s-item.on{background:rgba(143,214,164,.16);color:#fff}
+.s-item svg{width:16px;height:16px;flex-shrink:0;opacity:.85}
+.s-tag{margin-left:auto;font-family:var(--mono);font-size:8.5px;font-weight:600;
+  background:rgba(255,255,255,.1);color:rgba(255,255,255,.5);padding:2px 6px;border-radius:20px}
+.s-tag.al{background:rgba(224,167,60,.22);color:#F3D9A4}
+.s-foot{padding:12px;border-top:1px solid rgba(255,255,255,.08)}
+.s-home{display:flex;align-items:center;gap:9px;padding:10px 11px;border-radius:9px;
+  background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12);
+  color:#CFE8D8;font-size:12.5px;font-weight:600;text-decoration:none;transition:.14s}
+.s-home:hover{background:rgba(255,255,255,.12);color:#fff}
+.s-home svg{width:15px;height:15px}
+.s-ver{font-family:var(--mono);font-size:9px;color:rgba(255,255,255,.26);
+  text-align:center;margin-top:10px;line-height:1.6}
+
+.main{padding:26px 30px 48px;min-width:0}
+.view{display:none}
+.view.on{display:block;animation:fade .3s var(--ease)}
+@keyframes fade{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:none}}
+
+.head{display:flex;align-items:flex-start;justify-content:space-between;gap:18px;
+  flex-wrap:wrap;margin-bottom:22px}
+.h-t{font-size:25px;font-weight:800;letter-spacing:-.025em;line-height:1.15}
+.h-s{font-size:13px;color:var(--mut);margin-top:4px}
+.stamp{display:inline-flex;align-items:center;gap:7px;background:var(--card);
+  border:1px solid var(--line);border-radius:100px;padding:7px 14px;
+  font-family:var(--mono);font-size:10px;color:var(--mut);box-shadow:var(--sh1);flex-shrink:0}
+.stamp b{color:var(--g700);font-weight:600}
+.stamp.w{background:var(--warn-s);border-color:#F0DCB0;color:#7A5A16}
+.stamp.w b{color:#5E4410}
+.dot{width:6px;height:6px;border-radius:50%;background:var(--g500);
+  box-shadow:0 0 0 3px rgba(79,158,104,.17)}
+.dot.w{background:var(--warn);box-shadow:0 0 0 3px rgba(224,167,60,.2)}
+
+.lbl{font-family:var(--mono);font-size:10px;font-weight:600;letter-spacing:.13em;
+  text-transform:uppercase;color:var(--mut2);display:flex;align-items:center;gap:11px;
+  margin:28px 0 12px}
+.lbl::after{content:'';flex:1;height:1px;background:var(--line)}
+.lbl:first-child{margin-top:0}
+
+/* ══ KPIs ══ */
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(176px,1fr));gap:12px}
+.kpi{background:var(--card);border:1px solid var(--line);border-radius:var(--r);
+  padding:15px 16px;box-shadow:var(--sh1);position:relative;overflow:hidden}
+.kpi::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--c,var(--g500))}
+.kpi-l{font-size:10.5px;font-weight:700;color:var(--mut);margin-bottom:8px;line-height:1.3}
+.kpi-v{font-size:26px;font-weight:800;letter-spacing:-.03em;line-height:1;
+  font-variant-numeric:tabular-nums}
+.kpi-v small{font-size:12px;font-weight:600;color:var(--mut2);margin-left:3px;letter-spacing:0}
+.kpi-s{margin-top:7px;font-family:var(--mono);font-size:9.5px;color:var(--mut2);line-height:1.45}
+
+/* ══ TARJETAS ══ */
+.esp{display:grid;grid-template-columns:repeat(auto-fit,minmax(236px,1fr));gap:14px}
+.esp-c{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:20px;
+  box-shadow:var(--sh1);cursor:pointer;transition:.24s var(--ease);position:relative;overflow:hidden;
+  text-align:left;width:100%;font-family:inherit}
+.esp-c:hover{box-shadow:var(--sh3);transform:translateY(-3px);border-color:var(--g200)}
+.esp-i{width:46px;height:46px;border-radius:14px;display:flex;align-items:center;
+  justify-content:center;margin-bottom:14px;background:var(--ib,var(--g100));color:var(--ic,var(--g700))}
+.esp-i svg{width:24px;height:24px}
+.esp-t{font-size:16px;font-weight:800;letter-spacing:-.02em}
+.esp-p{font-size:11.5px;color:var(--mut);margin-top:5px;line-height:1.5}
+.esp-go{margin-top:14px;padding-top:12px;border-top:1px solid var(--line);
+  display:flex;align-items:center;justify-content:space-between;font-size:12px;
+  font-weight:700;color:var(--g700)}
+.esp-b{position:absolute;top:14px;right:14px;font-family:var(--mono);font-size:8.5px;
+  font-weight:600;padding:3px 8px;border-radius:20px;background:var(--g100);
+  color:var(--g800);border:1px solid var(--g200)}
+.esp-b.w{background:var(--warn-s);color:#8A6318;border-color:#F0DCB0}
+
+/* ══ FILTROS ══ */
+.filt{background:var(--card);border:1px solid var(--line);border-radius:var(--r);
+  padding:13px 15px;box-shadow:var(--sh1);display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end}
+.f-g{display:flex;flex-direction:column;gap:5px;min-width:140px;flex:1}
+.f-g label{font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:.09em;
+  text-transform:uppercase;color:var(--mut2)}
+.f-g select,.f-g input{font-family:var(--font);font-size:12.5px;font-weight:600;color:var(--ink);
+  border:1px solid var(--line);border-radius:9px;padding:8px 10px;background:var(--g50);width:100%}
+.f-g select:focus,.f-g input:focus{outline:2px solid var(--g300);outline-offset:-1px}
+.f-btn{font-size:12px;font-weight:700;padding:9px 15px;border-radius:9px;
+  border:1px solid var(--line);background:var(--card);color:var(--mut);cursor:pointer;transition:.14s}
+.f-btn:hover{background:var(--g50);color:var(--g700);border-color:var(--g200)}
+.f-btn.pri{background:var(--g700);border-color:var(--g700);color:#fff}
+.f-btn.pri:hover{background:var(--g800);color:#fff}
+.f-n{font-family:var(--mono);font-size:10px;color:var(--mut2);align-self:center;
+  padding-bottom:9px;white-space:nowrap}
+.chips{display:flex;gap:7px;flex-wrap:wrap;margin-top:12px}
+.chip{font-size:11.5px;font-weight:600;padding:6px 12px;border-radius:100px;
+  border:1px solid var(--line);background:var(--card);color:var(--mut);cursor:pointer;transition:.14s}
+.chip:hover{border-color:var(--g200);color:var(--g700)}
+.chip.on{background:var(--g700);border-color:var(--g700);color:#fff}
+
+/* ══ TABLAS ══ */
+.tw{background:var(--card);border:1px solid var(--line);border-radius:var(--r);
+  box-shadow:var(--sh1);overflow:auto;max-height:70vh}
+table{border-collapse:separate;border-spacing:0;width:100%;font-size:12px}
+thead th{position:sticky;top:0;z-index:3;background:var(--g50);color:var(--mut);
+  font-family:var(--mono);font-size:9.5px;font-weight:600;letter-spacing:.05em;
+  text-transform:uppercase;text-align:right;padding:10px 9px;white-space:nowrap;
+  border-bottom:1px solid var(--line)}
+thead th.l{text-align:left}
+tbody td{padding:8px 9px;text-align:right;border-bottom:1px solid var(--line2);
+  font-variant-numeric:tabular-nums;vertical-align:top}
+tbody td.l{text-align:left;white-space:normal}
+tbody tr:hover td{background:var(--g50)}
+tbody tr:last-child td{border-bottom:none}
+.nm{font-weight:700;color:var(--ink);font-size:12px;line-height:1.3}
+.sub{font-size:10px;color:var(--mut2);font-family:var(--mono);margin-top:1px;line-height:1.4}
+.num{font-family:var(--mono);font-weight:600}
+.big{font-family:var(--mono);font-size:13px;font-weight:600;color:var(--g800)}
+.z{color:var(--line);font-weight:400}
+.rowq td{background:var(--warn-s)!important}
+.rowq:hover td{background:#F7E9CE!important}
+
+.pill{display:inline-block;font-family:var(--mono);font-size:9px;font-weight:600;
+  padding:2px 7px;border-radius:20px;border:1px solid;white-space:nowrap}
+.p-a{background:var(--g100);color:var(--g800);border-color:var(--g200)}
+.p-b{background:var(--blue-s);color:var(--blue);border-color:#C3DCEA}
+.p-c{background:var(--warn-s);color:#8A6318;border-color:#F0DCB0}
+.p-r{background:var(--red-s);color:var(--red);border-color:#EFC9C1}
+.p-n{background:var(--line2);color:var(--mut2);border-color:var(--line)}
+
+/* ══ AVISOS ══ */
+.note{border-radius:var(--r);padding:13px 16px;font-size:12.5px;line-height:1.55;
+  display:flex;gap:11px;align-items:flex-start}
+.note svg{width:17px;height:17px;flex-shrink:0;margin-top:1px}
+.note-w{background:var(--warn-s);border:1px solid #F0DCB0;color:#7A5A16}
+.note-i{background:var(--blue-s);border:1px solid #C3DCEA;color:#235671}
+.note-r{background:var(--red-s);border:1px solid #EFC9C1;color:#8A3528}
+.note-g{background:var(--g100);border:1px solid var(--g200);color:var(--g800)}
+.note b{font-weight:700}
+.note a{color:inherit;font-weight:700}
+
+.empty{background:var(--g50);border:1px dashed var(--line);border-radius:var(--r);
+  padding:40px 24px;text-align:center;font-size:13px;color:var(--mut);line-height:1.6}
+
+/* ══ SITIOS EXTERNOS ══ */
+.ext{background:var(--card);border:1px solid var(--line);border-radius:var(--r);
+  box-shadow:var(--sh1);overflow:hidden}
+.ext-bar{display:flex;align-items:center;gap:10px;padding:9px 13px;background:var(--g50);
+  border-bottom:1px solid var(--line);flex-wrap:wrap}
+.ext-u{font-family:var(--mono);font-size:10px;color:var(--mut2);flex:1;min-width:120px;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ext-b{font-size:11px;font-weight:700;padding:6px 11px;border-radius:7px;border:1px solid var(--line);
+  background:var(--card);color:var(--mut);cursor:pointer;transition:.14s;text-decoration:none;
+  display:inline-flex;align-items:center;gap:5px;white-space:nowrap}
+.ext-b:hover{border-color:var(--g200);color:var(--g700);background:var(--g50)}
+.ext-b svg{width:12px;height:12px}
+.ext-b.pri{background:var(--g700);border-color:var(--g700);color:#fff}
+.ext-b.pri:hover{background:var(--g800);color:#fff}
+.ext-f{width:100%;border:none;display:block;background:var(--card);min-height:300px}
+.ext-load{padding:56px 24px;text-align:center;color:var(--mut)}
+.ext-load .spin{width:26px;height:26px;border:2.5px solid var(--g200);border-top-color:var(--g700);
+  border-radius:50%;margin:0 auto 14px;animation:sp .7s linear infinite}
+@keyframes sp{to{transform:rotate(360deg)}}
+.ext-off{padding:44px 30px;text-align:center}
+.ext-off .ico{width:52px;height:52px;border-radius:16px;background:var(--blue-s);color:var(--blue);
+  display:flex;align-items:center;justify-content:center;margin:0 auto 16px}
+.ext-off .ico svg{width:26px;height:26px}
+.ext-off h3{font-size:18px;font-weight:800;letter-spacing:-.02em;margin-bottom:8px}
+.ext-off p{font-size:13px;color:var(--mut);line-height:1.6;max-width:46ch;margin:0 auto 18px}
+.ext-off .acts{display:flex;gap:9px;justify-content:center;flex-wrap:wrap}
+
+/* ══ CARGADOR DE ARCHIVO ══ */
+.drop{background:var(--card);border:2px dashed var(--line);border-radius:18px;
+  padding:34px 24px;text-align:center;transition:.18s;cursor:pointer}
+.drop:hover,.drop.over{border-color:var(--g500);background:var(--g50)}
+.drop .ico{width:48px;height:48px;border-radius:14px;background:var(--g100);color:var(--g700);
+  display:flex;align-items:center;justify-content:center;margin:0 auto 14px}
+.drop .ico svg{width:24px;height:24px}
+.drop h3{font-size:16px;font-weight:800;letter-spacing:-.02em;margin-bottom:6px}
+.drop p{font-size:12.5px;color:var(--mut);line-height:1.55;max-width:44ch;margin:0 auto}
+.drop input{display:none}
+.steps{counter-reset:s;margin:0;padding:0;list-style:none}
+.steps li{counter-increment:s;position:relative;padding:0 0 13px 34px;font-size:12.5px;
+  color:var(--mut);line-height:1.55}
+.steps li::before{content:counter(s);position:absolute;left:0;top:-1px;width:22px;height:22px;
+  border-radius:50%;background:var(--g100);color:var(--g800);font-family:var(--mono);
+  font-size:10px;font-weight:600;display:flex;align-items:center;justify-content:center}
+.steps li:last-child{padding-bottom:0}
+.steps b{color:var(--ink);font-weight:700}
+
+/* ══ DETALLE ══ */
+.det{background:var(--card);border:1px solid var(--line);border-radius:var(--r);
+  padding:16px 18px;box-shadow:var(--sh1)}
+.det-g{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px}
+.det-i label{font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--mut2);display:block;margin-bottom:4px}
+.det-i div{font-size:13.5px;font-weight:700;line-height:1.4}
+.foot-n{font-family:var(--mono);font-size:9.5px;color:var(--mut2);margin-top:10px;line-height:1.5}
+
+/* ══ RESPONSIVE ══ */
+.burger{display:none}
+@media (max-width:1100px){ .main{padding:22px 20px 40px} }
+@media (max-width:900px){
+  .wrap{grid-template-columns:1fr}
+  .side{position:fixed;left:0;top:0;bottom:0;width:250px;height:100vh;z-index:300;
+    transform:translateX(-100%);transition:transform .26s var(--ease)}
+  .side.open{transform:none}
+  .burger{display:flex;align-items:center;justify-content:center;width:40px;height:40px;
+    border-radius:10px;background:var(--card);border:1px solid var(--line);
+    box-shadow:var(--sh1);cursor:pointer;margin-bottom:16px}
+  .burger svg{width:19px;height:19px;color:var(--g800)}
+  .scrim{display:none;position:fixed;inset:0;background:rgba(15,23,20,.5);z-index:299}
+  .scrim.on{display:block}
+  .main{padding:18px 16px 40px}
+  .h-t{font-size:21px}
+  .kpis{grid-template-columns:repeat(auto-fit,minmax(142px,1fr))}
+  .kpi-v{font-size:22px}
+  .f-g{min-width:120px}
+}
+@media (prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+</style>
+</head>
+<body>
+
+<div class="scrim" id="scrim" onclick="cerrarMenu()"></div>
+<div class="wrap">
+
+  <aside class="side" id="side">
+    <div class="s-brand"><img id="logo" alt="Exportadora Los Olmos"></div>
+    <nav class="s-nav">
+      <div class="s-lbl">Documentación SAG</div>
+      <button class="s-item on" id="nav-hub" onclick="ir('hub')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
+        <span>Todo</span></button>
+
+      <div class="s-lbl">Secciones</div>
+      <button class="s-item" id="nav-pais" onclick="ir('pais')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.6 2.4 4 5.6 4 9s-1.4 6.6-4 9c-2.6-2.4-4-5.6-4-9s1.4-6.6 4-9z"/></svg>
+        <span>Requisitos por país</span></button>
+      <button class="s-item" id="nav-mosca" onclick="ir('mosca')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><ellipse cx="12" cy="13" rx="3" ry="4.5"/><path d="M9.5 9.5C7 7 4 7.5 3.5 9.5S6 13 9 12M14.5 9.5C17 7 20 7.5 20.5 9.5S18 13 15 12M12 8.5V6M10.5 5l1.5 1 1.5-1"/></svg>
+        <span>Mosca de la Fruta</span></button>
+      <button class="s-item" id="nav-pest" onclick="ir('pest')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M9 3h6l-1 4h-4L9 3z"/><path d="M10 7v3.5L6.5 18a3 3 0 002.7 4h5.6a3 3 0 002.7-4L14 10.5V7"/><path d="M7.4 15h9.2"/></svg>
+        <span>Agenda de Pesticidas</span>
+        <span class="s-tag al" id="tag-pest" style="display:none">!</span></button>
+
+      <div class="s-lbl">Nuestros datos</div>
+      <button class="s-item" id="nav-csg" onclick="ir('csg')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M3 21V8l9-5 9 5v13"/><path d="M9 21v-7h6v7"/></svg>
+        <span>Nuestros CSG</span>
+        <span class="s-tag" id="tag-csg">—</span></button>
+    </nav>
+    <div class="s-foot">
+      <a class="s-home" href="./index.html">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M3 10.5L12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/></svg>
+        Inicio · otras plataformas</a>
+      <div class="s-ver">Requisitos SAG · v<span id="ver">4.8</span><br><span id="gen">—</span></div>
+    </div>
+  </aside>
+
+  <main class="main">
+    <button class="burger" onclick="abrirMenu()" aria-label="Menú">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+    </button>
+
+    <!-- ══════════ HUB ══════════ -->
+    <section class="view on" id="v-hub">
+      <div class="head">
+        <div><div class="h-t">Requisitos SAG</div>
+          <div class="h-s">Requisitos por mercado, campañas de mosca de la fruta y límites de residuos.</div></div>
+        <div class="stamp"><span class="dot"></span><b id="h-csg">—</b> CSG propios</div>
+      </div>
+      <div class="kpis" id="k-hub"></div>
+      <div id="aviso-hub" style="margin-top:14px"></div>
+      <div class="lbl">Qué necesitas revisar</div>
+      <div class="esp" id="secciones"></div>
+    </section>
+
+    <!-- ══════════ REQUISITOS POR PAÍS ══════════ -->
+    <section class="view" id="v-pais">
+      <div class="head">
+        <div><div class="h-t">Requisitos por país</div>
+          <div class="h-s">Consulta de requisitos de mercado del SAG, por especie y destino.</div></div>
+        <div class="stamp"><span class="dot"></span>Fuente <b>SAG</b></div>
+      </div>
+      <div class="note note-i" style="margin-bottom:14px">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+        <div>Esta consulta vive en el servidor del SAG y se actualiza allá. La plataforma solo
+        la muestra: lo que veas acá es exactamente lo que publica el SAG hoy, sin copias
+        intermedias que puedan quedar viejas.</div>
+      </div>
+      <div class="ext" id="ext-sag"></div>
+      <div class="lbl">Si no carga</div>
+      <div class="det">
+        <ol class="steps">
+          <li>Algunos sitios del Estado no permiten mostrarse dentro de otra página. Si acá
+            aparece en blanco, usa <b>Abrir en pestaña nueva</b>: es el mismo formulario.</li>
+          <li>La consulta del SAG trabaja con <b>sesión</b>: si dejas la pestaña mucho rato
+            abierta puede pedirte empezar de nuevo. Recarga y vuelve a elegir especie y país.</li>
+          <li>Para cerezas a China, Corea y Japón conviene además revisar
+            <b>Mosca de la Fruta</b>: la condición del predio cambia los requisitos.</li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- ══════════ MOSCA DE LA FRUTA ══════════ -->
+    <section class="view" id="v-mosca">
+      <div class="head">
+        <div><div class="h-t">Mosca de la Fruta</div>
+          <div class="h-s">Campañas vigentes del SAG y cruce con nuestros CSG.</div></div>
+        <div class="stamp" id="st-mosca"><span class="dot"></span>Sin consolidado cargado</div>
+      </div>
+
+      <div class="lbl">Cruce con nuestros CSG</div>
+      <div id="mosca-cruce"></div>
+
+      <div class="lbl">Tablero del SAG</div>
+      <div class="ext" id="ext-pbi"></div>
+    </section>
+
+    <!-- ══════════ AGENDA DE PESTICIDAS ══════════ -->
+    <section class="view" id="v-pest">
+      <div class="head">
+        <div><div class="h-t">Agenda de Pesticidas</div>
+          <div class="h-s">Límites máximos de residuos y carencias por mercado · fuente ASOEX.</div></div>
+        <div class="stamp" id="st-pest"><span class="dot"></span>—</div>
+      </div>
+      <div id="aviso-pest"></div>
+      <div class="lbl">Buscar</div>
+      <div class="filt">
+        <div class="f-g" style="max-width:190px"><label>Especie</label>
+          <select id="p-esp" onchange="cargarEspecie()"></select></div>
+        <div class="f-g" style="max-width:190px"><label>Mercado de destino</label>
+          <select id="p-mer" onchange="renPest()"></select></div>
+        <div class="f-g"><label>Sustancia activa</label>
+          <input id="p-sus" type="search" placeholder="Ej: azoxystrobin" oninput="renPest()" autocomplete="off"></div>
+        <div class="f-g" style="max-width:140px"><label>Tipo</label>
+          <select id="p-tipo" onchange="renPest()"></select></div>
+        <div class="f-g" style="max-width:170px"><label>Ordenar por</label>
+          <select id="p-orden" onchange="renPest()">
+            <option value="riesgo">Más restrictivas primero</option>
+            <option value="nombre">Nombre</option>
+          </select></div>
+        <button class="f-btn" onclick="limpiarPest()">Limpiar</button>
+        <span class="f-n" id="p-cnt">—</span>
+      </div>
+      <div class="chips" id="p-chips"></div>
+      <div class="lbl">Resultados</div>
+      <div id="p-res"></div>
+    </section>
+
+    <!-- ══════════ NUESTROS CSG ══════════ -->
+    <section class="view" id="v-csg">
+      <div class="head">
+        <div><div class="h-t">Nuestros CSG</div>
+          <div class="h-s">Todos los CSG con que trabajamos, reunidos desde la base de
+            cuarteles, el flujo de cosecha y las estimaciones.</div></div>
+        <div class="stamp"><span class="dot"></span><b id="c-n">—</b> CSG</div>
+      </div>
+      <div class="note note-i" style="margin-bottom:14px">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+        <div>Esta lista se arma sola con los archivos que ya tiene la plataforma. No hay que
+        mantenerla aparte: si agregas un cuartel o un productor, aparece acá solo.</div>
+      </div>
+      <div class="filt">
+        <div class="f-g"><label>Buscar CSG o productor</label>
+          <input id="c-q" type="search" placeholder="Ej: 91302 o Antumapu" oninput="renCsg()" autocomplete="off"></div>
+        <div class="f-g" style="max-width:170px"><label>Aparece en</label>
+          <select id="c-f" onchange="renCsg()">
+            <option value="">Todos</option>
+            <option value="cuart">Base de cuarteles</option>
+            <option value="flujo">Flujo de cosecha</option>
+            <option value="estim">Estimaciones</option>
+            <option value="falta">Falta en algún archivo</option>
+          </select></div>
+        <button class="f-btn" onclick="bajarCsg()">Descargar lista</button>
+        <span class="f-n" id="c-cnt">—</span>
+      </div>
+      <div class="lbl">Listado</div>
+      <div class="tw"><table id="t-csg"></table></div>
+    </section>
+
+  </main>
+</div>
+
+<script>
+const APP_VERSION="4.8";
+const LOGO_IMG="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAjAAAAB7CAYAAABq8brpAAA0d0lEQVR42u19XWojy7LuVy5tEBxYl9teLujHHodG4DGo9xbY0JvWGPyoKRwtrsEGH1p3ChqBx+HHBnl5HTjQINgu13lQxq5QKLMqM+tHJTs+EN3tlqvyJzLyy4jIiKQoCpwQEgAXAF4AnAPYWL6TWX52CWBS8dxHAGvxsxcAueW7qXn3C4A3ACc1gAqFQqFQvAckJ0JgUvNn7iArnKBMAYwtz9hWPN/2/TsHwdlY2qZERqFQKBQKJTC7tllIgSQsU0ZAtjWEJBTyefTvFSM00kqTmD+VzCgUCoVC8YEIDLmIpJVjJgiLxLiHtrksOHNDZjYWsrVREVMoFAqF4n0TmBGAV/b3T9hZWpbYt4CMB9JeaaG5Q2mZIeJC8TJKZBQKhUKheGcEJkXphhlhZ2WZALiOJC3bltoVSpT4e1cAbgSR0TgZhUKhUCjeAYHhMS5NiYsrXoXIxKPHM6SLKjauhrf9ThAZjZFRKBQKheJECYy0Rsj4Fh+iIAnOHSMpa8v3fVw4/Pr1C4Cv7N9L9q5tRDulRSYD8KxERqFQKBSK0yAw3F2UAVigtLjUEQL6ztYQAhhS4ENSKBalChsPciNvP8GDzFRZZDTQV6FQKBSKgROYM+wsL5khAvcexEVu/q7ry0DpnqH3cPh0MmG/y59RVBCaBQ7dTvDozxzAD9MHJTEKhUKhUAyQwPBYlxl27pi6zZ7HnszNnw/iO8cIjCWSkwsyQ5YZH2uSy62kUCgUCoViIASGXEZ/A/CfqI9zkcSFX0km8gDYU/z3DdsVaWldquvrGMCVITOv2HexKRQKhUKh6JnAcEsFxbpMI4kLEQVb0GvaI6HJYHddVRGZOmuTzRrD8+EoFAqFQqHoicBIl1FdrMvWQVxs7ppjEJeQd0sLim+g8laQGI2LUSgUCoWiRwJD5GVkrA9VGzf93JYrxbdRFEzbx2Y/sxCsoobo5Ox3666KcyL3oKKpUCgUCoUbZx2Ql9SQF5/N+grAd0MK0hpSkAgycQvgCTtXDSczbYOeOzHvuzU/Kyzt4sgNkcsMIfluyIlMkAcxTkvTPyJBCoVCoVAoJCloyQJD1oYUwB+oj3exJXbbeDxfumRgnvXd/H+I9SaEwLwA+B/xc96HuvfyuJbMECGg+rbSlSE+GtirUCgUCkUHBIbnX6kiL/zWzYP43aLm+UXNxv/ZkAy0vNkTeaDr32PRHwD4gtKClHuME3ex1VmpKF+M1lFSKBQKhYKhqQuJXBwXHuSFiMYD+72iBfKyxc4qk+MwgV3Tvr2ZPyeW/6d2PJn25ah2+VBfE+ysMd9Q5rhxuZSWZlzp9xIVWYVCoVAomhGYhG3aixrysgqwVMhNH6h2uYzNu2coY3DaIC856q1K9LOFITFvHiSjYO94MONSRWJ43y5UZBUKhUKhaEZgZMBuFXmhQN0sgLwQEZmZZ9el6afgV0qc15SYAfXxPIQpGxPfMSXyt/EgMdS3DTSwV6FQKBSKKAKTGIJQF7BL5OUbSmtGyHVnqps0cWzscpPnJOZfiLuVlKJ0Wd16khf6/0vWbl/QTaUQEpOjuxtXCoVCoVC8awLzLwBfPclLijKeJJRIAIeVn31JTKi1gse81GUObhNUQqCOxMi+KRQKhUKhBCaAvLyhzLBb5zYiUtDXNWByNXFrRerZLxoPX7dRm/CxxHCClol2KxQKhUKhBKYC5F65d1gJiLz8E+WtoEIQhb7cH6EulxzVVqWu4WOJ4UHDqZk/jYlRKBQKhRKYmu9SIjlbeQDabL+jDPAtLASoD/cHtW1i2vGC+ivORMz6IC+pY+x9LTFT7CxFOXaFJBUKRf9Ijd7IoNZQhWKwBIZcQa7YEJ7UjTZhm9soY58qUFbd/8bOohNLYqbYWVVyVJcoGDFi1gfOAfzd8X+vKDMTzysIFV2v3qjyVCiOgtysvw000aRC0Tt8MvHSZpoB+On4zhbVeV7oGZTRlr7r816Kt4lBXbbcM5S3nZ4QZ30ha9Rn1Oe54SURnlAWbrSVIqjKAmzrWxdlFBQKhXstf2X/XkOD6xWKXnHmsUhfsO86sm3gc7jzvKTs/5YBbaNNeY1dxeoY64i84izdLb+bPxcNx/EKfnluzkV7yMXlOt3BEJwVquNhFApFT4c+tpaX7HMp/l+hUHSMUc3/UxDuJdyuoxV29XoSxwmEX03mG6+PxYBiZm7M+22xNz6YmDZuhCIi0jGNHL8tO30BZT0mF/4U/54CeIS7aCP9zNX/MXaFLaueMTTMYC/NEItT6vtHAbmI/0JZxFShUCh6IzC8DtGywsJxgzJmxfWMc7PR0qa/QJkjxmfToaDWpwYkRuKCEZpY1xGvSF3XF+4+mrD3Lg0BspEf+j7Fwywd7ah6xtAwaUAYXXgwMqYm/GHgI83DGP3FzikUCgafIN6FY5PfonSd2G4cgf1Mup+mKN0tviZXIjHkTmlTaYQ8j747Z+Ql8SBi9P82a9Yl3DlraHzXqHYlXeK0svSOW/hwvOhyHgQy7Kxs9NGs0QqFohOMPKwF1xXWhx+oz7IrXTR0Yrk0J+cLzxMbWSJusHMbLNlm3tQi43OKov/nVhferjqkxkowcVglVihzwUgylLC+X8NuhSIrzDNOw53CLVhtQN1HxwVZW19QWtkouF2hUCh6tcBUBe4CpesIDutLyiwDkmTEFCik720M8fnNWEG4RaZtUy5/LlXU/sYISxpAXnK4Y4mmAD5VjCVPcnflIGA01mc4rdtImxY+CoVCoVACU7vZ0mbuE/cBVAdsUlp835T/OTvt5YbIfGNEBi0Rma2wuEjikgSc+ql/rkR58qbU7zV9/wG7K4nG8xxl4PSpnNz/Zv6M+dieR/W3ksj21P1+yj51z0gbtqeOGLf5nqSmX653JNhZUtPAdsa0q8lzmrynKxxzDoc09gpFYwKTsE134tjYyfpSF/eRM+sCKqwGC+xfP048Fm/BFuOIEZkvhszI9oYQFyItc0FceLbNwmPRJ8zCMEMZgFxF9FLsXEBJxXNz7FxoqCFCp+JSKQD8X/NnzMf2vBzVyQvr2lP3+zn7yLUjn5E7nhe7QaWOdrTxnqKmX6530G3B3CF3rnb69rOoeEbecEwTsa7r3nHRElHqcw7TGtk91tgrFI0wshAaEsprx4Y7h38SugzV8SmULXeKMqlbwZ6BmnflYsGRe2ltNnLfGy+cuDxiPymVTzvg+C4lu6LaUVVjcQ2/G02JscJMHBayJT52Ui26pk0kz/eKNU8cCPaMH5bN4Cv7f7r9lTMZuBRtgPg+ZW4NST6YsM2Ev8dGhOV7fGOiyG1Mh5QXx/voHRS3Jcecr7mFhXC7xpbG90281/Ucwv8H8K/AvkJ8d4SdG/fS8V0az9Aq9zZiEDOHvrF2M/H7ELqMzyG/hFDg0LKciUNR1biEjr1C0cLxtyj4JymKIiuK4rYoil9FUeSWT2a+h4pPZv6cVTyHf+g7t+Z3U/as1Hwyy//JT8reTf+esefa2piZ988s/+/zroy1kf9u3Tja+p+xZ8eOLfUlqXnOsT40Jr/M32GZm5hPwsaFjynN66hmLuXv/nLMx4j9/y8hR3xOflk+OWuTz1zzviXsPbdivm3v+SXe4zPGM/aMWc37blnbbyv6+qviUzUGcv38ChhTn08aMG9SP9Hvy7FGhW5MLX3zmcPbQFm5dcim7X2uNoeOPZeFZIA6Rz/v9HNmOeGRNcAW+3KHbup+jNnJ7Sd2hQpnzLXEa45QvEzqsMhsmFmY4mRsN12e2d+/mO9BuH5yxykqsbSJ4lxm5rT4E91UtiYX0wruWJgJPmZZgcTM4xWTWYqzenXIDL9xx2+2zR3WsE8Vlosle+/YIt9b1qYnlNXS0xq3IbXzlsnVtuY9EO/ZIPxKM5W8cL3Pto7HljbZrr+vKt7J+8n7UzemC9bHxMPyYpu3qveQfppFuExonmeBczi1yEqITvWZwzP23VnE2FNx2YxZYhSKXl1IBTMXuhTVjcX02hWRoc3/zvzsUZgs4SBfEH933RQqLO4eV9wDf77LpG5zu4WQF994HVIQr2ZMpg63HJmHqd7TkNFGDhceF/Ug3IcL5hLhsptYXCe0uf4IkPMnNvaUIwjMhA/mVroWBIPcXFUb4pn57lTIScx7QuDqF70zZ3rhRriNaP1eifbZ5j1na+wS+1mnXeMp+8pdVzcV7hZZj4z3byX0jGtMlxHrNmPjwuWs6n38uzFzeInD5JdyDoEyCeSlIPGIHPtnaG02xRFcSCOH24ObjH3MmKEupCrXijSpkslyZnEXpTXuhTrzvKsfEObm2xqTakw/8wi3QuZ4N3fPpCfgQmrT7DyyjA03l5+x755ZXCe3Na6IrMKk7uPG4Ob8Xw73pXQ73Ea4SzIx1tydlta4kGyuhixijvMI92AW+N6Uuf5C3DmhLqi/1aw31ztdc3gbOYd1OuLWoi9DZDN0zl1jn6qLQz9df+QGn1VssrMAX3rm8bw2SM0vB5FpayPki1RuOl30KYTApBUkUT4vGTCBGbGYId9PCJF2beB1cS++z7SRkMz0i8dvybiuW0c8iI1c2dYhPcf2nqTmPa74qJll87O9z9Yf/nNJYDIRM1YXX5Y5DidZxZjaiHFqIf2pZc1kltg313syR5yPjcC4DnI+spJ6yErqSWAyjzlsMvYz0T4lL/rp5TNiJuo3h/sotGAhd8ts0F62XJtbhsy53FRNvv4mt3DIRUNm3+sO+iGxYi4OH5fPG5sXW26ZmGzHfWKMZjWRHmvM6eQ6nDOz+D0Ob5jds7n9Eul2WzE30JllrDcWF8aN6D/NFc3/G8p0BlvxHnmbJeY9PrgTbcot7+EuINcNnY3j9+r0h7wVs7F8h2fovmYxGeTKkG7gczPnYO4p3u66uaOSJj894rFesJ+SgtxU/+X5Pt63KVs3oXNIMl1UzKHt/UnN2JNcSPeS1iVT9IIzJnAF3EnnQhLX8cVOv9vlJjjGYRDfBs3ybNB12iehOLrEo3nvuafvuGCE8q7GFz/kOkHTyE9dRWtK5rfGfpJDkhGqkC6DdrNA8kIFTVOxQbggC3TyGIdMrMtLIX838E+iWPeeuoBQ3q/YnDqxSBjhKNjPbInUXlg/tmKTL9iYXrAx5d/9ETimwK7Kdt2au0CZEJSXY7lhRKrufRvs4hRpDknXTdi8+MxhYmS6CBh7eIz9OQ5ziY3ZGGtuGEWnGLETYwZ77pcxykCzEGb9xhbsdQ+nedoMr4015gHhgWRnjLz45G5pA9LC9Rz4+5TYzmbNmKDMtTHUoLoYgjuFOycIJ3i52eBuBFniz6E2rM16eA6cu1XkaTNl1rOtg3hw+b6Df+FQMFlKxAl57HFS3lo27T5RsE0zF/MZsqbgWBPcopWbeX8NIFevHnrt2fE+XhLFB6+WOeQ5o6rmcGXIVhE59m+MROYV1pq/PMdeoWidwCTiZGJzH/0QAuu7EGgh36GbK8U2IkOuAsA/iZm0vNz3ZHWBOP2Hui6ozWtHW/ltpKGBFOz3yPEK2VilGf5ayLdM6BVqOQvFhlkP7li7yDXwFw5dD49wu46q1iBtlivLe15qxvhYt0lIrnmiyvOa37n0fC6ENSTB7mp86Bp5idBNj5FWicLMBb+Z5etGem049pTgT6EYJIEhoZ04LA50Som5Ok3KjzaPPiwanMSs4ef6Shh5WfbUTr6JP6D51XQZoxOq6I6Frq1DOdyxC1QtOZa8NJGRKmvmq7AQyb40XRsTIxN18lagfzdAwvr5lZG4Keqrxo8dVgCa/8wypgXiXKznEXpibd73FjEmhSChvoQpdr20NfYKRacEhkzWdSfMmFwihdg8nnomMa78HzblwAM6+yIv/BT4FqlsYDlhu+ZiqOg6yPitYg5eGo7PWshRE5ltcsJ/D+BrUQbPt0Ea20DhWMch6y1WTh4RF/geIpspdknphjj2CsUeeADW1KFU145F51N0ETgMJqxj8m2SmKmxQFBwrEuZjFAGdPZJXr6wjds3wM6mcFBx2lpCM2PS2C4ssvcH9l2pobhsiSBuLSf8ruSuSp6ODZk5FiiLq36u+FyhnUr0oWtwHLBWY8edDoKTjvuUmfUQOvafexp7hcJKYFzxL3c1i8pXaZMb58EIO3oU9iXcN5NoY/+EfmJ0aJGvGHlJA8iL7XvnzBIgySHd0jr/wDJOVcRvGUm/Y7I9NTLCb6yEEoKkQdtcp2CyqrVBOBIhE4+WA8xQrC8yIzJVhH9AWbrD9ll7HqJsYxq7PkL1xSXKq/ahyDvUUWeM4PN3+I79CxSKI1tgqsiHi61ngQuQnvcFZR2fLonMWBA0V38XPVpd5vCrOm0jjHVjriegQ/neAPgHDq8j32D/9toMcZWGY+pOZShvqfCbLGtBSh8bvmeEnfvsAvuBy+sOrTyxICuDvHLM5ySt+MRgYd77VwTZqgsalpbRbeQccn1LB5RxDWGLfT63wn/xGHtKR3CuqkYxVALjslpcRm78lPDqGyMyXW++EwtZSB0LtwuLCz9NPjBS6Hs7itq5cBDMjL3DdfIDPp4riZLB8XowV+zkeMVIDM+PMgogyNfwKyBo27AvcXjF9sxCaMDeExrIa3sPt/IMSQ99FdYX2yFIfnzX0YuFFE7ZmGYB40k5s6p01ifLHE4j5jBhZIved8f689xw7Hm+mqpAXNvYP6NMVaBQHEVx8OuaUjk/4rC66CehVGeBmyPdbOBxMZ+xX1m5D3+qTCTVlmlWtp369w3hFYHJvE1J16YVxHJT0Z7JB5XvFIcuiQd2gnzAvpt0gTILc8h8L9h6Smvmk9+IuWf/Rxvr7yjdndLlsYBfArME+9mk5Xv6Ji62eDn+s98tvzP1JIW+p//cQii4FebZc0xhdF6dO4eTUTmH8CBNpCPfxCGL9DLJQNPYqxePw1MV+aE5GEODfBVHOvm4LBBrx8IEO4HcR5wqCpTmyVdhkbkyC75PQtMksHgr2klt/2yxuISWOKDbOV9RmtYvA5XQ0MGv8sd8bAG4ZNr+A/vJ6m7YpkAbyHe2wVyb38kCZHnMiHzO1oHtU2C/EvLWstY2bO4TlEn4tuY9XxmJSdgY8PHgG+RCWF/WCEuG1xSUEfcCpQs0xX4M3aZC3xSOzTRDmaWWWyfHNaTgGWVmYj53fG5GOHSV8P9fevadyOgj2+Cn2MVjUb9H7CNlhfeNW0dCKqX7Yo3DVAw5O0C5xl5mtFYoeicwIScpvukQnrBvivU1pefiZLMxG/43o7g5oUGP1plQK8vKtJOC3sjashHKN4S88JN6ncK0xUycCojA5pGfV3EKzRjp48ScJ/QrhAxyksBvro0CZOHebExZRVszRl44AfoCe02cC4sV5p6RrIKNAR+PM/aea8cYtA26zZfjMO4jw37QJ09Ql4g+b4W1go/niP3OBvv1ynwCXIk0yQMSn7uNGM+crcOZmLu6cgL88gLdkuIkJjPverW8c2TeR33jNxdzxKVdcOngkcPal7H5ImJ1Jsb+D/RzAUKhcJ5+28CTOdk8MOWUeyq+XJAkXhDvwXxuzMYyQVxxxTYKjEnS8oj94oC8D3KTDCEupMRmFvJCScgKiwWG30QaW05NQ8rIS+2btXR63ODQPUPjcAV7CnfuqpmzsV7CvzAoLxZJpQpWDjI5wWEW4Cu4E+nRz78LS6nvezjRniPsyn4siZFyeM3I9ZpZZSbYL8hJ/efzIH9XFjq8ZN9diTGqOoRRKYCpIBVT7NeNco0pyZSPazZnemwSOYdg5KWLOSwYwZ0yWfYde5fOUSi6hSmNnlvKw/Oy7Yn4MxNl2/nvzBzl2GPKZaeW8u70/pl4b+74/DJtTS3PcPXf9ozcPGfmaE/Kxiemn6l43q2lTdRX+ft8XlzjkbF3HbMEuktumnwyMXZ8DGYe/ab/mzmem1Y8PxPz5frY+joLmJPUIvO/PMfQ9z0zy+8kEbJsG8vcIctcx7h+9xdbx7eOfss5mIl17lovtzVjWDVvtwHjlVXMoc87qR+jgPUVM4eZoy237OM79smRdY1+3vnnDPYcMHSikXlKuMvpWvwO+Xh5VWhgPy4gY6bIxPGRp5cNa0cmXE2f4Zccr8ktI35S/o4ypiUV5mxZsTep+GTYvxLNXQy8CvZ7PtF04QqUN7XujBzXxXyQfK7hDpp14ZJZcOYVVkF+Qp2jjI/ysVRSpmaS+ZU4+bqsW/w9GfqJe6F3/GBrc8zme8vGYmWxxCamvXRDcSzW8VT0c+5wwdVZHMga9w2lm9oWiMrnbSXmLQTPljkce8rKb9iPGQy1FodYf3maC/4cXgmez1/o2CsUvbqQuOuF/n5ZYTIkc+y12UC4CdJX0DlRkWSGFtobIzJr1PvBQ11IfJHe4DCexVWW4MLSdlhcA7CYZKWZuk2yMBQ89vC8FTOJv8I/YzQVfbTJTVU6dnJLPDCyYLvyLmNQQtyswH4KAu5SrXtP4in7nMA1zTOSs7Up2+lyvVJfffrJ3U80lo8Wd9VzRftoTm1ualS0lwjxoxi7KteObQ6/Y7/mUN0c5oHroa5NrjHxGfsVI1Mjx3sVik6RFEXBqy/zDW9lhJjHANDfKTajbpPl1VO5r3cN+80ZG8moq+NBm8AZgL9j3y/LN295UqC+ZNgV+Ntafsc3piexKAqq4vpi6SOY5WuC/WJpYw8i8h+OMeIBojKrMk9MlavoN7Ly8DG+MjKSBG4WjdYtmmVv7k2/1Ly/jhQWPbbTZ+7abNPQ5/DYsqNQeFtgugrAspl/69w9kujIU8iZ2IApir5gJ76fEX0aC/LGs4C+WTZ9TgQKYUkBqm8O1Zn+3zMoc2cbV7/pOW/Yv257zk7fRYM2hj5DXvnl/aS/t0EeC8dY8r/nEX3n/W6jrXxd0DPPsct8W9c+brFIxWGA2ripkK23iHkj/XLueFdhIbOIlLW6OaT2H2sOC4/xcI1FW3KuUHgRmK4RsjFLP7e87ZMzUkGLm9wEdB3wMw7zbNSB58og8jLCoc85FZYim/vH510fNWI/R3s+801Hz2/6jNzSvk0PY7kZ0Ny45in0+QXKq/Z1z2ja/iJwTDfvfA5DxkPjYBTvlsDEEpqtIDRzYZWRVpBX7Aei8ey1L57k5Tv2i7/JUwbF8lCcAyctepVQoVAoFIoecDbw9o2xH6m/xM6yMkOZNMt2c4lIzE3Au8jywgPZOHiOkVvs3FRTRzuHQP4UCoVCoVACY8ATpgH93m6RRIaK7xWWfnALytyQE1fNlEsc3jSS16HpmTwz5rHIhKbsVigUCoUSmMDvU/rqP+GufNwXkZmitMa84TAvA0/jfYNDFxKvv0JZSm0F54jM0M2rY+dnWanYHhVaeVehUCgGgNgYmCG4nugmz33Fxm4LpoSDyLiuDfK02UNw3zzWtFfRLd6wi6+S0LlQKBSKHhFKRCiD5SuGUThQupRoY4+BdBul2CWlWwyIvCiOD6oSzD8KhUKhGDiBcRGIIRCZKXZuHkro1nSTyuFf5bYPUOxLaHZNRfsggpvqUCgUCsXpEJg3tpF2Uc+mCYmhwN5Ng80lMxvUDMOrR7SCxmAMAURwNVmXQqFQnBCBKbB/w2doeEJZuC7UnUT9+geG6TZ6RHnDSqFQKBQKJTCB4Dd46koD9AkiHAuU5QV8kWJn3chQXQbgGKDyBj/Mv/9U0VUoFAqFEpg4JNjVNLkbWJ8oHmbK2unTF6p3tBBkaCjg1pc3Fd2TQIL4oHKFzqlCoTJYgSalBCh1/w126fSHhiV2FqLngP5kA+wLWV/WKLMBK4YDXriRQxb/S8V3eNHFIfVF9uMZ7sD40KKJ721OM8t4DG1OFSqDQ9MpVOzT9X/e7W+jFtIGwBWGFTNC7bjELpFdVrPxk0AsMMx6Ro+m/WfvYGEm2F1P98VQN0lZ1NMmXxlrf17xHRyZmGZMqcQU6+O/f8qQc7GJHKs+5tS1wdXp6iFtxlVrvotNmObu3LMN50cYMx8Z5LrnmDJYN+cJDguxctStoVqd0pTAULn1tbESDOnWzpZZYV5Qn/htqNaXuSFh6Ts52RU4bSsSyTwtvoyRZY6Jg4gS1kLB8Of23ZeNUHqXjn7Y2s/7kJ6oBSIR/fCdU5kLa93jePgk6RwKhtLWTWA7+mxv6iGDk4oDbpUM9n0A5HtViE6p0ovWPjQlMAVjgjeGwAzFguFrhaHBvhyY9UW6jk6dvFAfqIp3CKhO1THHgQhwwfpBGZpJ3uqC2aeW767MIn5gfUvY+uqjLzOjVKY1/ZiK9bVl7V+fGDHlY8zLhcBzLFzjIefUNu5trKNZxYbm2uRojvrO4t1kzbfZ1iZj1rUM5qKN04Z6hW4IPzje16VesenH2DX0o0rnJ0VRUI2fsWXz/IZ694tcVPcDIgK8H7bNjwY8w+76NQbWbt9FXNePLXbp749JAriMhN7ymsPPFdiV8uWnokujYK6FYhlHzLFcuHOhMLvoL5cl2limEf3YWg4MvA9DdinJEyIvFdL1nDZdfyQTt2LefA50n3vWASRroW0F09ttteMCwE+E35j90hHps+mVLmWQE4Eu5p/6QzolVj9uQw5Jo5Yan5tnEdsbEomZVpzgucl+aJaX79ivqn3qSCIX5TGv6PNFeSlORk1lxva7S0bY1h1tNoXDetRG+8GU8J3PCeqI5CUF8NWyafQxpyPsYgPawHjgawiR6+Xa6O1nNHOt0nwPKb4xFXpl2WCcfGVw2aFe4f15atiPsWMPvxYH+2cARZtBoa/MZPV5IAtHDoYreGsxkEXOJyiH3joaipKheljkVhh3JKu8thdPyCgJYGx/UtGftvvCnzfF8PIpcTfmHygLwaKnOV2Yd7+2eHh8r9iazb1AWKCya75j4xsv2bPaOMRJV/rSIit9yGCO9kqhkGW9Cy+GHJdrJhejLm61JEbxfzGb8RDKDZAQPg94sQKHbiO9jnn8je6pY+JStWCfUMZlFA1ITMIUTZ/1veYDkeHEominHRIX15xO2Zy+foB1RNa+aeTvU2mYl8jN9pzp/xjryxZlzMynlsZDyuD4iDKYo9nBiOYkY4eBrvuyxc6qmwJ4PetQaDfYuUHm7MXHIjIT02GZl+Ot4QJrYzJoTK6w8/keI8hOcUheZtj5zPva5GwKh5Q4JzFNFWdf5GWM8kbBsZNu8SDd5QDm9B67uJD3vo744XEcOVaXkSSYDtIjhAXudo2hyCDplQJx1sCM7Z9P6M89tzLycA50l1eETO85di6lLxYic2yrzDlTbH0Kkuz/HMBvKOOHUiUvR0OGYQWj06mJk5jYLJx9lsgYUpHXzOg5flnh2HMKQyRvTftSaGbVqsNnTG27MzbO1y3MeWwR3YTN7+2AZJDrlVfE1dcrGhDUWNyYP5+7JDBEYvjfOZFZOTb0kM8x0aTNK/OZA/g/KK/PcjO34jjYsI1+SFfqubK5QFgiQCI8fSuaOcpgweLIc/p3DK84K5nzycJwocvPOUaSlPiAXMCThvvFFM1iRi7M7/4Dw8qTJvXKJoAg8vjA+x733AP0GUiWMiLzgJ176auFbdsEaCX+PkWzq2ZtDODK0TYJmahH3sogl4VaXY4HGfMCDC8bMymb0CvldINj0qbiGOgYueb0fkAWITl+9+juxtkxUVTo9FAssHOv54Fzj4akQV5pDs3MS26s2QAJNEesDDaJLYrRKSs2/kXfBIasDGdMEGSiJ/KZvzCBuWH//s5+RifKJRuULgSEnrtiZITaydt2I9rNT4ASPM2zWlyGo2zbKuS57XDDXwYomzZuYawECZ+ITUFeP96KNXKMwqOSkG4HPKdb08Yv2JnF3wOJoRi+BM3jC8cor1T7xgfmYj0fcwzadN12IYNE0hYBY5y3QE7nFr02tvRzzP58hEjG1/dVPgomJOUrsan5N//ZA7NoUD6HtkkMDeTnivbY2roRypTjDXo1ekjI2CmpqYl3Kxbc1vL3JvlGuLL5p8dGRweF0JMSffcKhxbDB6N8PmE/N87WcVI61uaRornbbGtRol3OaYiVYehosywGH5+Qdd1WaZhLy2G7r0NRiAw2sTRNUWaP9pk7Gt9tYF/msOeGWqG8Mi9zblHf1hC3MY9ZHDC3fEj5+H7oORRf07blZYUyE+MmsG2Jo5/qKhoeeWl6SuLxTVdGZj6bP/nfr1C6GbcNlc0Fug38vMJ+fBaXaSrQ9mA2Feon9e2Rkfe+5T017TtHM/9833N6jbhAyqGSl7eW++M7PgkjDm25DcnS8BIgg3yTH5+ADJIVJDTeJ+RQtMJhyRSuU3KLXrky/38H4C9BDgdZ3bgI+BBGpuPzFoV2jP0MvqFtU6IyfJDJvskpiRbmZ7PoHhjhlR++MJvmSFoYGUtbHhNqD+VaSCtkmiwd1D/q25qR92McjPgGFuOf54eXvuZ0y+Tw1G8k0Q3PS7Rz44YsDf9OYFZBXprmnqnCm8fcJIy8LRrIAiJk8DPscZghROSyIxkkF1Bq2U9dBJD69pvZi19tTPk9gBT5Gu26kKiKtcapvD+QsjtvoOzIJPqNEd0Mbotcxjb8b+Z3fYq1VZ3Y847W8bmH3PMidCmzaG2OOKf85Bszn2MzL3R4ySLntIkVpgtieiy0GTy9xH4pCNfG1xZxssl7HS7Y92Jc0tx9+81TBlMhg1cNxv4eZbbotGZvjJEDn700Fwek3KVT3guBOUd3JEMtKe8ThThxxCgauhEERiY2cFvkKGibNj0quxFr+bk0z/m95ZMSHxfe3qRG6Wxw/JwmdGU8xvpCG8cDdtY5TshC5zRmA9mycT/XJWqVy6+oLi+QovnVaQm6Su2zZ5KbY9GgnySDqacM5kwGE/O7Vw0tXXVr+Bzh1kbpohrVvKdg303fM4FRKGJAeSJiyAP5c+kUFGJ1oE2PXJ9XkQp3yd5tUwRUOmMduKHS9d5bpkApfiurOZkdM86LFHrsnNLGkTFyEjqnKZvTGEzYmJ+qFealwdryGZ/UYgEgq8FXtJO4jq+FsSex5Lffpg1lMKmyPFTIIK1RCrbfRo5xUWMU2CDMXUXjyMsYvKK0NtbplFwJjEJxiFBlRwrhBmWW19gN+9UoqjXK+IlQ5fqpYi0XbEON8Y1T3RQiMiMcXv0fWrxGjPuICOnasTmGgMbmIXJOp+KUe2qQOVjatsJco7S4p0wGedmAtnP+bAU5qyPRfMOOORQ1Ja5UOyr04MJlMKuZY+Awx5kv6HA0Y/ISpVOUwCg+IppuunN2Mmrqujwzz7qJUOY+LgcKPIxRNmNBZChr50wo7GQA1oKmtXceW5zTWAUvT/sK+0a/EPNE+9inlq0vNpx7/F/s/N2YtXSOZlbMnFlJQmOyxgG6MoYgcZ1yD+B/GJnJBAmsvXWmBEbxEXHBFE3MaW1tFnYb1c15orcV2j89klsl9jQ2FkpnaRTPL6Z0yNx8zGvA544Ts+/pmuY0b3FOf0TMKa+ArHBbYTK2wb41XM8+mKDeVUxuv0nEnK+EBaUpKP1B7Lqve3bKCFLsPEKQGW7tpfHMqkiUEhjFR8QLU0qhpz9K0tbWVXnu5omxklBMwHONRSDmNGYjMvz3lyh92seO22ii9PmctkUaP/rtxa5uAtE6vGR7GMV9dF2Xp8t6VWQBbDMBIMVx3UXOXx2auKlsByQiMz+xH3/nvDqvBEahGN4JMwRTlCbntMIikJqN+q6l0xhXPJzIHGPTJrIQGzj6yJ7T9mb3+IFleRvwvbtA2aQbLdL6MvZ4FwXLhq6DF09ZbCrLba6LWBlc1nCEHGWm7y+ISwdRpVMkkbFWzFYCo1CELbCbDhRN1yiMoi9M+9t0VUkic3vkvsYEjq47bE/sCZWsZskHWl83ngSeX/WPqTc0j5SrLoKqZe2wU0rbscH+rbs2rW2cyCxQWmMSJTAKxccDkZgNdkVRm2YCdhGZKfb92KdwFXiIQbOnmgeGYi9iLGEvCLPCTNj8+birOFkISXoqg6u7IJVk3Xk7wfkGytwzbeoUMJ3yEzsL756lWQmMQvGxSAy5W24QnwnYR+EssB9g2Qde3tFcnXJfLhCXhTaHv7uDB/OGBM3yQqMhm+224zF7D4kLKfdM2+NFOuoepZs6UQKjUMSf1k81QzO1m+qMUP2Utq0xUwD/D6J67EA3gfUA5+kcZbmLU0EiZCBEXm7YXIS4OBcIcxs+MvlfNVxDbW7Q78GoQAn0eGHXNnXKFmXs0xmAVAmMQuGPrq64xl4BbgryX383J6c2iQyRmAOzb0ekjK61x2xKXZDSF/HsUGvEBt3eehkq6Dae73hR3hcf99EKwH+xn4XGS3Wx9mU+p6FgFTl3vCbTZ0Fk2gjyJdKaA3hTAqNQxG38bSvtWAW5Qpl5M/QGUM5+70EQmbaUDqXG7/p2El2njb2K3jbeOnz2UCHri8UgwS5/ThexFI/YtwiGbtLTgDGI1SvnLc/HGZrdzHuL1CmJIDLzlnTKXtFTJTCKj4iCLdJxxOIh834brpGEKa+YGzSPKK80xoD8yRkjMm2dnmi8uiJ+HLH95wqxLVdXivJ2zPQDrq+YRG5SJucttofk94djkw6RldRjLcdgifJactqSDFKh15jK7E3cqlQPLWUHtAcAv6EdSy9lY86UwCg+It4aLFIy9xZo18T/lSnJGPx3Q0K3EUqYTk9fGiodnvq9S/wpNprYOW2TZMW4j8b4WLljeHJI2wbalhVmjkMr4DqirVWWREpCF3Mw4vLShiuT6kUtEF6Zva3r0LK+ER2Q5mgeJzOlAVcoPjJiNuV7tJd5NiaPBV/0a0HK6k5kPu0hhZOy09N3dHPDoAtSGjOnFBzYRkmEvMGcbjHMoOK+QCTyuSUrjFwnsVYSirOZsfVkIw1NrBcTAH9DmXiyifWF0vBPI8brDmUMVxWZCqmBxusbveIwTiamxIkSGMWHRsxNhDGzKtCGF6NsOKFYRJ58VihLCNQRmJy11WeDLtj3R+z09CVyrGmskoHOKZ+HlwZzmrUwpy+MIJ8KEjbPbRRUbFK/y2Z9ocNG0cDawIP4zx2yR9XMQzNeU9D7f7L1mjZYZ2kDGZTWkzodQbKfeK5PclmTjH8PJDH/tlgpgVGcErrIjfEYscB5rhNSGKMIJZObE11MzgxqO1lwipr3ZSgDdjfsZz6K7NUcdjIzB6EnJn4K7FLnNEmdTrEwM0H2QsgLje2swSb+iI9XQ+nRInMjNLvqbLO+nAtrQAzRePSQwbyBDPJEkCHWwISNWQbgj0i9wq+0px56bMbmjGoW1REZcllv2LoJ1cNbtcAoTgkJ2o3Qp0UWe+NBkphX9lwZ4Ct/tmGLf4m4mI0xU8wvFQqG8IRd6XpeeHFjGQ8X3sx7YpTzyvMdbaHJyX0pNhCfOeW1mG4RV1RQVsXefJB1zeWYj+8n8+cNmllzVmy9bSKsDBJkgfmzYp00kUGpVzYWWZMySJYlqhe0iCQv5D6SfXHplgVbLzOmBwuEXXLgVbNDxundEJi/yKQUqbS26KZqqqI9FMKaEPI5czyP2H+TkvBT7FdkLnBYqVr+bGZ+Z9lA7u7ECabKYnUpNugnpnTk+HKLgvw0KZhY19a2ZIRX3u5rTgs2p01uHc07Ii5jy0EgZh1VbUhnETp46yEvG8QVIN0ya0KC9qy3U5RFJFMHgUkFcW8qg2c1MpizA9ET4i26ZGHaoN6qC5S3m6ZGrywsa6ZOp1A/YuRmPcL7QBtR2zYS8xU7v/+pZcR8bye0+4ab/ZWZR3kKs52WYkyuW3bqvmMWirWDQIwbkGaumKsIAaXx54RjzJ4xNQpoaRTto2kvWVlszyW/+vUR12noie5U5pQ/u6tx+tlAN66MzLmIKF0BbjPvDZGBm0iZo2DUi54tWuRKvGmwVrgMLgUhlzI4Ye9pQwarCF8iCMdYkLtrsWbW7Fl5hTUn6hLDeyAw3LWwrGCVuSAinOGvLCcnCtjiSl1xXLR9+6VgpGaOONO/jRhMhRKy1RtqYvG78lDIKXbm3EuLEh1bTpVc/lewu4kmiM9Vwze5rjePEZvTZQdz6pLHJnM6Rz+b7DZyHKYoYyOqdHGb7SHrAsWqhFgWiOTnKAPd5fogd+h1R2NNVZpjD19jQZJtMtaFDFYdjMjKOalp75TN17ZGp8SM/+o9ERgKnLNNIPexSiZOCvXRopjJjPfoOL0r+rfEdKGwyVz6wDbocQdtbMNFSYpgzTYL12n9E1PcVacy24Y8rSAq44ixp/X3Z48nYLLCrFqeUz6Wfc/pMddRHV4i271C9ZVdHhQ7DRzTTcVzSfevA6wWPF/Lg8e+VGAXYzfpQAbp523K4AMb76o+nXuQjrpDkmtNhRyKNmcek/AXDoOIhvAhvMEdDMmDkmyBcc9CwdqwtJCXIY5FXwGS7xHPKE3VMTkJ+tgwqE1kxj+r2DBS9p1lYFvrPrGnuj4rU5P/fcOsBtuBzWfonA4ZPD4q1EL3iOrbNgXT0SFr8yZAL4ZUZK+7Ss3bzSu/ty2DXeiVtEb+iC8sEH5FvC29QmTrB29Q1SS84jBgbQgfyrlwW6OkKSjposIctnEsDhrYnyhvJqQDHY8C3Vwz/gggU3UXG15bSmaMXQ6WkGDYptl921CMXcd11GGDMnfNEOd0zqyAp+6mvmx5c5WE/NFzXOusOn1ZpqSLeogyCKZX3jzn4tgg0pvWuZBmA14sdYFznKmlsPtBwZTGjTk9yOdxH/A19gP6hgi9TRWPM7bhPWEYt9OoDVcB5OUNx7fI8TYf2zpAc/pzQHMKuIPLFfZ59HUJcquOa1yfUVYwD42vIfgcGDfYhWqQy+l+YDLoeyjKGNG+PmKbV3zNjCqUT5XPaugbNjeL5ag3jSXYD/qzCRgnMlPVJ+8Sb0wWviA+n0LbSuYzU8S+GTIzpiyP0e65UTRdX52uQ85IzOcBEFOajznb1D4ieZG5jOrmMIM7XlGObV1+JGkdCQUFNJNrtM7KQzmiHtjhewgy+AXuHDkSFL+2OFLb+Z5OBLTShTQ+gY/P5CQeCpRcSVRoChWK/xTHROEP7lbkMTHbnhcrnTZIjkNzNtHNjXGPbeeb8w8Mxy2SC0vMMeYUYk6J3J06KLaJbqbEVqF+8ZBnTk5c7/G5SdPmgTmkoCvtMcdyadL7VsLysvGcZ7Juoef1I/d00tPvLhOvVPo+yXgkyycSM8Ywi9YpmimcEFkgEsPlYduDDI+NHH9n5OUtog+yWFqX7eeurgfT3iFZFvicfj/CnNLmeoP3E/PCSX8f80cu3nmN9SXUffrYg06xEel5j/LH1+f3CJKXMyvSFzEHXfXBdpDbI/2nTmC24iOTLYUqUNosHhyK/1QJzUe2zMTOGZchLg9dbHpShj8b8kEKr8ntHar6ypVOW/Jsa/dDj5ta7JzmYk7R05w+wN9kf4qWmL6I0tqh08j6cuG5Mb9E6oot9hMZxpIYIgNdHTC2wupCMpijmYWK2v6bIUSrjvQKzek3F+FKiqKgK8inuCnzyblhSqHNzLm8tgRO2DITeoOlbdB7Y+v/NFkMFG/QxsaRGeW1bEgSt0KepAy3JcfyGSl2t5NcSenGnu0GW3uPjLicYtZqucbbmtO52Ww3YpMvGrZ1g92tyL7is6oCPvkV6qeAcSOZ/ydKC2MRIM+3Yr7G2I8VC9FJsW3/1uK6lDWMth3qlbbIamHRi5PIPvDv8iy+lXt6UhQFDdwpQab13giBbAvcdE95CmiSTg1tC3Hsgs0anF5iQQuh6ebK5Yv3oyqbpGsR3zFZXncow67222TaZ0PkWTV5u3m9llNCX3P61tLYDGEdVRH7vtYl7VuPZq44iY49lLQ1FqHzeWaRQdpjri2yV3X79o7pe/SgV6Rsp9jlx6nqAyraHaQPk6J4FyV+MnSX7j8TgqD42KAFunHICcQmaCPcsMhrn3JGfuS8og9V2FQo4Pc6p/Lw4jOnrucq2ifj73EPI/mp0ivrirXZ9d7os4ZkH1yw6cPnOmL7v4urIDDgQu8+AAAAAElFTkSuQmCC";
+document.getElementById("logo").src=LOGO_IMG;
+
+/* ══════════════════════════════════════════════════════════
+   UTILIDADES
+   ══════════════════════════════════════════════════════════ */
+const $=id=>document.getElementById(id);
+const mil=n=>Math.round(n||0).toLocaleString('es-CL');
+const mil1=n=>(n==null?'—':Number(n).toLocaleString('es-CL',{maximumFractionDigits:1}));
+/* los LMR van de 0,01 a 50 ppm: redondear a un decimal convertiría
+   todo lo pequeño en 0, que es justo lo contrario de lo que dice */
+const ppmTxt=n=>(n==null?'—':Number(n).toLocaleString('es-CL',
+  {minimumFractionDigits:0,maximumFractionDigits:3}));
+const esc=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const MES=['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
+function flarga(f){ if(!f)return '—'; const p=String(f).split('-'); if(p.length<3)return f;
+  return (+p[2])+' '+MES[(+p[1])-1]+' '+p[0]; }
+function diasDesde(f){
+  if(!f)return null;
+  const d=new Date(f+'T00:00:00'); if(isNaN(d))return null;
+  return Math.floor((Date.now()-d.getTime())/864e5);
+}
+function guardar(k,v){ try{localStorage.setItem(k,v);}catch(e){} }
+function leer(k){ try{return localStorage.getItem(k);}catch(e){return null;} }
+
+/* texto sin tildes y en minúscula, para buscar sin pelear con los acentos */
+function norm(s){
+  return String(s==null?'':s).toLowerCase()
+    .normalize('NFD').replace(/[̀-ͯ]/g,'').trim();
+}
+
+/* ══════════════════════════════════════════════════════════
+   NAVEGACIÓN
+   ══════════════════════════════════════════════════════════ */
+var VISTA='hub';
+function ir(v){
+  VISTA=v;
+  document.querySelectorAll('.view').forEach(e=>e.classList.remove('on'));
+  const el=$('v-'+v); if(el)el.classList.add('on');
+  document.querySelectorAll('.s-item').forEach(e=>e.classList.remove('on'));
+  const mapa={hub:'nav-hub',pais:'nav-pais',mosca:'nav-mosca',pest:'nav-pest',csg:'nav-csg'};
+  const b=$(mapa[v]); if(b)b.classList.add('on');
+  if(v==='pais')  abrirSag();
+  if(v==='mosca') abrirMosca();
+  if(v==='pest')  abrirPest();
+  if(v==='csg')   renCsg();
+  cerrarMenu();
+  window.scrollTo(0,0);
+}
+function abrirMenu(){ $('side').classList.add('open'); $('scrim').classList.add('on'); }
+function cerrarMenu(){ $('side').classList.remove('open'); $('scrim').classList.remove('on'); }
+
+/* ══════════════════════════════════════════════════════════
+   SITIOS EXTERNOS
+   ──────────────────────────────────────────────────────────
+   Algunos sitios no permiten mostrarse dentro de otra página
+   (mandan X-Frame-Options o Content-Security-Policy). Desde
+   acá no hay forma de saberlo antes de intentarlo: el navegador
+   no deja leer nada de un sitio de otro dominio.
+
+   Entonces se intenta mostrar, y pasa una de tres cosas:
+     · carga        → se ve adentro, con una barra arriba
+     · no responde  → a los 12 segundos aparece la tarjeta con
+                      el botón para abrirlo en otra pestaña
+     · carga en blanco → el botón "No se ve nada" deja la
+                      tarjeta puesta y lo recuerda en este equipo
+
+   Así nunca queda un recuadro blanco sin explicación.
+   ══════════════════════════════════════════════════════════ */
+const SVG_OUT='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><path d="M15 3h6v6M10 14L21 3"/></svg>';
+const SVG_RE='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M21 12a9 9 0 11-3-6.7"/><path d="M21 4v5h-5"/></svg>';
+const SVG_EYE='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg>';
+
+var EXT={};
+
+function montarExt(idCont,cfg){
+  EXT[cfg.clave]=cfg;
+  const c=$(idCont);
+  if(!c) return;
+  if(leer('olo_ext_'+cfg.clave)==='no'){ extTarjeta(idCont,cfg,true); return; }
+
+  c.innerHTML=
+    '<div class="ext-bar">'+
+      '<span class="ext-u">'+esc(cfg.host)+'</span>'+
+      '<button class="ext-b" onclick="extNoSeVe(\''+idCont+'\',\''+cfg.clave+'\')">'+SVG_EYE+'No se ve nada</button>'+
+      '<a class="ext-b pri" href="'+esc(cfg.url)+'" target="_blank" rel="noopener">'+SVG_OUT+'Abrir en pestaña nueva</a>'+
+    '</div>'+
+    '<div class="ext-load" id="ld-'+cfg.clave+'"><div class="spin"></div>'+
+      'Abriendo '+esc(cfg.nombre)+'…</div>'+
+    '<iframe class="ext-f" id="if-'+cfg.clave+'" title="'+esc(cfg.nombre)+'" '+
+      'style="height:0;opacity:0" referrerpolicy="no-referrer-when-downgrade" '+
+      'sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-downloads"></iframe>';
+
+  const f=$('if-'+cfg.clave), ld=$('ld-'+cfg.clave);
+  var listo=false;
+  const reloj=setTimeout(function(){
+    if(!listo) extTarjeta(idCont,cfg,false);
+  },12000);
+  f.addEventListener('load',function(){
+    listo=true; clearTimeout(reloj);
+    if(ld)ld.style.display='none';
+    f.style.height=(cfg.alto||760)+'px';
+    f.style.opacity='1';
+  });
+  f.src=cfg.url;
+}
+
+function extNoSeVe(idCont,clave){
+  guardar('olo_ext_'+clave,'no');
+  extTarjeta(idCont,EXT[clave],true);
+}
+
+function extTarjeta(idCont,cfg,recordado){
+  const c=$(idCont); if(!c||!cfg)return;
+  c.innerHTML=
+    '<div class="ext-off">'+
+      '<div class="ico">'+SVG_OUT+'</div>'+
+      '<h3>'+esc(cfg.nombre)+'</h3>'+
+      '<p>'+(recordado
+        ? 'Este sitio no se deja mostrar dentro de la plataforma, así que se abre aparte. '+
+          'Queda recordado en este equipo para no hacerte esperar de nuevo.'
+        : 'El sitio no respondió a tiempo. Puede estar lento, caído, o no permitir '+
+          'mostrarse dentro de otra página.')+'</p>'+
+      '<div class="acts">'+
+        '<a class="ext-b pri" href="'+esc(cfg.url)+'" target="_blank" rel="noopener">'+SVG_OUT+'Abrir en pestaña nueva</a>'+
+        '<button class="ext-b" onclick="extReintentar(\''+idCont+'\',\''+cfg.clave+'\')">'+SVG_RE+'Volver a intentar acá</button>'+
+      '</div>'+
+      '<div class="foot-n">'+esc(cfg.host)+'</div>'+
+    '</div>';
+}
+
+function extReintentar(idCont,clave){
+  try{localStorage.removeItem('olo_ext_'+clave);}catch(e){}
+  montarExt(idCont,EXT[clave]);
+}
+
+/* ══════════════════════════════════════════════════════════
+   DIRECCIONES DE LAS FUENTES
+   ══════════════════════════════════════════════════════════ */
+const FUENTES={
+  sag:{clave:'sag', nombre:'Consulta de Requisitos de Mercado · SAG',
+       host:'www2.sag.gob.cl', alto:900,
+       url:'https://www2.sag.gob.cl/reqmercado/consulta_agricola.asp'},
+  pbi:{clave:'pbi', nombre:'Campañas de Mosca de la Fruta · SAG',
+       host:'app.powerbi.com', alto:720,
+       url:'https://app.powerbi.com/view?r=eyJrIjoiYjAwY2VkMmYtYzU0Mi00NjhjLTg0MTYtYTgyYmM2OTcyZjdjIiwidCI6Ijc3ZWNkYTc1LTU4NjQtNDIyYS1hNTM1LTZlYTY3MTU0MDI5YyIsImMiOjR9'}
+};
+function abrirSag(){   if(!$('ext-sag').innerHTML.trim()) montarExt('ext-sag',FUENTES.sag); }
+function abrirPbiRec(){ if(!$('ext-pbi').innerHTML.trim()) montarExt('ext-pbi',FUENTES.pbi); }
+
+/* ══════════════════════════════════════════════════════════
+   DATOS PROPIOS · INVENTARIO DE CSG
+   ══════════════════════════════════════════════════════════ */
+var CSG=[], IDX=null, CONS=null;
+
+function nombreLimpio(s){
+  return String(s||'').replace(/\s+/g,' ').trim();
+}
+
+async function cargar(){
+  const pide=async u=>{ try{ const r=await fetch(u,{cache:'no-store'});
+    return r.ok? await r.json(): null; }catch(e){ return null; } };
+
+  const [idx,cuart,cos]=await Promise.all([
+    pide('./pesticidas.json'), pide('./cuarteles.json'), pide('./cosecha.json')
+  ]);
+  IDX=idx;
+
+  /* un CSG puede venir de tres lados; se juntan en una sola ficha */
+  const mapa=new Map();
+  const ficha=k=>{
+    const s=String(k);
+    if(!mapa.has(s)) mapa.set(s,{csg:s,nombre:'',zona:'',comuna:'',
+      cuarteles:0,ha:0,kg:0,variedades:new Set(),
+      enCuart:false,enFlujo:false,enEstim:false});
+    return mapa.get(s);
+  };
+  (cuart||[]).forEach(r=>{
+    if(!r.CSG) return;
+    const f=ficha(r.CSG);
+    f.enCuart=true; f.cuarteles++;
+    f.ha+=r.Sup_Ha||0;
+    if(!f.nombre) f.nombre=nombreLimpio(r.R_Social);
+    if(!f.zona)   f.zona=nombreLimpio(r.Zona);
+    if(r.Variedad) f.variedades.add(nombreLimpio(r.Variedad));
+  });
+  ((cos&&cos.flujo)||[]).forEach(r=>{
+    if(!r.csg) return;
+    const f=ficha(r.csg);
+    f.enFlujo=true; f.kg+=r.kg||0;
+    if(!f.nombre) f.nombre=nombreLimpio(r.prod);
+    if(!f.comuna) f.comuna=nombreLimpio(r.comuna);
+    if(r.vari) f.variedades.add(nombreLimpio(r.vari));
+  });
+  ((cos&&cos.estimaciones)||[]).forEach(r=>{
+    if(!r.csg) return;
+    const f=ficha(r.csg);
+    f.enEstim=true;
+    if(!f.nombre) f.nombre=nombreLimpio(r.prod);
+    if(!f.comuna) f.comuna=nombreLimpio(r.comuna);
+    if(r.vari) f.variedades.add(nombreLimpio(r.vari));
+  });
+  /* un CSG es un número del SAG. Si dice "pendiente" u otra cosa, es un
+     pendiente de la base: nunca va a calzar con ningún archivo del SAG,
+     y conviene decirlo en vez de mostrarlo como "no aparece". */
+  CSG=[...mapa.values()].map(c=>({...c, valido:/^\d{4,}$/.test(c.csg)}))
+    .sort((a,b)=>
+    (a.nombre||'zzz').localeCompare(b.nombre||'zzz','es')||a.csg.localeCompare(b.csg));
+
+  $('gen').textContent=IDX&&IDX.meta? 'Agenda al '+flarga(IDX.meta.fechaMasReciente) : '—';
+  $('h-csg').textContent=CSG.length;
+  $('c-n').textContent=CSG.length;
+  $('tag-csg').textContent=CSG.length;
+
+  renHub();
+  if(location.search.indexOf('check')>=0) autoRevision();
+}
+
+/* ══════════════════════════════════════════════════════════
+   HUB
+   ══════════════════════════════════════════════════════════ */
+const SVG_PAIS='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.6 2.4 4 5.6 4 9s-1.4 6.6-4 9c-2.6-2.4-4-5.6-4-9s1.4-6.6 4-9z"/></svg>';
+const SVG_MOSCA='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><ellipse cx="12" cy="13" rx="3" ry="4.5"/><path d="M9.5 9.5C7 7 4 7.5 3.5 9.5S6 13 9 12M14.5 9.5C17 7 20 7.5 20.5 9.5S18 13 15 12M12 8.5V6M10.5 5l1.5 1 1.5-1"/></svg>';
+const SVG_PEST='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 3h6l-1 4h-4L9 3z"/><path d="M10 7v3.5L6.5 18a3 3 0 002.7 4h5.6a3 3 0 002.7-4L14 10.5V7"/><path d="M7.4 15h9.2"/></svg>';
+const SVG_CSG='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 21V8l9-5 9 5v13"/><path d="M9 21v-7h6v7"/></svg>';
+const SVG_FLECHA='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" style="width:14px;height:14px"><path d="M5 12h13M12 5l7 7-7 7"/></svg>';
+
+function renHub(){
+  const esp=(IDX&&IDX.especies)||[];
+  const total=esp.reduce((s,e)=>s+e.filas,0);
+  const vieja=esp.slice().sort((a,b)=>(b.dias||0)-(a.dias||0))[0];
+  const cambios=esp.reduce((s,e)=>s+(e.cambios||0),0);
+
+  $('k-hub').innerHTML=[
+    {l:'CSG propios',v:CSG.length,s:'Reunidos desde cuarteles, flujo y estimaciones',c:'var(--g700)'},
+    {l:'Límites de residuo en la agenda',v:mil(total),s:esp.length+' especies · fuente ASOEX',c:'var(--blue)'},
+    {l:'Cambios de LMR anunciados',v:mil(cambios),s:'Con fecha de entrada en vigencia',c:'var(--plum)'},
+    {l:'Hoja más atrasada',v:vieja?(vieja.dias||'—'):'—',
+      s:vieja?('días · '+vieja.especie):'Sin datos',c:vieja&&vieja.dias>180?'var(--warn)':'var(--g500)',
+      u:'días'}
+  ].map(k=>'<div class="kpi" style="--c:'+k.c+'">'+
+      '<div class="kpi-l">'+k.l+'</div>'+
+      '<div class="kpi-v">'+k.v+(k.u?'<small>'+k.u+'</small>':'')+'</div>'+
+      '<div class="kpi-s">'+esc(k.s)+'</div></div>').join('');
+
+  /* los CSG incompletos se avisan desde la entrada: sin ese número no hay
+     forma de revisar nada contra el SAG */
+  const malos=CSG.filter(c=>!c.valido);
+
+  /* aviso si la agenda está vieja */
+  const avs=[];
+  esp.filter(e=>e.dias>180).forEach(e=>avs.push(e.especie+' ('+flarga(e.fecha)+')'));
+  $('aviso-hub').innerHTML = avs.length
+    ? '<div class="note note-w">'+
+      '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.3 3.9L1.8 18a2 2 0 001.7 3h17a2 2 0 001.7-3L13.7 3.9a2 2 0 00-3.4 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>'+
+      '<div><b>La agenda de pesticidas tiene hojas con más de 6 meses.</b> '+
+      esc(avs.join(' · '))+'. Conviene bajar la agenda nueva desde ASOEX y volver a generar '+
+      'los archivos antes de decidir una aplicación.</div></div>'
+    : '';
+  $('tag-pest').style.display=avs.length?'':'none';
+
+  if(malos.length) $('aviso-hub').innerHTML+=
+    '<div class="note note-r" style="margin-top:10px">'+
+    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.3 3.9L1.8 18a2 2 0 001.7 3h17a2 2 0 001.7-3L13.7 3.9a2 2 0 00-3.4 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>'+
+    '<div><b>'+malos.length+' productor'+(malos.length>1?'es no tienen':' no tiene')+
+    ' número de CSG en nuestros archivos:</b> '+
+    esc(malos.map(c=>c.nombre+' («'+c.csg+'»)').join(' · '))+
+    '. Sin ese número no se puede revisar contra el SAG.</div></div>';
+
+  const S=[
+    {k:'pais',n:'Requisitos por país',i:SVG_PAIS,ib:'var(--blue-s)',ic:'var(--blue)',
+     p:'La consulta del SAG por especie y mercado de destino, abierta dentro de la plataforma.',
+     b:'SAG', go:'Abrir la consulta'},
+    {k:'mosca',n:'Mosca de la Fruta',i:SVG_MOSCA,ib:'var(--warn-s)',ic:'#8A6318',
+     p:'El tablero de campañas del SAG y el cruce de nuestros '+CSG.length+' CSG contra el consolidado.',
+     b:'SAG', go:'Revisar campañas'},
+    {k:'pest',n:'Agenda de Pesticidas',i:SVG_PEST,ib:'var(--g100)',ic:'var(--g700)',
+     p:mil(total)+' límites de residuo y carencias, buscables sin internet.',
+     b: vieja&&vieja.dias>180 ? 'Revisar fecha' : 'ASOEX',
+     bw: vieja&&vieja.dias>180, go:'Buscar un LMR'},
+    {k:'csg',n:'Nuestros CSG',i:SVG_CSG,ib:'#F0E6ED',ic:'var(--plum)',
+     p:'Los CSG con que trabajamos, con productor, cuarteles y hectáreas.',
+     b:CSG.length+'', go:'Ver el listado'}
+  ];
+  $('secciones').innerHTML=S.map(s=>
+    '<button class="esp-c" onclick="ir(\''+s.k+'\')">'+
+      '<span class="esp-b'+(s.bw?' w':'')+'">'+esc(s.b)+'</span>'+
+      '<div class="esp-i" style="--ib:'+s.ib+';--ic:'+s.ic+'">'+s.i+'</div>'+
+      '<div class="esp-t">'+esc(s.n)+'</div>'+
+      '<div class="esp-p">'+esc(s.p)+'</div>'+
+      '<div class="esp-go"><span>'+esc(s.go)+'</span>'+SVG_FLECHA+'</div>'+
+    '</button>').join('');
+}
+
+/* ══════════════════════════════════════════════════════════
+   AGENDA DE PESTICIDAS
+   ══════════════════════════════════════════════════════════ */
+var PEST=null, PEST_CLAVE='';
+const MERCADOS_NUESTROS=['CHINA','USA','COREA','JAPON','UE','UK','BRASIL','TAIWAN'];
+
+function abrirPest(){
+  if(!IDX||!IDX.especies||!IDX.especies.length){
+    $('p-res').innerHTML='<div class="empty">No se pudo leer <b>pesticidas.json</b>. '+
+      'Hay que generarlo desde el Excel de ASOEX con '+
+      '<code>python3 scripts/generar_pesticidas.py</code>.</div>';
+    return;
+  }
+  if($('p-esp').options.length) return;
+  $('p-esp').innerHTML=IDX.especies.map(e=>
+    '<option value="'+esc(e.especie)+'">'+esc(e.especie)+'</option>').join('');
+  const pref=IDX.especies.find(e=>e.especie==='CEREZAS')||IDX.especies[0];
+  $('p-esp').value=pref.especie;
+  cargarEspecie();
+}
+
+async function cargarEspecie(){
+  const nombre=$('p-esp').value;
+  const e=IDX.especies.find(x=>x.especie===nombre);
+  if(!e) return;
+  $('p-res').innerHTML='<div class="empty">Cargando '+esc(nombre)+'…</div>';
+  try{
+    const r=await fetch('./'+e.archivo,{cache:'no-store'});
+    PEST=await r.json(); PEST_CLAVE=nombre;
+  }catch(err){
+    PEST=null;
+    $('p-res').innerHTML='<div class="empty">No se pudo cargar <b>'+esc(e.archivo)+'</b>.</div>';
+    return;
+  }
+
+  /* los mercados se ordenan dejando primero los nuestros */
+  const peso=m=>{ const i=MERCADOS_NUESTROS.indexOf(m); return i<0?99:i; };
+  const ms=PEST.mercados.slice().sort((a,b)=>peso(a)-peso(b)||a.localeCompare(b,'es'));
+  $('p-mer').innerHTML='<option value="">Todos los mercados</option>'+
+    ms.map(m=>'<option value="'+esc(m)+'">'+esc(m)+'</option>').join('');
+  $('p-tipo').innerHTML='<option value="">Todos</option>'+
+    PEST.tipos.slice().sort().map(t=>'<option value="'+esc(t)+'">'+esc(t)+'</option>').join('');
+
+  /* sello con la fecha de ESTA hoja, que no es la de las demás */
+  const d=diasDesde(PEST.fecha);
+  const al=d!=null&&d>180;
+  $('st-pest').className='stamp'+(al?' w':'');
+  $('st-pest').innerHTML='<span class="dot'+(al?' w':'')+'"></span>Descargada el <b>'+
+    flarga(PEST.fecha)+'</b>'+(d!=null?' · hace '+mil(d)+' días':'');
+
+  $('aviso-pest').innerHTML = al
+    ? '<div class="note note-w" style="margin-bottom:4px">'+
+      '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.3 3.9L1.8 18a2 2 0 001.7 3h17a2 2 0 001.7-3L13.7 3.9a2 2 0 00-3.4 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>'+
+      '<div><b>Esta hoja se descargó hace '+mil(d)+' días.</b> Los LMR cambian durante la '+
+      'temporada. Úsala para orientarte y confirma en ASOEX antes de autorizar una aplicación '+
+      'cerca de cosecha.</div></div>'
+    : '';
+
+  chipsPest();
+  renPest();
+}
+
+function chipsPest(){
+  if(!PEST)return;
+  const presentes=MERCADOS_NUESTROS.filter(m=>PEST.mercados.indexOf(m)>=0);
+  $('p-chips').innerHTML=
+    '<span class="f-n" style="padding:6px 2px 6px 0">Atajos:</span>'+
+    presentes.map(m=>'<button class="chip" onclick="chipMer(\''+esc(m)+'\')">'+esc(m)+'</button>').join('')+
+    '<button class="chip" onclick="chipCambios()">Solo con cambios anunciados</button>';
+}
+function chipMer(m){
+  $('p-mer').value=($('p-mer').value===m)?'':m;
+  SOLO_CAMBIOS=false; renPest(); marcarChips();
+}
+var SOLO_CAMBIOS=false;
+function chipCambios(){ SOLO_CAMBIOS=!SOLO_CAMBIOS; renPest(); marcarChips(); }
+function marcarChips(){
+  const m=$('p-mer').value;
+  document.querySelectorAll('#p-chips .chip').forEach(b=>{
+    const t=b.textContent.trim();
+    b.classList.toggle('on', t===m || (SOLO_CAMBIOS && t.indexOf('cambios')>=0));
+  });
+}
+function limpiarPest(){
+  $('p-mer').value=''; $('p-sus').value=''; $('p-tipo').value='';
+  SOLO_CAMBIOS=false; marcarChips(); renPest();
+}
+
+/* índices de los campos dentro de cada fila comprimida */
+const F={MER:0,SUS:1,TIPO:2,PPM:3,PPMN:4,OBS:5,DIAS:6,DIASN:7,DIASOBS:8,NUEVO:9,VIG:10};
+
+function filtrarPest(){
+  if(!PEST)return [];
+  const mer=$('p-mer').value, tipo=$('p-tipo').value, q=norm($('p-sus').value);
+  const iMer=mer?PEST.mercados.indexOf(mer):-1;
+  const iTipo=tipo?PEST.tipos.indexOf(tipo):-1;
+  /* buscar la sustancia una vez sobre el diccionario, no 25.000 veces */
+  var okSus=null;
+  if(q){ okSus=new Set();
+    PEST.sustancias.forEach((s,i)=>{ if(norm(s).indexOf(q)>=0) okSus.add(i); }); }
+  return PEST.filas.filter(f=>
+    (iMer<0  || f[F.MER]===iMer) &&
+    (iTipo<0 || f[F.TIPO]===iTipo) &&
+    (!okSus  || okSus.has(f[F.SUS])) &&
+    (!SOLO_CAMBIOS || f[F.NUEVO]));
+}
+
+function renPest(){
+  if(!PEST)return;
+  marcarChips();
+  const fs=filtrarPest();
+  $('p-cnt').textContent=mil(fs.length)+' de '+mil(PEST.filas.length);
+
+  if(!fs.length){
+    $('p-res').innerHTML='<div class="empty">Ningún registro con esos filtros.<br>'+
+      'Ojo: una sustancia que no aparece para un mercado <b>no</b> significa que esté '+
+      'permitida; significa que no está en la agenda. Confirma en ASOEX.</div>';
+    return;
+  }
+
+  /* Sin mercado ni sustancia elegidos, mostrar las 25.000 filas una por una no
+     sirve de nada: salen 23 veces la misma sustancia, una por mercado. En ese
+     caso se muestra el índice de sustancias, que es con lo que se parte. */
+  if(!$('p-mer').value && !$('p-sus').value.trim()){ renIndice(fs); return; }
+
+  const porSus=!$('p-mer').value;
+  const TOPE=400;
+  const mostrar=fs.slice(0,TOPE);
+
+  var html='<div class="tw"><table><thead><tr>'+
+    '<th class="l">Sustancia activa</th>'+
+    (porSus?'<th class="l">Mercado</th>':'')+
+    '<th>Tipo</th><th>LMR ppm</th><th>Carencia</th>'+
+    '<th class="l">Cambio anunciado</th></tr></thead><tbody>';
+
+  mostrar.forEach(f=>{
+    const sus=PEST.sustancias[f[F.SUS]], mer=PEST.mercados[f[F.MER]];
+    const ppm=f[F.PPM], dias=f[F.DIAS];
+    html+='<tr'+(f[F.NUEVO]?' class="rowq"':'')+'>'+
+      '<td class="l"><div class="nm">'+esc(sus)+'</div>'+
+        (f[F.OBS]?'<div class="sub">'+esc(f[F.OBS])+'</div>':'')+'</td>'+
+      (porSus?'<td class="l"><span class="pill '+
+        (MERCADOS_NUESTROS.indexOf(mer)>=0?'p-a':'p-n')+'">'+esc(mer)+'</span></td>':'')+
+      '<td><span class="pill p-n">'+esc(PEST.tipos[f[F.TIPO]]||'—')+'</span></td>'+
+      '<td class="big">'+pintaLmr(ppm)+'</td>'+
+      '<td class="num">'+(dias?esc(dias)+' <span class="sub" style="display:inline">d</span>':
+        '<span class="z">—</span>')+
+        (f[F.DIASOBS]?'<div class="sub">'+esc(f[F.DIASOBS])+'</div>':'')+'</td>'+
+      '<td class="l">'+(f[F.NUEVO]
+        ? '<span class="pill p-c">'+esc(f[F.NUEVO])+'</span>'+
+          (f[F.VIG]?'<div class="sub">desde '+esc(f[F.VIG])+'</div>':'')
+        : '<span class="z">—</span>')+'</td></tr>';
+  });
+  html+='</tbody></table></div>';
+
+  if(fs.length>TOPE)
+    html+='<div class="foot-n">Se muestran los primeros '+TOPE+' de '+mil(fs.length)+
+      '. Elige un mercado o escribe la sustancia para acotar.</div>';
+  html+='<div class="foot-n">'+
+    '<b>ST</b> sin tolerancia establecida · <b>EX</b> exento · '+
+    'un valor como <b>2/4</b> es un LMR por cada sustancia de la mezcla, en el mismo orden. '+
+    'Las filas marcadas tienen un cambio de LMR ya anunciado.</div>';
+  $('p-res').innerHTML=html;
+}
+
+/* ── índice de sustancias ─────────────────────────────────
+   Una línea por sustancia, resumiendo cómo le va en LOS MERCADOS
+   NUESTROS, que son los que mandan. Lo que interesa de un vistazo
+   es dónde hay sin tolerancia y cuál es el límite más apretado.
+   ────────────────────────────────────────────────────────── */
+function renIndice(fs){
+  const nuestros=new Set(MERCADOS_NUESTROS
+    .map(m=>PEST.mercados.indexOf(m)).filter(i=>i>=0));
+
+  const por=new Map();
+  fs.forEach(f=>{
+    const k=f[F.SUS];
+    if(!por.has(k)) por.set(k,{sus:PEST.sustancias[k],tipos:new Set(),
+      mercados:new Set(), st:new Set(), min:null, carMax:null,
+      cambios:0, nuestros:new Set()});
+    const g=por.get(k);
+    g.tipos.add(PEST.tipos[f[F.TIPO]]);
+    g.mercados.add(f[F.MER]);
+    const mio=nuestros.has(f[F.MER]);
+    if(mio) g.nuestros.add(f[F.MER]);
+    if(f[F.PPM]==='ST' && mio) g.st.add(PEST.mercados[f[F.MER]]);
+    if(mio && f[F.PPMN]!=null && (g.min==null || f[F.PPMN]<g.min.v))
+      g.min={v:f[F.PPMN], m:PEST.mercados[f[F.MER]]};
+    if(f[F.DIASN]!=null && (g.carMax==null || f[F.DIASN]>g.carMax)) g.carMax=f[F.DIASN];
+    if(f[F.NUEVO]) g.cambios++;
+  });
+
+  var lista=[...por.values()].map(g=>({...g,
+    st:[...g.st].sort(), tipos:[...g.tipos].sort(),
+    nMer:g.mercados.size, nNue:g.nuestros.size}));
+  if($('p-orden').value==='riesgo')
+    lista.sort((a,b)=>b.st.length-a.st.length ||
+      ((a.min?a.min.v:1e9)-(b.min?b.min.v:1e9)) || a.sus.localeCompare(b.sus,'es'));
+  else
+    lista.sort((a,b)=>a.sus.localeCompare(b.sus,'es'));
+
+  $('p-cnt').textContent=mil(lista.length)+' sustancias · '+mil(fs.length)+' registros';
+
+  var html='<div class="note note-i" style="margin-bottom:12px">'+
+    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>'+
+    '<div>Una línea por sustancia. Las columnas resumen cómo le va en '+
+    '<b>nuestros mercados</b> ('+MERCADOS_NUESTROS.join(', ')+'). '+
+    'Toca una sustancia para ver mercado por mercado, o elige un mercado arriba.</div></div>'+
+    '<div class="tw"><table><thead><tr>'+
+    '<th class="l">Sustancia activa</th><th>Tipo</th>'+
+    '<th>Mercados</th><th>Sin tolerancia</th><th>LMR más bajo</th>'+
+    '<th>Carencia máx</th><th class="l">Cambios</th></tr></thead><tbody>';
+
+  lista.forEach(g=>{
+    html+='<tr style="cursor:pointer" onclick="verSustancia('+
+        JSON.stringify(g.sus).replace(/"/g,'&quot;')+')">'+
+      '<td class="l"><div class="nm">'+esc(g.sus)+'</div>'+
+        (g.st.length?'<div class="sub">ST en '+esc(g.st.join(', '))+'</div>':'')+'</td>'+
+      '<td>'+(g.tipos.length
+        ? g.tipos.map(t=>'<span class="pill p-n">'+esc(t)+'</span>').join(' ')
+        : '<span class="z">—</span>')+'</td>'+
+      '<td class="num">'+g.nMer+'<div class="sub">'+g.nNue+' nuestros</div></td>'+
+      '<td>'+(g.st.length
+        ? '<span class="pill p-r">'+g.st.length+'</span>'
+        : '<span class="z">—</span>')+'</td>'+
+      '<td class="big">'+(g.min
+        ? esc(ppmTxt(g.min.v))+'<div class="sub">'+esc(g.min.m)+'</div>'
+        : '<span class="z">—</span>')+'</td>'+
+      '<td class="num">'+(g.carMax!=null
+        ? mil(g.carMax)+' <span class="sub" style="display:inline">d</span>'
+        : '<span class="z">—</span>')+'</td>'+
+      '<td class="l">'+(g.cambios
+        ? '<span class="pill p-c">'+g.cambios+' anunciado'+(g.cambios>1?'s':'')+'</span>'
+        : '<span class="z">—</span>')+'</td></tr>';
+  });
+  html+='</tbody></table></div>'+
+    '<div class="foot-n"><b>Sin tolerancia</b> es en cuántos de nuestros mercados la '+
+    'sustancia aparece como ST: ahí no puede haber residuo detectable. '+
+    '<b>LMR más bajo</b> es el límite más apretado entre nuestros mercados, y el que '+
+    'manda si la fruta todavía no tiene destino.</div>';
+  $('p-res').innerHTML=html;
+}
+
+function verSustancia(s){
+  $('p-sus').value=s;
+  renPest();
+  $('p-res').scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+/* El Excel escribe los números con punto ("0.01"). Acá se muestran como
+   se escriben en Chile ("0,01"), incluidos los pares de una mezcla. */
+function pintaLmr(v){
+  if(!v) return '<span class="z">—</span>';
+  if(v==='ST') return '<span class="pill p-r">ST</span>';
+  if(v==='EX') return '<span class="pill p-a">EX</span>';
+  return esc(String(v).split('/').map(p=>{
+    const t=p.trim();
+    if(t==='ST'||t==='EX') return t;
+    const n=Number(t.replace(',','.'));
+    return isNaN(n)? t : ppmTxt(n);
+  }).join('/'));
+}
+
+/* ══════════════════════════════════════════════════════════
+   MOSCA DE LA FRUTA
+   ──────────────────────────────────────────────────────────
+   El consolidado de campañas lo publica el SAG como archivo.
+   No se puede bajar solo desde acá (el sitio del SAG no deja
+   que otra página le pida archivos), así que lo cargas tú:
+   lo bajas una vez y lo sueltas en el recuadro.
+
+   El lector no exige un formato fijo: busca la fila del
+   encabezado y reconoce las columnas por su nombre. Si el SAG
+   cambia el orden o agrega columnas, sigue funcionando.
+   ══════════════════════════════════════════════════════════ */
+const SVG_SUBIR='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><path d="M7 9l5-5 5 5M12 4v12"/></svg>';
+
+function abrirMosca(){
+  abrirPbiRec();
+  if(!CONS) pintaCargador();
+  else renCruce();
+}
+
+function pintaCargador(){
+  $('mosca-cruce').innerHTML=
+    '<div class="drop" id="drop" onclick="document.getElementById(\'arch\').click()">'+
+      '<div class="ico">'+SVG_SUBIR+'</div>'+
+      '<h3>Carga el consolidado de campañas</h3>'+
+      '<p>Suelta acá el archivo del SAG (<b>CONSOLIDADO CAMPAÑAS</b>, en Excel o CSV) '+
+      'y se cruza al instante con nuestros '+CSG.length+' CSG. El archivo no sale de '+
+      'este equipo: se lee en el navegador.</p>'+
+      '<input type="file" id="arch" accept=".xlsx,.xls,.csv" onchange="tomarArchivo(this.files[0])">'+
+    '</div>'+
+    '<div class="det" style="margin-top:14px">'+
+      '<ol class="steps">'+
+        '<li>En el tablero de abajo, o en el sitio del SAG, descarga el '+
+          '<b>Listado de CSG · Consolidado Campañas</b>.</li>'+
+        '<li>Suéltalo en el recuadro de arriba. Queda guardado en este equipo, '+
+          'así que al volver ya está puesto.</li>'+
+        '<li>La tabla te muestra, CSG por CSG, si aparece en el consolidado y en qué '+
+          'campaña. Lo que <b>no</b> aparece queda igual de visible que lo que sí.</li>'+
+      '</ol>'+
+    '</div>';
+  const d=$('drop');
+  ['dragenter','dragover'].forEach(ev=>d.addEventListener(ev,e=>{
+    e.preventDefault(); d.classList.add('over'); }));
+  ['dragleave','drop'].forEach(ev=>d.addEventListener(ev,e=>{
+    e.preventDefault(); d.classList.remove('over'); }));
+  d.addEventListener('drop',e=>{
+    if(e.dataTransfer.files&&e.dataTransfer.files[0]) tomarArchivo(e.dataTransfer.files[0]); });
+  /* si ya se cargó antes en este equipo, recuperarlo */
+  const g=leer('olo_consolidado');
+  if(g){ try{ CONS=JSON.parse(g); renCruce(); }catch(e){} }
+}
+
+/* la librería de Excel se trae solo cuando de verdad se necesita */
+function conXLSX(cb){
+  if(window.XLSX) return cb();
+  const s=document.createElement('script');
+  s.src='https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js';
+  s.onload=cb;
+  s.onerror=()=>avisoMosca('No se pudo cargar el lector de Excel. '+
+    'Si estás sin internet, guarda el consolidado como CSV y vuelve a intentar.','r');
+  document.head.appendChild(s);
+}
+
+function avisoMosca(txt,tipo){
+  const c=$('mosca-cruce');
+  const d=document.createElement('div');
+  d.className='note note-'+(tipo||'w'); d.style.marginTop='14px';
+  d.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">'+
+    '<circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/>'+
+    '<line x1="12" y1="8" x2="12.01" y2="8"/></svg><div>'+txt+'</div>';
+  c.appendChild(d);
+}
+
+function tomarArchivo(file){
+  if(!file) return;
+  if(/\.csv$/i.test(file.name)){
+    const fr=new FileReader();
+    fr.onload=()=>procesarMatriz(leerCsv(fr.result),file.name);
+    fr.readAsText(file,'utf-8');
+    return;
+  }
+  conXLSX(()=>{
+    const fr=new FileReader();
+    fr.onload=()=>{
+      try{
+        const wb=XLSX.read(new Uint8Array(fr.target?fr.target.result:fr.result),{type:'array'});
+        /* puede traer varias hojas: se usa la que tenga una columna CSG */
+        var mejor=null;
+        wb.SheetNames.forEach(n=>{
+          const m=XLSX.utils.sheet_to_json(wb.Sheets[n],{header:1,raw:false,defval:''});
+          const h=buscarEncabezado(m);
+          if(h&&(!mejor||m.length>mejor.m.length)) mejor={m:m,n:n};
+        });
+        if(!mejor) return avisoMosca('Ese archivo no tiene ninguna columna de <b>CSG</b>. '+
+          'Revisa que sea el consolidado de campañas y no otro listado.','r');
+        procesarMatriz(mejor.m,file.name+' · hoja '+mejor.n);
+      }catch(e){
+        avisoMosca('No se pudo leer el archivo: '+esc(e.message),'r');
+      }
+    };
+    fr.readAsArrayBuffer(file);
+  });
+}
+
+function leerCsv(txt){
+  /* separador: el que más aparezca en la primera línea con contenido */
+  const lin=txt.split(/\r?\n/).filter(l=>l.trim());
+  if(!lin.length) return [];
+  const prim=lin[0];
+  const sep=[';',',','\t'].sort((a,b)=>
+    prim.split(b).length-prim.split(a).length)[0];
+  return lin.map(l=>{
+    const out=[]; var cur='', dentro=false;
+    for(var i=0;i<l.length;i++){
+      const c=l[i];
+      if(c==='"'){ if(dentro&&l[i+1]==='"'){cur+='"';i++;} else dentro=!dentro; }
+      else if(c===sep&&!dentro){ out.push(cur); cur=''; }
+      else cur+=c;
+    }
+    out.push(cur);
+    return out.map(s=>s.trim());
+  });
+}
+
+/* ── reconocer el encabezado y sus columnas ── */
+function buscarEncabezado(m){
+  for(var i=0;i<Math.min(m.length,25);i++){
+    const fila=(m[i]||[]).map(c=>norm(c));
+    const j=fila.findIndex(c=>/^c\.?\s?s\.?\s?g\.?$/.test(c)||/\bcsg\b/.test(c));
+    if(j>=0) return {fila:i,csg:j,cols:fila};
+  }
+  return null;
+}
+function hallarCol(cols,patrones){
+  for(const p of patrones){
+    const j=cols.findIndex(c=>p.test(c));
+    if(j>=0) return j;
+  }
+  return -1;
+}
+
+function procesarMatriz(m,origen){
+  const h=buscarEncabezado(m);
+  if(!h) return avisoMosca('No encontré la columna de <b>CSG</b> en ese archivo.','r');
+  const c=h.cols;
+  const col={
+    csg:h.csg,
+    campana: hallarCol(c,[/campa/,/\bprograma\b/]),
+    especie: hallarCol(c,[/especie/,/cultivo/,/\bfruta\b/]),
+    nombre:  hallarCol(c,[/razon/,/nombre/,/product/,/propietar/,/titular/]),
+    comuna:  hallarCol(c,[/comuna/]),
+    region:  hallarCol(c,[/region/]),
+    estado:  hallarCol(c,[/estado/,/condic/,/situac/,/vigen/]),
+    predio:  hallarCol(c,[/predio/,/huerto/,/sitio/])
+  };
+
+  const filas=[];
+  for(var i=h.fila+1;i<m.length;i++){
+    const r=m[i]||[];
+    const bruto=String(r[col.csg]==null?'':r[col.csg]).trim();
+    const csg=bruto.replace(/\D+/g,'');          /* el SAG a veces escribe "CSG 91302" */
+    if(!csg) continue;
+    const g=j=>j>=0? String(r[j]==null?'':r[j]).replace(/\s+/g,' ').trim() : '';
+    filas.push({csg:csg, campana:g(col.campana), especie:g(col.especie),
+      nombre:g(col.nombre), comuna:g(col.comuna)||g(col.region),
+      estado:g(col.estado), predio:g(col.predio)});
+  }
+  if(!filas.length) return avisoMosca('El archivo tenía encabezado pero ninguna fila con CSG.','r');
+
+  CONS={origen:origen, cargado:new Date().toISOString().slice(0,10),
+        filas:filas, columnas:Object.keys(col).filter(k=>col[k]>=0)};
+  try{ guardar('olo_consolidado',JSON.stringify(CONS)); }
+  catch(e){ /* si es muy grande, igual sirve en esta sesión */ }
+  renCruce();
+}
+
+function olvidarConsolidado(){
+  CONS=null;
+  try{ localStorage.removeItem('olo_consolidado'); }catch(e){}
+  pintaCargador();
+}
+
+/* ── el cruce ── */
+function renCruce(){
+  if(!CONS) return pintaCargador();
+
+  const porCsg=new Map();
+  CONS.filas.forEach(f=>{
+    if(!porCsg.has(f.csg)) porCsg.set(f.csg,[]);
+    porCsg.get(f.csg).push(f);
+  });
+
+  const nuestros=CSG.map(c=>{
+    const hits=porCsg.get(c.csg)||[];
+    const camp=[...new Set(hits.map(h=>h.campana).filter(Boolean))];
+    const esp =[...new Set(hits.map(h=>h.especie).filter(Boolean))];
+    const est =[...new Set(hits.map(h=>h.estado).filter(Boolean))];
+    return {...c, dentro:hits.length>0, hits:hits, camp:camp, esp:esp, est:est};
+  });
+  const dentro=nuestros.filter(n=>n.dentro);
+  const sinCsg=nuestros.filter(n=>!n.dentro && !n.valido);
+  const fuera=nuestros.filter(n=>!n.dentro && n.valido);
+  const haDentro=dentro.reduce((s,n)=>s+n.ha,0);
+  const kgDentro=dentro.reduce((s,n)=>s+n.kg,0);
+  const kgTot=nuestros.reduce((s,n)=>s+n.kg,0);
+
+  $('st-mosca').className='stamp';
+  $('st-mosca').innerHTML='<span class="dot"></span>Consolidado del <b>'+
+    flarga(CONS.cargado)+'</b>';
+
+  var html=
+    '<div class="kpis">'+
+      kpi('CSG dentro de una campaña',dentro.length,
+        'de '+CSG.length+' nuestros', dentro.length?'var(--warn)':'var(--g700)')+
+      kpi('CSG sin coincidencia',fuera.length,'no aparecen en el consolidado','var(--g500)')+
+      (sinCsg.length? kpi('Sin número de CSG',sinCsg.length,
+        'no se pueden cruzar con el SAG','var(--red)') : '')+
+      kpi('Hectáreas involucradas',mil1(haDentro),'en los CSG que sí aparecen','var(--blue)')+
+      kpi('Kilos comprometidos',mil(kgDentro),
+        kgTot? Math.round(kgDentro/kgTot*100)+'% del flujo de cosecha':'sin flujo cargado','var(--plum)')+
+    '</div>'+
+    '<div class="note note-i" style="margin-top:14px">'+
+      '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>'+
+      '<div>Esto compara <b>número de CSG</b> contra el archivo del SAG. '+
+      'Que un CSG aparezca significa que está en el consolidado de campañas; '+
+      'lo que eso exige en cada mercado se confirma en el documento del SAG y en '+
+      '<b>Requisitos por país</b>. Que <b>no</b> aparezca puede ser porque está fuera '+
+      'de campaña o porque el consolidado que cargaste no es el último.'+
+      '<div style="margin-top:8px;display:flex;gap:8px;flex-wrap:wrap">'+
+        '<button class="ext-b" onclick="olvidarConsolidado()">'+SVG_RE+'Cargar otro consolidado</button>'+
+        '<button class="ext-b" onclick="bajarCruce()">Descargar el cruce</button>'+
+      '</div></div></div>';
+
+  /* ── los que están dentro, primero ── */
+  if(dentro.length){
+    html+='<div class="lbl">Dentro de campaña ('+dentro.length+')</div>'+
+      '<div class="tw"><table><thead><tr>'+
+      '<th class="l">CSG</th><th class="l">Productor</th><th class="l">Campaña</th>'+
+      '<th class="l">Especie</th><th>Cuarteles</th><th>Hectáreas</th><th>Kilos</th>'+
+      '</tr></thead><tbody>'+
+      dentro.map(n=>'<tr class="rowq">'+
+        '<td class="l"><div class="nm">'+esc(n.csg)+'</div>'+
+          (n.est.length?'<div class="sub">'+esc(n.est.join(' · '))+'</div>':'')+'</td>'+
+        '<td class="l"><div class="nm">'+esc(n.nombre||'—')+'</div>'+
+          '<div class="sub">'+esc(n.comuna||n.zona||'')+'</div></td>'+
+        '<td class="l">'+(n.camp.length
+          ? n.camp.map(x=>'<span class="pill p-c">'+esc(x)+'</span>').join(' ')
+          : '<span class="pill p-c">aparece sin nombre de campaña</span>')+'</td>'+
+        '<td class="l">'+esc(n.esp.join(', ')||'—')+'</td>'+
+        '<td class="num">'+(n.cuarteles||'<span class="z">—</span>')+'</td>'+
+        '<td class="num">'+(n.ha?mil1(n.ha):'<span class="z">—</span>')+'</td>'+
+        '<td class="num">'+(n.kg?mil(n.kg):'<span class="z">—</span>')+'</td>'+
+      '</tr>').join('')+'</tbody></table></div>';
+  } else {
+    html+='<div class="lbl">Dentro de campaña</div>'+
+      '<div class="note note-g">'+
+      '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M20 6L9 17l-5-5"/></svg>'+
+      '<div><b>Ninguno de nuestros '+CSG.length+' CSG aparece en ese consolidado.</b> '+
+      'Antes de darlo por bueno, confirma que el archivo es el del período que te interesa: '+
+      'el consolidado cambia cada vez que el SAG abre o cierra una campaña.</div></div>';
+  }
+
+  /* ── los que ni siquiera tienen número de CSG ── */
+  if(sinCsg.length){
+    html+='<div class="lbl">Sin número de CSG ('+sinCsg.length+')</div>'+
+      '<div class="note note-r">'+
+      '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.3 3.9L1.8 18a2 2 0 001.7 3h17a2 2 0 001.7-3L13.7 3.9a2 2 0 00-3.4 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>'+
+      '<div><b>Estos no se pudieron cruzar porque en nuestros archivos no tienen '+
+      'número de CSG.</b> No es que estén fuera de campaña: es que falta el dato. '+
+      'Hay que completarlo en la base antes de poder revisarlos.<br>'+
+      sinCsg.map(n=>'· <b>'+esc(n.nombre||'sin nombre')+'</b> ('+esc(n.comuna||n.zona||'')+
+        ') — dice «'+esc(n.csg)+'»').join('<br>')+
+      '</div></div>';
+  }
+
+  /* ── los que no aparecen ── */
+  html+='<div class="lbl">Sin coincidencia en el consolidado ('+fuera.length+')</div>'+
+    '<div class="tw" style="max-height:52vh"><table><thead><tr>'+
+    '<th class="l">CSG</th><th class="l">Productor</th><th class="l">Zona</th>'+
+    '<th>Cuarteles</th><th>Hectáreas</th><th>Kilos</th>'+
+    '</tr></thead><tbody>'+
+    fuera.map(n=>'<tr>'+
+      '<td class="l"><div class="nm">'+esc(n.csg)+'</div></td>'+
+      '<td class="l"><div class="nm">'+esc(n.nombre||'—')+'</div></td>'+
+      '<td class="l">'+esc(n.comuna||n.zona||'—')+'</td>'+
+      '<td class="num">'+(n.cuarteles||'<span class="z">—</span>')+'</td>'+
+      '<td class="num">'+(n.ha?mil1(n.ha):'<span class="z">—</span>')+'</td>'+
+      '<td class="num">'+(n.kg?mil(n.kg):'<span class="z">—</span>')+'</td>'+
+    '</tr>').join('')+'</tbody></table></div>'+
+    '<div class="foot-n">Archivo cruzado: '+esc(CONS.origen)+' · '+
+      mil(CONS.filas.length)+' filas · '+mil(porCsg.size)+' CSG distintos en el consolidado · '+
+      'columnas reconocidas: '+esc(CONS.columnas.join(', '))+'</div>';
+
+  $('mosca-cruce').innerHTML=html;
+}
+
+function kpi(l,v,s,c){
+  return '<div class="kpi" style="--c:'+c+'"><div class="kpi-l">'+l+'</div>'+
+    '<div class="kpi-v">'+v+'</div><div class="kpi-s">'+esc(s)+'</div></div>';
+}
+
+function bajarCruce(){
+  if(!CONS)return;
+  const porCsg=new Map();
+  CONS.filas.forEach(f=>{ if(!porCsg.has(f.csg))porCsg.set(f.csg,[]); porCsg.get(f.csg).push(f); });
+  const filas=[['CSG','Productor','Zona o comuna','Cuarteles','Hectareas','Kilos',
+    'Dentro de campana','Campana','Especie','Estado']];
+  CSG.forEach(c=>{
+    const h=porCsg.get(c.csg)||[];
+    filas.push([c.csg,c.nombre,c.comuna||c.zona,c.cuarteles,
+      Math.round((c.ha||0)*10)/10,Math.round(c.kg||0),
+      h.length?'SI':'NO',
+      [...new Set(h.map(x=>x.campana).filter(Boolean))].join(' / '),
+      [...new Set(h.map(x=>x.especie).filter(Boolean))].join(' / '),
+      [...new Set(h.map(x=>x.estado).filter(Boolean))].join(' / ')]);
+  });
+  bajarCsvArchivo(filas,'cruce_csg_mosca_'+CONS.cargado+'.csv');
+}
+
+function bajarCsvArchivo(filas,nombre){
+  const txt='﻿'+filas.map(f=>f.map(v=>{
+    const s=String(v==null?'':v);
+    return /[";\n]/.test(s)? '"'+s.replace(/"/g,'""')+'"' : s;
+  }).join(';')).join('\r\n');
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(new Blob([txt],{type:'text/csv;charset=utf-8'}));
+  a.download=nombre; a.click();
+  setTimeout(()=>URL.revokeObjectURL(a.href),4000);
+}
+
+/* ══════════════════════════════════════════════════════════
+   NUESTROS CSG
+   ══════════════════════════════════════════════════════════ */
+function renCsg(){
+  const q=norm($('c-q').value), f=$('c-f').value;
+  const lista=CSG.filter(c=>{
+    if(q && norm(c.csg).indexOf(q)<0 && norm(c.nombre).indexOf(q)<0) return false;
+    if(f==='cuart' && !c.enCuart) return false;
+    if(f==='flujo' && !c.enFlujo) return false;
+    if(f==='estim' && !c.enEstim) return false;
+    if(f==='falta' && c.enCuart && c.enFlujo && c.enEstim) return false;
+    return true;
+  });
+  $('c-cnt').textContent=lista.length+' de '+CSG.length;
+
+  if(!lista.length){ $('t-csg').innerHTML=
+    '<tbody><tr><td class="l" style="padding:30px;text-align:center;color:var(--mut)">'+
+    'Ningún CSG con ese filtro.</td></tr></tbody>'; return; }
+
+  $('t-csg').innerHTML='<thead><tr>'+
+    '<th class="l">CSG</th><th class="l">Productor</th><th class="l">Zona o comuna</th>'+
+    '<th>Cuarteles</th><th>Hectáreas</th><th>Kilos 26-27</th>'+
+    '<th class="l">Aparece en</th></tr></thead><tbody>'+
+    lista.map(c=>'<tr>'+
+      '<td class="l"><div class="nm">'+esc(c.csg)+'</div>'+
+        (c.valido?'':'<div class="sub"><span class="pill p-r">falta el CSG</span></div>')+'</td>'+
+      '<td class="l"><div class="nm">'+esc(c.nombre||'—')+'</div>'+
+        (c.variedades.size?'<div class="sub">'+
+          esc([...c.variedades].slice(0,4).join(', '))+
+          (c.variedades.size>4?' +'+(c.variedades.size-4):'')+'</div>':'')+'</td>'+
+      '<td class="l">'+esc(c.comuna||c.zona||'—')+'</td>'+
+      '<td class="num">'+(c.cuarteles||'<span class="z">—</span>')+'</td>'+
+      '<td class="num">'+(c.ha?mil1(c.ha):'<span class="z">—</span>')+'</td>'+
+      '<td class="num">'+(c.kg?mil(c.kg):'<span class="z">—</span>')+'</td>'+
+      '<td class="l">'+
+        '<span class="pill '+(c.enCuart?'p-a':'p-n')+'">cuarteles</span> '+
+        '<span class="pill '+(c.enFlujo?'p-b':'p-n')+'">flujo</span> '+
+        '<span class="pill '+(c.enEstim?'p-b':'p-n')+'">estim.</span></td>'+
+    '</tr>').join('')+'</tbody>';
+}
+
+function bajarCsg(){
+  const filas=[['CSG','Productor','Zona','Comuna','Cuarteles','Hectareas','Kilos',
+    'En cuarteles','En flujo','En estimaciones','Variedades']];
+  CSG.forEach(c=>filas.push([c.csg,c.nombre,c.zona,c.comuna,c.cuarteles,
+    Math.round((c.ha||0)*10)/10,Math.round(c.kg||0),
+    c.enCuart?'SI':'NO',c.enFlujo?'SI':'NO',c.enEstim?'SI':'NO',
+    [...c.variedades].join(' / ')]));
+  bajarCsvArchivo(filas,'nuestros_csg.csv');
+}
+
+/* ══════════════════════════════════════════════════════════
+   REVISIÓN AUTOMÁTICA ( ?check )
+   ══════════════════════════════════════════════════════════ */
+function autoRevision(){
+  const r=[];
+  const ok=(n,c)=>r.push((c?'OK   ':'FALLA')+' · '+n);
+  ok('índice de pesticidas', !!(IDX&&IDX.especies&&IDX.especies.length));
+  ok('inventario de CSG', CSG.length>0);
+  ok('todas las secciones existen',
+    ['hub','pais','mosca','pest','csg'].every(v=>!!$('v-'+v)));
+  ok('cada especie tiene archivo',
+    (IDX&&IDX.especies||[]).every(e=>e.archivo&&e.filas>0));
+  const d=document.createElement('div');
+  d.style.cssText='position:fixed;left:12px;bottom:12px;z-index:999;background:#14301C;'+
+    'color:#CFE8D8;font:11px/1.7 "IBM Plex Mono",monospace;padding:12px 16px;'+
+    'border-radius:10px;white-space:pre;box-shadow:0 10px 30px rgba(0,0,0,.3)';
+  d.textContent='REVISIÓN v'+APP_VERSION+'\n'+r.join('\n');
+  d.onclick=()=>d.remove();
+  document.body.appendChild(d);
+}
+
+/* ══════════════════════════════════════════════════════════
+   ARRANQUE
+   ══════════════════════════════════════════════════════════ */
+window.addEventListener('error',function(e){
+  const b=document.createElement('div');
+  b.style.cssText='position:fixed;left:0;right:0;bottom:0;z-index:999;background:#C0503C;'+
+    'color:#fff;font:11px/1.5 "IBM Plex Mono",monospace;padding:9px 14px';
+  b.textContent='Error: '+(e.message||'')+'  ('+(e.filename||'').split('/').pop()+':'+(e.lineno||0)+')';
+  b.onclick=()=>b.remove();
+  document.body.appendChild(b);
+});
+if('serviceWorker' in navigator && location.protocol==='https:'){
+  window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));
+}
+cargar();
+
+</script>
+</body>
+</html>

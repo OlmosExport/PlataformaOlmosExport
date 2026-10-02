@@ -91,8 +91,8 @@ def gdd_esperado(est, desde, hasta, base):
 def correr(pw):
     nav = pw.chromium.launch()
 
-    # 1 · las tres páginas abren sin errores de JavaScript
-    for pagina in ["index.html", "clima.html", "tecnica.html", "tecnico.html"]:
+    # 1 · todas las páginas abren sin errores de JavaScript
+    for pagina in ["index.html", "clima.html", "tecnica.html", "tecnico.html", "sag.html"]:
         ctx = nav.new_context(viewport={"width": 390, "height": 844})
         pg = ctx.new_page()
         fallas = []
@@ -278,6 +278,148 @@ def correr(pw):
 
     reales = [f for f in fallas if "librer" not in f.lower()]
     prueba("el Depto. Técnico no da errores", not reales,
+           reales[0][:60] if reales else "")
+    ctx.close()
+
+    # 6 · Requisitos SAG
+    ctx = nav.new_context(viewport={"width": 1440, "height": 950})
+    pg = ctx.new_page()
+    fallas = []
+    pg.on("pageerror", lambda e: fallas.append(str(e)))
+    pg.goto("%s/sag.html" % BASE, wait_until="domcontentloaded")
+    pg.wait_for_timeout(4000)
+
+    # el inventario de CSG se arma solo desde cuarteles.json y cosecha.json
+    cuart = json.load(open(os.path.join(RAIZ, "cuarteles.json"), encoding="utf-8"))
+    cos = json.load(open(os.path.join(RAIZ, "cosecha.json"), encoding="utf-8"))
+    esperados = {str(r["CSG"]) for r in cuart if r.get("CSG")}
+    esperados |= {str(r["csg"]) for r in cos["flujo"] if r.get("csg")}
+    esperados |= {str(r["csg"]) for r in cos["estimaciones"] if r.get("csg")}
+    n = pg.evaluate("() => CSG.length")
+    prueba("reúne todos nuestros CSG", n == len(esperados),
+           "%d de %d" % (n, len(esperados)))
+
+    con_nombre = pg.evaluate("() => CSG.filter(c => c.nombre).length")
+    prueba("cada CSG tiene productor", con_nombre == n,
+           "%d de %d con nombre" % (con_nombre, n))
+
+    # la agenda de pesticidas se carga por especie, no todo de una vez
+    pg.evaluate("() => ir('pest')")
+    pg.wait_for_timeout(3000)
+    p = pg.evaluate("""() => PEST ? {
+        esp: PEST_CLAVE, filas: PEST.filas.length,
+        mer: PEST.mercados.length, sus: PEST.sustancias.length} : null""")
+    idx = json.load(open(os.path.join(RAIZ, "pesticidas.json"), encoding="utf-8"))
+    cer = [e for e in idx["especies"] if e["especie"] == "CEREZAS"]
+    prueba("la agenda abre en cerezas", p and p["esp"] == "CEREZAS" and
+           (not cer or p["filas"] == cer[0]["filas"]),
+           "%d filas · %d mercados" % (p["filas"], p["mer"]) if p else "")
+
+    # los LMR que el Excel había convertido en fecha llegan arreglados
+    rep = pg.evaluate("""() => {
+        const i = PEST.sustancias.indexOf('AZOXYSTROBIN/TEBUCONAZOLE');
+        const j = PEST.mercados.indexOf('CHILE');
+        const f = PEST.filas.find(x => x[1] === i && x[0] === j);
+        const s = PEST.sustancias.indexOf('AZOXYSTROBIN');
+        const g = PEST.filas.find(x => x[1] === s && x[0] === j);
+        return {par: f ? f[3] : null, simple: g ? g[3] : null};
+    }""")
+    prueba("ningún LMR quedó convertido en fecha",
+           rep["par"] == "2/4" and rep["simple"] == "2",
+           "mezcla %s · simple %s" % (rep["par"], rep["simple"]))
+    sin_fecha = pg.evaluate("""() => PEST.filas
+        .filter(f => /^\d{4}-\d{2}-\d{2}$/.test(String(f[3]))).length""")
+    prueba("no hay fechas en la columna de ppm", sin_fecha == 0,
+           "%d filas con fecha" % sin_fecha)
+
+    # el buscador filtra de verdad
+    filtrado = pg.evaluate("""() => {
+        const todo = filtrarPest().length;
+        document.getElementById('p-mer').value = 'CHINA';
+        const chi = filtrarPest().length;
+        document.getElementById('p-sus').value = 'azoxy';
+        const uno = filtrarPest().length;
+        document.getElementById('p-mer').value = '';
+        document.getElementById('p-sus').value = '';
+        return {todo, chi, uno};
+    }""")
+    prueba("el buscador de LMR filtra",
+           filtrado["todo"] > filtrado["chi"] > filtrado["uno"] > 0,
+           "%d → %d → %d" % (filtrado["todo"], filtrado["chi"], filtrado["uno"]))
+
+    # buscar sin tildes tiene que encontrar igual
+    tildes = pg.evaluate("""() => {
+        document.getElementById('p-sus').value = 'JAPON';
+        const a = norm('JAPÓN') === norm('japon');
+        document.getElementById('p-sus').value = '';
+        return a;
+    }""")
+    prueba("la búsqueda ignora los acentos", tildes)
+
+    # el cruce con el consolidado del SAG, con un archivo armado a mano
+    primeros = sorted(esperados)[:3]
+    cruce = pg.evaluate("""(csgs) => {
+        const m = [['Consolidado de campanas'],[],
+          ['CSG','Razon Social','Campana','Especie','Comuna','Estado'],
+          ...csgs.map((c,i) => ['CSG '+c, 'PRUEBA '+i, 'CAMPANA SUR', 'CEREZAS',
+                                 'CHIMBARONGO', 'vigente']),
+          ['999999','AJENO','CAMPANA SUR','CEREZAS','OTRA','vigente']];
+        procesarMatriz(m, 'prueba.csv');
+        const d = document.querySelectorAll('#mosca-cruce tbody')[0];
+        return {
+          filas: CONS.filas.length,
+          dentro: document.querySelectorAll('#mosca-cruce .rowq').length,
+          cols: CONS.columnas
+        };
+    }""", primeros)
+    prueba("el cruce encuentra los CSG que están en campaña",
+           cruce["dentro"] == len(primeros),
+           "%d de %d · columnas %s" % (cruce["dentro"], len(primeros),
+                                       ",".join(cruce["cols"])))
+    prueba("lee el CSG aunque venga escrito 'CSG 91302'",
+           cruce["filas"] == len(primeros) + 1,
+           "%d filas leídas" % cruce["filas"])
+
+    # un archivo sin columna CSG no puede pasar por bueno
+    malo = pg.evaluate("""() => {
+        const antes = CONS ? CONS.origen : null;
+        try { procesarMatriz([['hola'],['a','b'],['1','2']], 'malo.csv'); } catch(e) {}
+        return (CONS ? CONS.origen : null) === antes;
+    }""")
+    prueba("rechaza un archivo que no es el consolidado", malo)
+
+    # un CSG que no es un número no puede pasar por "fuera de campaña"
+    pend = pg.evaluate("""() => {
+        const m = CSG.filter(c => !c.valido);
+        const avisa = (document.getElementById('mosca-cruce').textContent || '')
+                        .includes('Sin número de CSG');
+        return {n: m.length, avisa, cuales: m.map(c => c.csg)};
+    }""")
+    prueba("los CSG incompletos se separan de los que no están en campaña",
+           pend["n"] == 0 or pend["avisa"],
+           "%d sin número: %s" % (pend["n"], ", ".join(pend["cuales"])))
+
+    # si un sitio externo no se deja incrustar, aparece la tarjeta, no un marco vacío
+    tarjeta = pg.evaluate("""() => {
+        ir('pais');
+        extNoSeVe('ext-sag', 'sag');
+        const c = document.getElementById('ext-sag');
+        return {card: !!c.querySelector('.ext-off'),
+                iframe: !!c.querySelector('iframe'),
+                link: !!c.querySelector('a[target=_blank]')};
+    }""")
+    prueba("un sitio que no se deja incrustar muestra tarjeta con enlace",
+           tarjeta["card"] and tarjeta["link"] and not tarjeta["iframe"],
+           "tarjeta=%s enlace=%s marco=%s" % (tarjeta["card"], tarjeta["link"],
+                                              tarjeta["iframe"]))
+    vuelve = pg.evaluate("""() => {
+        extReintentar('ext-sag', 'sag');
+        return !!document.getElementById('ext-sag').querySelector('iframe');
+    }""")
+    prueba("se puede volver a intentar incrustarlo", vuelve)
+
+    reales = [f for f in fallas if "librer" not in f.lower()]
+    prueba("Requisitos SAG no da errores", not reales,
            reales[0][:60] if reales else "")
     ctx.close()
     nav.close()

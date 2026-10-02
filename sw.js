@@ -1,7 +1,7 @@
 /* Service Worker · Plataforma Exportadora Los Olmos */
-const CACHE = 'olmos-plataforma-v13';
-const CORE = ['./','./index.html','./clima.html','./tecnica.html','./tecnico.html',
-  './datos.json','./config.json','./heladas_comunas.json','./cuarteles.json','./cosecha.json','./manifest.webmanifest',
+const CACHE = 'olmos-plataforma-v14';
+const CORE = ['./','./index.html','./clima.html','./tecnica.html','./tecnico.html','./sag.html',
+  './datos.json','./config.json','./heladas_comunas.json','./cuarteles.json','./cosecha.json','./pesticidas.json','./manifest.webmanifest',
   './icon-192.png','./icon-512.png','./apple-touch-icon.png',
   'https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js',
   'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js',
@@ -40,9 +40,14 @@ self.addEventListener('fetch', e => {
   // Las hojas de Google y la IA nunca se guardan en caché: siempre van a la red.
   if (/script\.google\.com|generativelanguage\.googleapis\.com/.test(url.hostname)) return;
 
+  // Lo que no guardamos nunca (mapas, SAG, Power BI y cualquier otro sitio ajeno)
+  // va directo a la red. Va primero que todo: un sitio incrustado en un iframe
+  // también llega acá como navegación, y no debe pasar por el service worker.
+  if (!cacheable(req.url)) return;
+
   // Documentos, datos y configuración: primero la red, así llegan las actualizaciones.
   const vivo = req.mode === 'navigate' || req.destination === 'document' ||
-               /\/(datos|config|heladas_comunas|cuarteles|cosecha)\.json$/.test(url.pathname);
+               /\/(datos|config|heladas_comunas|cuarteles|cosecha|pesticidas(_[a-z_]+)?)\.json$/.test(url.pathname);
   if (vivo) {
     e.respondWith(
       fetch(req).then(r => { const cp = r.clone(); caches.open(CACHE).then(c => c.put(req, cp)); return r; })
@@ -51,8 +56,6 @@ self.addEventListener('fetch', e => {
     );
     return;
   }
-
-  if (!cacheable(req.url)) return;  // teselas de mapas y otros externos van directo a la red
 
   e.respondWith(caches.match(req).then(hit => hit || fetch(req).then(r => {
     if (r && r.ok) { const cp = r.clone(); caches.open(CACHE).then(c => c.put(req, cp)); }

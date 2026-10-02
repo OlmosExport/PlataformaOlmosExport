@@ -1,6 +1,6 @@
 PLATAFORMA EXPORTADORA LOS OLMOS
 ================================
-Versión 4.7 · Departamento Técnico
+Versión 4.8 · Requisitos SAG
 
 
 QUÉ HAY EN LA CARPETA (todo junto, sin subcarpetas)
@@ -10,6 +10,8 @@ QUÉ HAY EN LA CARPETA (todo junto, sin subcarpetas)
   clima.html            Plataforma Climática (antes se llamaba index.html).
   tecnica.html          Plataforma de Campo.
   tecnico.html          Departamento Técnico: estimación y flujo de cosecha.
+  sag.html              Requisitos SAG: requisitos por país, mosca de la fruta
+                        y agenda de pesticidas.
 
   datos.json            Todos los datos climáticos. Es lo único que se
                         reemplaza al actualizar cada semana.
@@ -17,6 +19,10 @@ QUÉ HAY EN LA CARPETA (todo junto, sin subcarpetas)
   cuarteles.json        Base de productores y cuarteles (244 cuarteles).
   cosecha.json          Calendario de cosecha, estimaciones y kilos por semana.
   heladas_comunas.json  Reporte de heladas por comuna.
+  pesticidas.json       Índice de la agenda de pesticidas (qué especies hay y
+                        de qué fecha es cada una).
+  pesticidas_*.json     Una especie por archivo. La página carga solo la que
+                        estás mirando, no las ocho.
 
   manifest.webmanifest  Datos de la app instalable.
   sw.js                 Permite usarla sin internet y avisa de versiones nuevas.
@@ -178,13 +184,75 @@ LA CLAVE DE LA IA (informe de visita)
   el siguiente intento.
 
 
+REQUISITOS SAG (desde la versión 4.8)
+
+  Cuarta plataforma, con cuatro secciones:
+
+    Requisitos por país   La consulta del SAG, mostrada dentro de la plataforma.
+    Mosca de la Fruta     El tablero del SAG más el cruce con nuestros CSG.
+    Agenda de Pesticidas  Los LMR y carencias de ASOEX, buscables sin internet.
+    Nuestros CSG          Los CSG con que trabajamos, armados solos.
+
+
+  LOS SITIOS QUE VIENEN DE AFUERA
+
+  El SAG y Power BI son páginas de ellos, no copias nuestras: lo que ves es lo
+  que publican hoy. Algunos sitios no permiten mostrarse dentro de otra página.
+  Si eso pasa, en vez de un recuadro en blanco aparece una tarjeta con el botón
+  "Abrir en pestaña nueva". Si se ve en blanco igual, aprieta "No se ve nada" y
+  queda recordado en ese equipo; "Volver a intentar" lo deshace.
+
+
+  ACTUALIZAR LA AGENDA DE PESTICIDAS
+
+      python3 scripts/generar_pesticidas.py AGENDA_PESTICIDAS_2026.xlsx
+
+  Genera pesticidas.json y un archivo por especie. Al terminar imprime un
+  control: filas por especie, la fecha de descarga de CADA hoja y cuántos LMR
+  hubo que reparar.
+
+  OJO CON LAS FECHAS: cada hoja del Excel trae su propia fecha de descarga y
+  no siempre coinciden entre ellas ni con el nombre del archivo. La plataforma
+  muestra la fecha de la hoja que estás mirando y avisa si pasó de 6 meses.
+
+  OJO CON LOS LMR CONVERTIDOS EN FECHA: en el Excel de origen hay celdas de LMR
+  que Excel transformó en fecha. Un "2" quedó como 02-01-1900, y un par "2/4"
+  (una mezcla, un valor por sustancia) quedó como 02-04-2026. El generador las
+  devuelve a su valor; en la última agenda eran 386 celdas, 313 solo en cerezas.
+  Si abres el Excel a mano, esas celdas se ven mal; en la plataforma, bien.
+
+
+  EL CRUCE DE MOSCA DE LA FRUTA
+
+  El consolidado de campañas lo publica el SAG como archivo y hay que cargarlo
+  a mano: lo bajas del tablero y lo sueltas en el recuadro. Se lee en el
+  navegador, no se sube a ninguna parte, y queda guardado en ese equipo.
+
+  El lector no exige un formato fijo: busca la fila del encabezado y reconoce
+  las columnas por su nombre, así que aguanta que el SAG cambie el orden.
+  También entiende "CSG 91302" además de "91302".
+
+  La tabla separa tres cosas distintas:
+    · los CSG que SÍ aparecen en el consolidado, con su campaña
+    · los que no aparecen
+    · los que no se pudieron revisar porque en nuestros archivos les falta
+      el número de CSG (hoy: AGRICOLA ARROYO SERVICIOS INTEGRALES, que dice
+      "pendiente"). Eso no es estar fuera de campaña: es un dato que falta.
+
+
+  LA LISTA DE CSG SE ARMA SOLA
+
+  Sale de cuarteles.json, del flujo de cosecha y de las estimaciones. No hay
+  una lista aparte que mantener: si agregas un cuartel, el CSG aparece solo.
+
+
 ANTES DE PUBLICAR: CORRER LAS PRUEBAS
 
   En la carpeta del repositorio:
 
       python3 pruebas/verificar.py
 
-  Tarda segundos y revisa 13 cosas. Si sale algún ERROR, no publiques.
+  Tarda segundos y revisa 15 cosas. Si sale algún ERROR, no publiques.
   Los detalles están en pruebas/LEEME.txt.
 
   Además, GitHub las corre solo con cada cambio que subas y te avisa

@@ -23,9 +23,9 @@ import sys
 import tempfile
 
 RAIZ = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-PAGINAS = ["index.html", "clima.html", "tecnica.html", "tecnico.html"]
+PAGINAS = ["index.html", "clima.html", "tecnica.html", "tecnico.html", "sag.html"]
 JSONS = ["datos.json", "config.json", "cuarteles.json", "cosecha.json",
-         "heladas_comunas.json", "manifest.webmanifest"]
+         "pesticidas.json", "heladas_comunas.json", "manifest.webmanifest"]
 OBLIGATORIOS = PAGINAS + JSONS + ["sw.js", "icon-192.png", "icon-512.png",
                                   "apple-touch-icon.png", "LEEME.txt"]
 
@@ -170,6 +170,9 @@ def r_onclick():
         definidas = set(re.findall(r"function\s+([A-Za-z_$][\w$]*)\s*\(", js))
         definidas |= set(re.findall(r"(?:var|let|const)\s+([A-Za-z_$][\w$]*)\s*=\s*function", js))
         definidas |= set(re.findall(r"(?:var|let|const)\s+([A-Za-z_$][\w$]*)\s*=\s*(?:async\s*)?\(", js))
+        # flecha de un solo argumento sin paréntesis:  const esc=s=>...
+        definidas |= set(re.findall(
+            r"(?:var|let|const)\s+([A-Za-z_$][\w$]*)\s*=\s*(?:async\s+)?[A-Za-z_$][\w$]*\s*=>", js))
         nativas = {"alert", "confirm", "prompt", "event", "window", "document",
                    "console", "setTimeout", "parseInt", "parseFloat", "Number",
                    "String", "JSON", "Math", "Date", "location", "history", "this",
@@ -387,6 +390,62 @@ def r_cosecha():
                   % f"{abs(kg_cal-kx):,.0f}".replace(",", "."))
 
 
+def r_pesticidas():
+    """Que la agenda de pesticidas esté completa y avisar si está vieja.
+
+    El índice nombra un archivo por especie. Si falta uno, la búsqueda
+    de LMR queda en blanco justo cuando se necesita.
+    """
+    ruta = os.path.join(RAIZ, "pesticidas.json")
+    if not os.path.exists(ruta):
+        return
+    try:
+        d = json.load(open(ruta, encoding="utf-8"))
+    except Exception:
+        return
+    esp = d.get("especies") or []
+    if not esp:
+        error("pesticidas", "pesticidas.json no lista ninguna especie")
+        return
+    import datetime
+    hoy = datetime.date.today()
+    for e in esp:
+        arch = e.get("archivo", "")
+        p = os.path.join(RAIZ, arch)
+        if not arch or not os.path.exists(p):
+            error("pesticidas", "falta el archivo de %s: %s" % (e.get("especie"), arch))
+            continue
+        try:
+            h = json.load(open(p, encoding="utf-8"))
+        except Exception:
+            error("pesticidas", "%s no es un JSON válido" % arch)
+            continue
+        if len(h.get("filas") or []) != e.get("filas"):
+            error("pesticidas", "%s dice %s filas y el índice dice %s"
+                  % (arch, len(h.get("filas") or []), e.get("filas")))
+        for clave in ("mercados", "sustancias", "tipos", "campos"):
+            if not h.get(clave):
+                error("pesticidas", "%s no trae la sección '%s'" % (arch, clave))
+        # ningún índice de la fila puede apuntar fuera del diccionario
+        nm, ns, nt = len(h.get("mercados", [])), len(h.get("sustancias", [])), len(h.get("tipos", []))
+        for f in (h.get("filas") or [])[:5000]:
+            if not (0 <= f[0] < nm and 0 <= f[1] < ns and 0 <= f[2] < nt):
+                error("pesticidas", "%s tiene una fila que apunta a un mercado o "
+                                    "sustancia que no existe" % arch)
+                break
+        f = e.get("fecha")
+        if f:
+            try:
+                dias = (hoy - datetime.date.fromisoformat(f)).days
+                if dias > 180:
+                    aviso("pesticidas", "%s se descargó hace %d días (%s)"
+                          % (e.get("especie"), dias, f))
+            except ValueError:
+                aviso("pesticidas", "%s tiene una fecha rara: %s" % (e.get("especie"), f))
+        else:
+            aviso("pesticidas", "%s no trae fecha de descarga" % e.get("especie"))
+
+
 # ─────────────────────────────────────────────────────────────
 REVISIONES = [
     ("archivos del sitio", r_archivos),
@@ -403,6 +462,7 @@ REVISIONES = [
     ("base de cuarteles", r_cuarteles),
     ("estados fenológicos", r_fenologia),
     ("datos de cosecha", r_cosecha),
+    ("agenda de pesticidas", r_pesticidas),
 ]
 
 

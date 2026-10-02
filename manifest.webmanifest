@@ -1,7 +1,7 @@
 {
   "name": "Plataforma Exportadora Los Olmos",
   "short_name": "Los Olmos",
-  "description": "Portal interno de Exportadora Los Olmos: plataforma climática y plataforma de campo.",
+  "description": "Portal interno de Exportadora Los Olmos: plataforma climática, de campo, departamento técnico y requisitos SAG.",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
@@ -62,7 +62,18 @@
           "sizes": "192x192"
         }
       ]
+    },
+    {
+      "name": "Requisitos SAG",
+      "short_name": "SAG",
+      "url": "./sag.html",
+      "icons": [
+        {
+          "src": "./icon-192.png?v=2",
+          "sizes": "192x192"
+        }
+      ]
     }
   ],
-  "version": "4.7"
+  "version": "4.8"
 }

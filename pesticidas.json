@@ -1,0 +1,93 @@
+{
+ "meta": {
+  "generado": "2026-10-02",
+  "origen": "685a6179-AGENDA_PESTICIDAS_2026_05-01-2026.xlsx",
+  "fechaNombre": "2026-01-05",
+  "fechaMasReciente": "2026-01-05",
+  "fechaMasAntigua": "2024-11-15",
+  "registros": 25266,
+  "fuente": "Agenda de Pesticidas ASOEX"
+ },
+ "especies": [
+  {
+   "especie": "CEREZAS",
+   "archivo": "pesticidas_cerezas.json",
+   "fecha": "2025-10-10",
+   "filas": 3367,
+   "mercados": 23,
+   "sustancias": 179,
+   "cambios": 67,
+   "dias": 357
+  },
+  {
+   "especie": "PERAS",
+   "archivo": "pesticidas_peras.json",
+   "fecha": "2026-01-05",
+   "filas": 2448,
+   "mercados": 19,
+   "sustancias": 159,
+   "cambios": 80,
+   "dias": 270
+  },
+  {
+   "especie": "KIWIS",
+   "archivo": "pesticidas_kiwis.json",
+   "fecha": "2026-01-05",
+   "filas": 1378,
+   "mercados": 25,
+   "sustancias": 79,
+   "cambios": 1,
+   "dias": 270
+  },
+  {
+   "especie": "UVA DE MESA",
+   "archivo": "pesticidas_uva_de_mesa.json",
+   "fecha": "2026-01-05",
+   "filas": 4982,
+   "mercados": 28,
+   "sustancias": 218,
+   "cambios": 62,
+   "dias": 270
+  },
+  {
+   "especie": "MANZANAS",
+   "archivo": "pesticidas_manzanas.json",
+   "fecha": "2026-01-05",
+   "filas": 3669,
+   "mercados": 25,
+   "sustancias": 189,
+   "cambios": 104,
+   "dias": 270
+  },
+  {
+   "especie": "CIRUELAS",
+   "archivo": "pesticidas_ciruelas.json",
+   "fecha": "2026-01-05",
+   "filas": 5901,
+   "mercados": 26,
+   "sustancias": 215,
+   "cambios": 107,
+   "dias": 270
+  },
+  {
+   "especie": "CIRUELA DESHIDRATADA",
+   "archivo": "pesticidas_ciruela_deshidratada.json",
+   "fecha": "2024-11-15",
+   "filas": 680,
+   "mercados": 31,
+   "sustancias": 27,
+   "cambios": 0,
+   "dias": 686
+  },
+  {
+   "especie": "UVA VINIFERA",
+   "archivo": "pesticidas_uva_vinifera.json",
+   "fecha": "2024-11-15",
+   "filas": 2841,
+   "mercados": 18,
+   "sustancias": 187,
+   "cambios": 15,
+   "dias": 686
+  }
+ ]
+}
