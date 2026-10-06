@@ -1,6 +1,6 @@
 PLATAFORMA EXPORTADORA LOS OLMOS
 ================================
-Versión 4.9 · Formato de escritorio en la Plataforma de Campo
+Versión 5.0 · Programa de Fertilización
 
 
 QUÉ HAY EN LA CARPETA (todo junto, sin subcarpetas)
@@ -23,6 +23,8 @@ QUÉ HAY EN LA CARPETA (todo junto, sin subcarpetas)
                         de qué fecha es cada una).
   pesticidas_*.json     Una especie por archivo. La página carga solo la que
                         estás mirando, no las ocho.
+  fertilizacion.json    Los 4 programas tipo de fertilización: matriz de vigor,
+                        reparto por etapa, productos y comentarios.
 
   manifest.webmanifest  Datos de la app instalable.
   sw.js                 Permite usarla sin internet y avisa de versiones nuevas.
@@ -275,13 +277,76 @@ LA PLATAFORMA DE CAMPO EN EL COMPUTADOR (desde la versión 4.9)
   dice "Plataforma de Campo".
 
 
+PROGRAMA DE FERTILIZACIÓN (desde la versión 5.0)
+
+  Está en Departamento Técnico → Cerezas → Programa de Fertilización, y
+  reemplaza las cuatro planillas .xlsm que se usaban a mano.
+
+  LOS CUATRO PROGRAMAS TIPO
+
+    Lapins · Bajo Vigor      Santina · Bajo Vigor
+    Lapins · Vigorosa        Santina · Vigorosa
+
+  No son el mismo programa con otro nombre. La diferencia es agronómica y
+  está a la vista en cada ficha:
+
+    Bajo vigor  el nitrógeno se reparte 0/20/20/60 entre las cuatro
+                etapas, y el potasio entra como NITRATO de potasio.
+    Vigoroso    todo el nitrógeno (0/0/0/100) va a post cosecha, y el
+                potasio entra como SULFATO, que no trae nitrógeno.
+
+  Es la misma lógica de siempre: a un huerto vigoroso no se le mete
+  nitrógeno en primavera.
+
+  QUÉ SE PUEDE MOVER
+
+  Portainjerto, índice de vigor, producción esperada, superficie del
+  bloque y eficiencia del riego. Al moverlos se recalcula todo en el
+  momento: el requerimiento de cada nutriente, las dosis de cada etapa y
+  la tabla que se manda. "Volver al estándar" deja las perillas como
+  vienen en el programa tipo.
+
+  El requerimiento de nitrógeno sale del cruce entre el portainjerto y el
+  índice de vigor, igual que en la planilla: un Colt en vigor 3 pide
+  4 kg por tonelada; un Gisela 5 en el mismo vigor pide 12.
+
+  EXPORTAR EL INFORME
+
+  El botón "Exportar informe" arma las dos páginas del formato que se
+  manda hoy —encabezado, etapas, tabla de dosis y los comentarios— y abre
+  el diálogo de impresión, donde se elige "Guardar como PDF". Se hace con
+  el navegador y no con una librería para que funcione sin internet.
+
+  QUÉ SE CALCULA Y QUÉ NO
+
+  Las celdas con un punto naranjo son dosis fijas del programa (Martello,
+  Release, Pilatus, Mamvert WinCa, Movili-Ca, Ácido Bórico y TradeCorp
+  Zn): no dependen de los kilos. El resto se calcula.
+
+  ACTUALIZAR LOS PROGRAMAS
+
+      python3 scripts/generar_fertilizacion.py Programa_*.xlsm
+
+  Lee los cuatro .xlsm y genera fertilizacion.json. Las pruebas comparan
+  el cálculo de la plataforma contra los valores que dejaron guardados
+  esas planillas: 692 celdas, de las que ninguna puede moverse.
+
+
+PROGRAMA FITOSANITARIO (se mudó en la versión 5.0)
+
+  Estaba en la Plataforma de Campo y ahora vive en Departamento Técnico →
+  Cerezas → Programa Fitosanitario, al lado del de fertilización. Trae lo
+  mismo de antes: el programa de cerezos, la calculadora de giberélico y
+  los productos alternativos. Sigue marcado como en construcción.
+
+
 ANTES DE PUBLICAR: CORRER LAS PRUEBAS
 
   En la carpeta del repositorio:
 
       python3 pruebas/verificar.py
 
-  Tarda segundos y revisa 15 cosas. Si sale algún ERROR, no publiques.
+  Tarda segundos y revisa 16 cosas. Si sale algún ERROR, no publiques.
   Los detalles están en pruebas/LEEME.txt.
 
   Además, GitHub las corre solo con cada cambio que subas y te avisa

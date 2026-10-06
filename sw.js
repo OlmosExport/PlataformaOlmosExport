@@ -1,7 +1,7 @@
 /* Service Worker · Plataforma Exportadora Los Olmos */
-const CACHE = 'olmos-plataforma-v15';
+const CACHE = 'olmos-plataforma-v16';
 const CORE = ['./','./index.html','./clima.html','./tecnica.html','./tecnico.html','./sag.html',
-  './datos.json','./config.json','./heladas_comunas.json','./cuarteles.json','./cosecha.json','./pesticidas.json','./manifest.webmanifest',
+  './datos.json','./config.json','./heladas_comunas.json','./cuarteles.json','./cosecha.json','./pesticidas.json','./fertilizacion.json','./manifest.webmanifest',
   './icon-192.png','./icon-512.png','./apple-touch-icon.png',
   'https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js',
   'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js',
@@ -47,7 +47,7 @@ self.addEventListener('fetch', e => {
 
   // Documentos, datos y configuración: primero la red, así llegan las actualizaciones.
   const vivo = req.mode === 'navigate' || req.destination === 'document' ||
-               /\/(datos|config|heladas_comunas|cuarteles|cosecha|pesticidas(_[a-z_]+)?)\.json$/.test(url.pathname);
+               /\/(datos|config|heladas_comunas|cuarteles|cosecha|fertilizacion|pesticidas(_[a-z_]+)?)\.json$/.test(url.pathname);
   if (vivo) {
     e.respondWith(
       fetch(req).then(r => { const cp = r.clone(); caches.open(CACHE).then(c => c.put(req, cp)); return r; })

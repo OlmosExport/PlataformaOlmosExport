@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Departamento Técnico · Exportadora Los Olmos</title>
 <meta name="description" content="Estimación y flujo de cosecha de Exportadora Los Olmos.">
-<meta name="app-version" content="4.9">
+<meta name="app-version" content="5.0">
 <meta name="theme-color" content="#14301C">
 <link rel="manifest" href="./manifest.webmanifest">
 <link rel="apple-touch-icon" href="./apple-touch-icon.png">
@@ -28,6 +28,16 @@
   --sh2:0 1px 3px rgba(20,32,24,.05),0 8px 24px -12px rgba(20,32,24,.16);
   --sh3:0 2px 6px rgba(20,32,24,.06),0 18px 40px -18px rgba(20,32,24,.24);
   --ease:cubic-bezier(.22,.61,.36,1);
+
+  /* nombres que usa el Programa Fitosanitario, heredados de la
+     Plataforma de Campo: apuntan a los mismos colores de arriba */
+  --w:#fff; --s50:var(--g50); --s100:#F0F3EF; --s150:var(--line2); --s200:var(--line);
+  --s300:#D6DCD4; --s400:var(--mut2); --s500:var(--mut); --s600:#526054;
+  --s700:#374238; --s800:var(--ink);
+  --g400:var(--g500); --g600:var(--g700);
+  --r-sm:9px; --r-md:var(--r); --r-lg:18px;
+  --sh-sm:var(--sh1); --sh-md:var(--sh2); --sh-lg:var(--sh3);
+  --amber:var(--warn); --amber-s:var(--warn-s); --ice:#1B4F8A;
 }
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 html{-webkit-text-size-adjust:100%}
@@ -55,6 +65,26 @@ button{font-family:inherit}
 .s-item svg{width:16px;height:16px;flex-shrink:0;opacity:.85}
 .s-item.off{opacity:.38;cursor:default}
 .s-item.off:hover{background:transparent;color:rgba(255,255,255,.72)}
+
+/* ══ GRUPOS DE ESPECIE EN EL MENÚ ══
+   Cada especie es un grupo que se abre. Así caben Fertilización y
+   Fitosanitario sin que el menú se vuelva una lista interminable. */
+.s-grp{display:flex;align-items:center;gap:10px;width:100%;padding:9px 10px;border:none;
+  background:transparent;color:rgba(255,255,255,.82);border-radius:9px;cursor:pointer;
+  font-size:13px;font-weight:700;text-align:left;transition:.14s}
+.s-grp:hover{background:rgba(255,255,255,.07);color:#fff}
+.s-grp svg{width:16px;height:16px;flex-shrink:0;opacity:.85}
+.s-grp .s-chev{margin-left:auto;width:13px;height:13px;opacity:.45;transition:transform .22s var(--ease)}
+.s-grp[aria-expanded="true"] .s-chev{transform:rotate(180deg)}
+.s-grp[aria-expanded="true"]{color:#fff}
+.s-grp.off{opacity:.34;cursor:default}
+.s-grp.off:hover{background:transparent;color:rgba(255,255,255,.82)}
+.s-grp.off .s-tag{margin-left:auto}
+.s-sub{display:none;margin:2px 0 8px;padding-left:13px;
+  border-left:1px solid rgba(255,255,255,.12);margin-left:18px}
+.s-sub.on{display:block;animation:fade .22s var(--ease)}
+.s-ch{font-weight:600;font-size:12.5px;padding:7px 10px}
+.s-ch svg{width:14px;height:14px;opacity:.7}
 .s-tag{margin-left:auto;font-family:var(--mono);font-size:8.5px;font-weight:600;
   background:rgba(255,255,255,.1);color:rgba(255,255,255,.5);padding:2px 6px;border-radius:20px}
 .s-foot{padding:12px;border-top:1px solid rgba(255,255,255,.08)}
@@ -221,6 +251,250 @@ thead th.stick{z-index:4;background:var(--g50)}
   .kpi-v{font-size:22px}
   .f-g{min-width:120px}
 }
+
+/* ══ PROGRAMA DE FERTILIZACIÓN ══ */
+.crumb{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--mut2);
+  margin-bottom:10px;font-weight:600}
+.crumb i{font-style:normal;opacity:.5}
+.crumb b{color:var(--g700);font-weight:700}
+
+.btn-g,.btn-p{display:inline-flex;align-items:center;gap:7px;font-size:12.5px;font-weight:700;
+  padding:9px 15px;border-radius:10px;cursor:pointer;transition:.16s;font-family:var(--font);
+  border:1px solid var(--line);background:var(--card);color:var(--ink);box-shadow:var(--sh1)}
+.btn-g:hover{border-color:var(--g200);color:var(--g700);background:var(--g50)}
+.btn-g svg,.btn-p svg{width:15px;height:15px}
+.btn-p{background:var(--g800);border-color:var(--g800);color:#fff}
+.btn-p:hover{background:var(--g900);border-color:var(--g900);color:#fff}
+
+/* perillas: se ven como las fichas de la referencia, pero se mueven */
+.ctrls{display:grid;grid-template-columns:repeat(auto-fit,minmax(164px,1fr));gap:12px}
+.ctrl{background:var(--card);border:1px solid var(--line);border-radius:var(--r);
+  padding:11px 14px;box-shadow:var(--sh1);display:flex;flex-direction:column;gap:5px;
+  cursor:pointer;transition:.16s}
+.ctrl:hover,.ctrl:focus-within{border-color:var(--g200);box-shadow:var(--sh2)}
+.ctrl-l{font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:.11em;
+  text-transform:uppercase;color:var(--mut2)}
+.ctrl select,.ctrl input{font-family:var(--font);font-size:15px;font-weight:800;color:var(--ink);
+  border:none;background:transparent;padding:0;width:100%;letter-spacing:-.02em;cursor:pointer}
+.ctrl input{cursor:text}
+.ctrl select:focus,.ctrl input:focus{outline:none}
+.ctrl-u{display:flex;align-items:baseline;gap:5px}
+.ctrl-u i{font-style:normal;font-family:var(--mono);font-size:10px;color:var(--mut2);
+  font-weight:600;flex-shrink:0}
+.ctrl-h{font-size:9.5px;color:var(--mut2);line-height:1.35;margin-top:-1px}
+.ctrl-n{font-size:11.5px;color:var(--mut);margin-top:10px;line-height:1.5}
+.ctrl-n b{color:var(--g800)}
+
+/* los cuatro programas tipo, siempre a la vista */
+.plbl{font-family:var(--mono);font-size:10px;font-weight:600;letter-spacing:.13em;
+  text-transform:uppercase;color:var(--mut2);margin:0 0 10px}
+.progs{display:grid;grid-template-columns:repeat(auto-fit,minmax(196px,1fr));gap:10px;
+  margin-bottom:18px}
+.pg-c{background:var(--card);border:1px solid var(--line);border-radius:var(--r);
+  padding:13px 15px;box-shadow:var(--sh1);cursor:pointer;text-align:left;transition:.18s;
+  font-family:var(--font);position:relative;overflow:hidden}
+.pg-c:hover{border-color:var(--g200);box-shadow:var(--sh2)}
+.pg-c::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;
+  background:var(--pc);opacity:.35;transition:.18s}
+.pg-c.on{border-color:var(--g700);box-shadow:var(--sh2)}
+.pg-c.on::before{opacity:1;width:4px}
+.pg-t{font-size:14px;font-weight:800;letter-spacing:-.02em;color:var(--ink)}
+.pg-s{font-size:10.5px;color:var(--mut);margin-top:4px;line-height:1.45}
+.pg-c.on .pg-t{color:var(--g800)}
+.pg-k{font-family:var(--mono);font-size:9.5px;color:var(--mut2);margin-top:7px;
+  padding-top:7px;border-top:1px solid var(--line2)}
+
+/* etapas */
+.etapas{display:grid;grid-template-columns:repeat(auto-fit,minmax(224px,1fr));gap:12px;
+  align-items:stretch}
+.et{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:17px 18px;
+  box-shadow:var(--sh1);position:relative;overflow:hidden;
+  background:var(--etb,var(--card));border-color:var(--etl,var(--line))}
+.et-h{display:flex;align-items:center;gap:11px;margin-bottom:11px}
+.et-i{width:38px;height:38px;border-radius:12px;display:flex;align-items:center;
+  justify-content:center;background:rgba(255,255,255,.7);color:var(--etc,var(--g700));flex-shrink:0}
+.et-i svg{width:20px;height:20px}
+.et-n{font-family:var(--mono);font-size:17px;font-weight:600;color:var(--etc,var(--g700));
+  letter-spacing:.04em}
+.et-t{font-size:12.5px;font-weight:700;line-height:1.4;color:var(--ink);min-height:2.8em}
+.et-f{display:flex;flex-direction:column;gap:6px;margin-top:13px;padding-top:11px;
+  border-top:1px solid rgba(22,33,26,.08)}
+.et-d{display:flex;align-items:center;gap:6px;font-family:var(--mono);font-size:10px;
+  color:var(--mut);font-weight:600}
+.et-d svg{width:12px;height:12px;opacity:.6}
+.et-d b{color:var(--ink);font-weight:700}
+
+/* requerimiento por nutriente */
+.nut{display:grid;grid-template-columns:repeat(auto-fit,minmax(168px,1fr));gap:12px}
+.nu{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:14px 15px;
+  box-shadow:var(--sh1);position:relative;overflow:hidden}
+.nu::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--nc)}
+.nu-h{display:flex;align-items:baseline;justify-content:space-between;gap:8px;margin-bottom:9px}
+.nu-s{font-family:var(--mono);font-size:15px;font-weight:600;color:var(--nc)}
+.nu-l{font-size:9.5px;color:var(--mut2);font-weight:600}
+.nu-v{font-size:23px;font-weight:800;letter-spacing:-.03em;font-variant-numeric:tabular-nums;
+  line-height:1}
+.nu-v small{font-size:11px;font-weight:600;color:var(--mut2);margin-left:3px;letter-spacing:0}
+.nu-b{height:5px;border-radius:3px;background:var(--line2);margin-top:10px;overflow:hidden;display:flex}
+.nu-b i{display:block;height:100%;background:var(--nc);opacity:.85}
+.nu-f{margin-top:7px;font-family:var(--mono);font-size:9.5px;color:var(--mut2);line-height:1.5}
+
+/* tabla de dosis, con bandas por etapa */
+#ft-tabla thead th{font-size:9px;letter-spacing:.03em;padding:9px 7px;line-height:1.3;
+  white-space:normal;min-width:62px;vertical-align:bottom}
+#ft-tabla thead th.l{min-width:150px}
+#ft-tabla tbody td{padding:7px;font-size:11.5px}
+#ft-tabla tbody tr td{background:var(--eb,transparent)}
+#ft-tabla tbody tr:hover td{background:var(--ebh,var(--g50))}
+.et-cell{font-weight:700;color:var(--etc);font-family:var(--mono);font-size:12px;
+  text-align:center;vertical-align:middle;border-right:1px solid var(--line2)}
+.et-cell small{display:block;font-family:var(--font);font-size:9.5px;font-weight:600;
+  color:var(--mut);margin-top:3px;line-height:1.35;letter-spacing:0}
+.ap-cell{font-family:var(--mono);font-weight:600;color:var(--mut);text-align:center}
+#ft-tabla .z{color:var(--line);font-weight:400}
+#ft-tabla tfoot td{background:var(--g900)!important;color:#fff;font-weight:800;
+  padding:10px 7px;font-family:var(--mono);font-size:12px;position:sticky;bottom:0}
+#ft-tabla tfoot td.l{text-align:left;letter-spacing:.08em;font-size:10px}
+.man{position:relative}
+.man::after{content:'';position:absolute;top:5px;right:4px;width:4px;height:4px;
+  border-radius:50%;background:var(--warn);opacity:.75}
+
+.lbl-u{font-family:var(--mono);font-size:9.5px;color:var(--mut2);text-transform:none;
+  letter-spacing:0;font-weight:500}
+
+/* comentarios */
+.coment{background:var(--card);border:1px solid var(--line);border-radius:var(--r);
+  padding:4px 20px 18px;box-shadow:var(--sh1)}
+.coment p{font-size:12.5px;line-height:1.65;color:var(--mut);margin:11px 0}
+.coment p.t{font-weight:800;color:var(--ink);font-size:13px;margin:20px 0 4px;
+  letter-spacing:-.01em}
+.coment p.b{padding-left:14px;position:relative}
+.coment p.b::before{content:'';position:absolute;left:0;top:8px;width:5px;height:5px;
+  border-radius:50%;background:var(--g300)}
+
+@media (max-width:900px){
+  .ctrls{grid-template-columns:repeat(auto-fit,minmax(142px,1fr))}
+  .etapas{grid-template-columns:1fr}
+  .et-t{min-height:0}
+}
+
+/* ══ HOJA DE IMPRESIÓN DEL INFORME ══
+   Solo existe cuando se exporta. En pantalla está escondida. */
+#ft-print{display:none}
+.imprimiendo #ft-print{display:block}
+
+@media print{
+  @page{size:A4 landscape;margin:10mm 9mm}
+  body.imprimiendo{background:#fff}
+  body.imprimiendo .wrap,body.imprimiendo .burger,body.imprimiendo .scrim{display:none!important}
+  body.imprimiendo #ft-print{display:block;position:static}
+  .pg{page-break-after:always;color:#16211A;font-family:var(--font)}
+  .pg:last-child{page-break-after:auto}
+  .pg2{page-break-before:always}
+}
+
+#ft-print{font-family:var(--font);color:#16211A}
+.ph{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;
+  border-bottom:2px solid #14301C;padding-bottom:9px;margin-bottom:12px}
+.ph-t{font-size:15px;font-weight:800;letter-spacing:.02em;color:#14301C}
+.ph-s{font-size:10px;color:#6B7A6E;margin-top:3px;font-weight:600}
+.ph-l{height:30px;width:auto;filter:brightness(0) saturate(100%) invert(14%) sepia(18%)
+  saturate(1500%) hue-rotate(95deg) brightness(95%) contrast(95%)}
+
+.pcols{display:flex;gap:14px;margin-bottom:12px}
+.pd{border-collapse:collapse;flex:1;font-size:9.5px}
+.pd td{padding:3.5px 7px;border-bottom:1px solid #ECF0EA}
+.pk{color:#6B7A6E;font-weight:600;width:42%}
+.pv{font-weight:800;color:#16211A}
+
+.pe{border-collapse:collapse;width:100%;font-size:9px;margin-bottom:13px}
+.pe th{background:#14301C;color:#fff;padding:5px 7px;text-align:left;font-weight:700;
+  font-size:8px;letter-spacing:.05em;text-transform:uppercase}
+.pe th:first-child{text-align:center;width:46px}
+.pe th:nth-child(2){width:auto}
+.pe td:nth-child(2){text-align:left}
+.pe td{padding:4px 7px;border-bottom:1px solid #ECF0EA}
+.pe .pr{font-family:var(--mono);font-weight:700;color:#2C7A46;width:46px;text-align:center}
+.pe .pn{text-align:center;font-family:var(--mono);width:95px}
+
+.pt-t{font-size:11px;font-weight:800;margin-bottom:5px;color:#14301C}
+.pt{border-collapse:collapse;width:100%;font-size:8px;table-layout:fixed}
+.pt th{background:#14301C;color:#fff;padding:5px 3px;font-weight:700;font-size:6.6px;
+  line-height:1.2;vertical-align:bottom;text-align:center;
+  white-space:normal;overflow-wrap:anywhere;hyphens:auto}
+.pt th.l{text-align:left;width:118px}
+.pt td{padding:3.5px 3px;text-align:center;border-bottom:1px solid #E5EAE4;
+  font-variant-numeric:tabular-nums}
+.pt td.l{text-align:left;font-family:var(--mono);font-weight:700;vertical-align:middle;
+  font-size:10px;color:#2C7A46}
+.pt td.l i{display:block;font-style:normal;font-family:var(--font);font-size:7px;
+  font-weight:600;color:#374238;margin-top:2px;line-height:1.3}
+.pt .pn{font-family:var(--mono);font-weight:600;color:#6B7A6E}
+.pt tr.e0 td{background:#EDF6F0} .pt tr.e0 td.l{color:#2C7A46}
+.pt tr.e1 td{background:#EBF3F8} .pt tr.e1 td.l{color:#2E6B8F}
+.pt tr.e2 td{background:#FCF2E6} .pt tr.e2 td.l{color:#B8791F}
+.pt tr.e3 td{background:#F4EFF6} .pt tr.e3 td.l{color:#7B4B6B}
+.pt tfoot td{background:#14301C!important;color:#fff;font-weight:800;padding:5px 3px;
+  font-family:var(--mono);font-size:8.5px}
+.pt tfoot td.l{text-align:left;letter-spacing:.08em;color:#fff}
+
+.pc{column-count:2;column-gap:22px;font-size:8.5px;line-height:1.5}
+.pc p{margin:0 0 6px;break-inside:avoid;color:#374238}
+.pc p.t{font-weight:800;color:#14301C;font-size:9.5px;margin:10px 0 3px}
+.pc p.b{padding-left:9px;position:relative}
+.pc p.b::before{content:'•';position:absolute;left:0;color:#4F9E68}
+.pf{margin-top:12px;padding-top:7px;border-top:1px solid #E5EAE4;font-size:8px;
+  color:#9AA79C;font-family:var(--mono)}
+
+/* ══ PROGRAMA FITOSANITARIO ══ */
+.ftabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+.ftab{font-size:12.5px;font-weight:700;padding:8px 15px;border-radius:100px;
+  border:1px solid var(--line);background:var(--card);color:var(--mut);cursor:pointer;
+  transition:.14s;font-family:var(--font)}
+.ftab:hover{border-color:var(--g200);color:var(--g700)}
+.ftab.on{background:var(--g700);border-color:var(--g700);color:#fff}
+.fsec{display:none}
+.fsec.on{display:block;animation:fade .25s var(--ease)}
+.fito-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(224px,1fr));gap:14px}
+#fito-prog-list,#fito-alt-list{display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(330px,1fr));gap:12px;align-items:start}
+#fito-prog-list .fito-divider{grid-column:1/-1}
+.fv-group{margin-bottom:14px}
+.fv-group-title{font-size:12.5px;font-weight:800;color:var(--g800);margin-bottom:8px;display:flex;align-items:center;gap:7px}
+.fv-group-n{font-size:9.5px;font-weight:700;color:var(--s500);background:var(--s100);padding:2px 8px;border-radius:20px}
+.fv-cards{display:flex;flex-direction:column;gap:8px}
+.fv-card{display:flex;gap:10px;background:var(--w);border:1px solid var(--s200);border-radius:var(--r-md);box-shadow:var(--sh-sm);padding:10px;cursor:pointer}
+.fv-card-photo{width:56px;height:56px;border-radius:8px;object-fit:cover;flex-shrink:0;background:var(--s100)}
+.fv-card-photo-ph{width:56px;height:56px;border-radius:8px;background:var(--s100);flex-shrink:0;display:flex;align-items:center;justify-content:center;color:var(--s400)}
+.fv-card-body{flex:1;min-width:0}
+.fv-card-ctel{font-size:12px;font-weight:700;color:var(--s800)}
+.fv-card-prod{font-size:10.5px;color:var(--s400);margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.fv-card-estado{display:flex;align-items:center;gap:5px;font-size:11.5px;font-weight:700;color:var(--s700);margin-top:5px}
+.fv-card-estado-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.fv-bar{height:5px;border-radius:20px;position:relative;margin-top:7px}
+.fv-bar-dot{position:absolute;top:50%;width:10px;height:10px;border-radius:50%;background:#fff;border:2px solid var(--g800);transform:translate(-50%,-50%)}
+.fv-card-date{font-size:9.5px;color:var(--s400);margin-top:6px;font-family:var(--mono)}
+.fv-empty{font-size:11.5px;color:var(--s400);padding:16px;text-align:center;background:var(--w);border:1px dashed var(--s300);border-radius:var(--r-md)}
+.fito-beta{background:var(--amber-s);border:1px solid rgba(224,167,60,.45);border-radius:var(--r-md);padding:11px 13px;margin-bottom:12px;display:flex;gap:9px;align-items:flex-start}
+.fito-beta div{font-size:11px;color:#7A5417;line-height:1.5}
+.beta-tag{background:var(--amber);color:#fff;font-size:8.5px;font-weight:800;padding:2px 7px;border-radius:20px;letter-spacing:.4px}
+.fito-card{background:var(--w);border:1px solid var(--s200);border-radius:var(--r-md);padding:12px 13px;margin-bottom:8px;box-shadow:var(--sh-sm)}
+.fito-card-hdr{display:flex;justify-content:space-between;align-items:flex-start;gap:8px;margin-bottom:6px}
+.fito-card-n{width:24px;height:24px;border-radius:7px;background:var(--g100);color:var(--g800);font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.fito-card-title{font-size:13px;font-weight:800;color:var(--s800)}
+.fito-card-sub{font-size:10.5px;color:var(--s500);margin-top:1px}
+.fito-badges{display:flex;gap:5px;flex-wrap:wrap;margin:6px 0}
+.fito-badge{font-size:9.5px;font-weight:700;padding:3px 8px;border-radius:20px;background:var(--s100);color:var(--s600)}
+.fito-badge.sag{background:var(--blue-s);color:var(--ice)}
+.fito-row{font-size:11.5px;color:var(--s600);margin-top:3px;line-height:1.45}
+.fito-row strong{color:var(--s700)}
+.fito-obs{font-size:10.5px;color:var(--s500);margin-top:6px;padding:7px 9px;background:var(--s50);border-radius:8px;line-height:1.5}
+.gib-result-card{background:var(--w);border:1px solid var(--s200);border-radius:var(--r-md);padding:13px 14px;margin-bottom:8px;box-shadow:var(--sh-sm);display:flex;align-items:center;justify-content:space-between;gap:10px}
+.gib-result-name{font-size:12.5px;font-weight:700;color:var(--s800)}
+.gib-result-sub{font-size:10px;color:var(--s400);margin-top:2px}
+.gib-result-val{font-size:19px;font-weight:800;color:var(--g700);font-family:var(--mono);white-space:nowrap}
+.gib-result-unit{font-size:10.5px;color:var(--s400);font-weight:600}
+
 @media (prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;transition-duration:.01ms!important}}
 </style>
 </head>
@@ -232,35 +506,57 @@ thead th.stick{z-index:4;background:var(--g50)}
   <aside class="side" id="side">
     <div class="s-brand"><img id="logo" alt="Exportadora Los Olmos"></div>
     <nav class="s-nav">
-      <div class="s-lbl">Estimación</div>
+      <div class="s-lbl">General</div>
       <button class="s-item on" id="nav-hub" onclick="ir('hub')">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
         <span>Todas las especies</span></button>
-      <button class="s-item" id="nav-cer" onclick="ir('cerezas')">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><circle cx="8" cy="17" r="4"/><circle cx="17" cy="15" r="3.2"/><path d="M8 13c0-5 3-9 8-10M17 11.8c0-3 1-5 3-6"/></svg>
-        <span>Cerezas</span></button>
-      <button class="s-item off"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><circle cx="12" cy="7" r="2.4"/><circle cx="8" cy="12" r="2.4"/><circle cx="16" cy="12" r="2.4"/><circle cx="12" cy="17" r="2.4"/></svg><span>Uva de Mesa</span><span class="s-tag">pronto</span></button>
-      <button class="s-item off"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><ellipse cx="12" cy="14" rx="6.5" ry="7"/><path d="M12 7V3M12 7c2-1 4-3 4-4"/></svg><span>Ciruelas</span><span class="s-tag">pronto</span></button>
-      <button class="s-item off"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M12 8c-3-3-8-1-8 4s4 10 8 10 8-5 8-10-5-7-8-4z"/><path d="M12 8V4"/></svg><span>Manzanas</span><span class="s-tag">pronto</span></button>
-      <button class="s-item off"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M12 5c-2 0-3 2-3 4s-4 3-4 7 3 6 7 6 7-2 7-6-4-5-4-7-1-4-3-4z"/></svg><span>Perales</span><span class="s-tag">pronto</span></button>
-      <button class="s-item off"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><ellipse cx="12" cy="12" rx="8" ry="6.5"/><ellipse cx="12" cy="12" rx="3" ry="2.4"/></svg><span>Kiwis</span><span class="s-tag">pronto</span></button>
 
-      <div class="s-lbl" id="lbl-cer" style="display:none">Cerezas · Temporada 26-27</div>
-      <button class="s-item" id="nav-flujo" onclick="ir('flujo')" style="display:none">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M3 9h18M8 2v4M16 2v4"/></svg>
-        <span>Flujo de Cosecha</span></button>
-      <button class="s-item" id="nav-est" onclick="ir('estim')" style="display:none">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M3 3v18h18"/><polyline points="7 14 11 10 15 13 21 6"/></svg>
-        <span>Estimaciones</span></button>
-      <button class="s-item" id="nav-kilos" onclick="ir('kilos')" style="display:none">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 10h18M9 10v10M15 10v10"/></svg>
-        <span>Kilos Semana</span></button>
+      <div class="s-lbl">Especies</div>
+      <button class="s-grp" id="grp-cer" onclick="abrirEspecie('cer')" aria-expanded="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><circle cx="8" cy="17" r="4"/><circle cx="17" cy="15" r="3.2"/><path d="M8 13c0-5 3-9 8-10M17 11.8c0-3 1-5 3-6"/></svg>
+        <span>Cerezas</span><svg class="s-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><polyline points="6 9 12 15 18 9"/></svg></button>
+      <div class="s-sub on" id="sub-cer">
+        <button class="s-item s-ch" id="nav-resumen" onclick="ir('resumen')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+          <span>Resumen</span></button>
+        <button class="s-item s-ch" id="nav-flujo" onclick="ir('flujo')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M3 9h18M8 2v4M16 2v4"/></svg>
+          <span>Flujo de Cosecha</span></button>
+        <button class="s-item s-ch" id="nav-estim" onclick="ir('estim')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M3 3v18h18"/><polyline points="7 14 11 10 15 13 21 6"/></svg>
+          <span>Estimaciones</span></button>
+        <button class="s-item s-ch" id="nav-kilos" onclick="ir('kilos')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 10h18M9 10v10M15 10v10"/></svg>
+          <span>Kilos Semana</span></button>
+        <button class="s-item s-ch" id="nav-fert" onclick="ir('fert')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M12 21c0-5 2-8 6-10M12 21c0-5-2-8-6-10"/><path d="M12 21V8"/><path d="M9 8a3 3 0 016 0c0 2-3 4-3 4s-3-2-3-4z"/></svg>
+          <span>Programa de Fertilización</span></button>
+        <button class="s-item s-ch" id="nav-fito" onclick="ir('fito')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M9 3h6l-1 4h-4L9 3z"/><path d="M10 7v3.5L6.5 18a3 3 0 002.7 4h5.6a3 3 0 002.7-4L14 10.5V7"/><path d="M7.4 15h9.2"/></svg>
+          <span>Programa Fitosanitario</span></button>
+      </div>
+
+      <button class="s-grp off">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><circle cx="12" cy="7" r="2.4"/><circle cx="8" cy="12" r="2.4"/><circle cx="16" cy="12" r="2.4"/><circle cx="12" cy="17" r="2.4"/></svg>
+        <span>Uva de Mesa</span><span class="s-tag">pronto</span></button>
+      <button class="s-grp off">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><ellipse cx="12" cy="14" rx="6.5" ry="7"/><path d="M12 7V3M12 7c2-1 4-3 4-4"/></svg>
+        <span>Ciruelas</span><span class="s-tag">pronto</span></button>
+      <button class="s-grp off">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M12 8c-3-3-8-1-8 4s4 10 8 10 8-5 8-10-5-7-8-4z"/><path d="M12 8V4"/></svg>
+        <span>Manzanas</span><span class="s-tag">pronto</span></button>
+      <button class="s-grp off">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M12 5c-2 0-3 2-3 4s-4 3-4 7 3 6 7 6 7-2 7-6-4-5-4-7-1-4-3-4z"/></svg>
+        <span>Perales</span><span class="s-tag">pronto</span></button>
+      <button class="s-grp off">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><ellipse cx="12" cy="12" rx="8" ry="6.5"/><ellipse cx="12" cy="12" rx="3" ry="2.4"/></svg>
+        <span>Kiwis</span><span class="s-tag">pronto</span></button>
     </nav>
     <div class="s-foot">
       <a class="s-home" href="./index.html">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M3 10.5L12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/></svg>
         Inicio · otras plataformas</a>
-      <div class="s-ver">Departamento Técnico · v<span id="ver">4.9</span><br><span id="gen">—</span></div>
+      <div class="s-ver">Departamento Técnico · v<span id="ver">5.0</span><br><span id="gen">—</span></div>
     </div>
   </aside>
 
@@ -280,7 +576,7 @@ thead th.stick{z-index:4;background:var(--g50)}
     </section>
 
     <!-- ══ CEREZAS · RESUMEN ══ -->
-    <section class="view" id="v-cerezas">
+    <section class="view" id="v-resumen">
       <div class="head">
         <div><div class="h-t">Cerezas</div>
           <div class="h-s">Temporada 2026-2027 · estimación y flujo de cosecha</div></div>
@@ -382,8 +678,120 @@ thead th.stick{z-index:4;background:var(--g50)}
       </div>
     </section>
 
+    <!-- ══ PROGRAMA DE FERTILIZACIÓN ══ -->
+    <section class="view" id="v-fert">
+      <div class="crumb"><span>Cerezas</span><i>›</i><b>Programa de Fertilización</b></div>
+      <div class="head">
+        <div><div class="h-t">Programa de Fertilización</div>
+          <div class="h-s" id="ft-sub">Temporada 2026 – 2027</div></div>
+        <div style="display:flex;gap:9px;align-items:center;flex-wrap:wrap">
+          <div class="stamp"><span class="dot"></span>Temporada <b id="ft-temp">2026 – 2027</b></div>
+          <button class="btn-g" onclick="fertImprimir()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><polyline points="9 15 12 12 15 15"/></svg>
+            Exportar informe</button>
+          <button class="btn-p" onclick="fertRestablecer()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a9 9 0 11-3-6.7"/><path d="M21 4v5h-5"/></svg>
+            Volver al estándar</button>
+        </div>
+      </div>
+
+      <!-- ── las perillas ── -->
+      <div class="plbl">Programa tipo</div>
+      <div class="progs" id="ft-progs"></div>
+
+      <div class="ctrls" id="ft-ctrls">
+        <label class="ctrl"><span class="ctrl-l">Cuartel</span>
+          <input id="ft-cuartel" type="text" oninput="renFert()" autocomplete="off"></label>
+        <label class="ctrl"><span class="ctrl-l">Portainjerto</span>
+          <select id="ft-porta" onchange="renFert()"></select></label>
+        <label class="ctrl"><span class="ctrl-l">Índice de vigor</span>
+          <select id="ft-vigor" onchange="renFert()"></select>
+          <span class="ctrl-h" id="ft-vigor-h"></span></label>
+        <label class="ctrl"><span class="ctrl-l">Producción esperada</span>
+          <span class="ctrl-u"><input id="ft-kg" type="number" min="0" step="500" oninput="renFert()"><i>kg/ha</i></span></label>
+        <label class="ctrl"><span class="ctrl-l">Superficie bloque</span>
+          <span class="ctrl-u"><input id="ft-sup" type="number" min="0.1" step="0.1" oninput="renFert()"><i>ha</i></span></label>
+        <label class="ctrl"><span class="ctrl-l">Eficiencia del riego</span>
+          <span class="ctrl-u"><input id="ft-efic" type="number" min="10" max="100" step="1" oninput="renFert()"><i>%</i></span></label>
+      </div>
+      <div class="ctrl-n" id="ft-aviso"></div>
+
+      <!-- ── etapas ── -->
+      <div class="lbl">Etapas fenológicas del programa</div>
+      <div class="etapas" id="ft-etapas"></div>
+
+      <!-- ── requerimiento y aporte ── -->
+      <div class="lbl">Requerimiento del huerto y cómo se cubre</div>
+      <div class="nut" id="ft-nut"></div>
+      <div id="ft-cuadra" style="margin-top:12px"></div>
+
+      <!-- ── dosis ── -->
+      <div class="lbl">Dosis de fertilizante <span class="lbl-u" id="ft-unidad">(kg/ha)</span></div>
+      <div class="tw" id="ft-tabla-w"><table id="ft-tabla"></table></div>
+      <div class="foot-n" id="ft-pie"></div>
+
+      <!-- ── comentarios ── -->
+      <div class="lbl">Comentarios que acompañan al programa</div>
+      <div class="coment" id="ft-coment"></div>
+    </section>
+
+    <!-- ══ PROGRAMA FITOSANITARIO ══ -->
+    <section class="view" id="v-fito">
+      <div class="crumb"><span>Cerezas</span><i>›</i><b>Programa Fitosanitario</b></div>
+      <div class="head">
+        <div><div class="h-t">Programa Fitosanitario</div>
+          <div class="h-s">Cerezos, temporada 2026-27 · programa base, calculadora de
+            giberélico y productos alternativos</div></div>
+        <div class="stamp"><span class="dot w"></span>En construcción</div>
+      </div>
+      <div class="ftabs" id="f-tabs"></div>
+<div class="fsec on" id="f-hub">
+    <div class="fito-beta">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#B8791F" stroke-width="2" style="flex-shrink:0;margin-top:1px"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+      <div><strong>Sección BETA.</strong> Contenido digitalizado desde la planilla del Departamento Técnico. Puede contener errores, omisiones o quedar desactualizado. Verifica siempre dosis, productos y carencias con el Depto. Técnico antes de aplicar en terreno.</div>
+    </div>
+    <div class="esp">
+      <button class="esp-c" onclick="showFitoView('programa')">
+        <div class="esp-i"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 3H5a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-4"/><path d="M18 2l4 4-10 10H8v-4z"/></svg></div>
+        <div class="esp-t">Programa Cerezos 2026-27</div>
+      </button>
+      <button class="esp-c" onclick="showFitoView('giberelico')">
+        <div class="esp-i"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 2v6.5L4 17a2 2 0 001.7 3h12.6a2 2 0 001.7-3l-5-8.5V2"/><line x1="8" y1="2" x2="16" y2="2"/><line x1="8" y1="16" x2="16" y2="16"/></svg></div>
+        <div class="esp-t">Calculadora Giberélico</div>
+      </button>
+      <button class="esp-c" onclick="showFitoView('alternativas')">
+        <div class="esp-i"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 1l4 4-4 4"/><path d="M3 11V9a4 4 0 014-4h14"/><path d="M7 23l-4-4 4-4"/><path d="M21 13v2a4 4 0 01-4 4H3"/></svg></div>
+        <div class="esp-t">Alternativas de Aplicación</div>
+      </button>
+    </div>
+  </div>
+
+  <div class="fsec" id="f-programa">
+    <div class="fito-beta"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#B8791F" stroke-width="2" style="flex-shrink:0;margin-top:1px"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg><div><strong>BETA:</strong> puede contener errores. Programa referencial para huertos adultos de cerezos; consulta al Depto. Técnico antes de aplicar.</div></div>
+    <div class="sel-card"><div class="sel-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div><div class="sel-content"><input class="sel-input" type="text" id="fito-prog-search" placeholder="Buscar producto, objetivo, época, ingrediente..." oninput="renderFitoPrograma()" style="border:none;background:transparent;padding:0;width:100%"></div></div>
+    <div id="fito-prog-list"></div>
+  </div>
+
+  <div class="fsec" id="f-giberelico">
+    <div class="fito-beta"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#B8791F" stroke-width="2" style="flex-shrink:0;margin-top:1px"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg><div><strong>BETA:</strong> calculadora de referencia según el cuadro del Depto. Técnico. Verifica siempre la dosis final con el Depto. Técnico antes de aplicar.</div></div>
+    <div class="flabel">Datos de la aplicación</div>
+    <div class="sel-card"><div class="sel-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg></div><div class="sel-content"><div class="sel-sublabel">Concentración objetivo</div><input class="sel-input" type="number" id="gib-ppm" value="10" min="0" step="0.5" oninput="calcGiberelico()" style="border:none;background:transparent;padding:0;width:100%"></div><div style="font-size:11px;color:var(--s400);font-weight:700;align-self:center">ppm</div></div>
+    <div class="sel-card"><div class="sel-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2.69s-5 5.5-5 9.31a5 5 0 0010 0c0-3.81-5-9.31-5-9.31z"/></svg></div><div class="sel-content"><div class="sel-sublabel">Mojamiento</div><input class="sel-input" type="number" id="gib-moj" value="1000" min="1" step="10" oninput="calcGiberelico()" style="border:none;background:transparent;padding:0;width:100%"></div><div style="font-size:11px;color:var(--s400);font-weight:700;align-self:center">L/Ha</div></div>
+    <div class="flabel" style="margin-top:16px">Dosis de producto comercial</div>
+    <div id="gib-results"></div>
+    <div style="font-size:10.5px;color:var(--s400);margin-top:10px;line-height:1.5">Fórmula: gramos de ácido giberélico/Ha = ppm × mojamiento (L/Ha) ÷ 1000. Dosis de producto comercial = gramos Ac. Giberélico/Ha ÷ concentración del producto × 1000.</div>
+  </div>
+
+  <div class="fsec" id="f-alternativas">
+    <div class="fito-beta"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#B8791F" stroke-width="2" style="flex-shrink:0;margin-top:1px"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg><div><strong>BETA:</strong> puede contener errores. Productos alternativos equivalentes a los del programa base; confirma dosis con el Depto. Técnico.</div></div>
+    <div id="fito-alt-list"></div>
+  </div>
+    </section>
+
   </main>
 </div>
+
+<div id="ft-print"></div>
 
 <script>
 /* ═══════════════════════════════════════════════════════════════════
@@ -391,7 +799,7 @@ thead th.stick{z-index:4;background:var(--g50)}
    Lee cosecha.json, que sale del Excel FLUJO_CEREZOS con el script
    scripts/generar_cosecha.py. Esta página solo muestra: no escribe nada.
    ═══════════════════════════════════════════════════════════════════ */
-const APP_VERSION="4.9";
+const APP_VERSION="5.0";
 const LOGO_IMG="data:image/png;base64,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";
 document.getElementById("logo").src=LOGO_IMG;
 
@@ -401,6 +809,10 @@ var D=null, VISTA='hub';
 const $=id=>document.getElementById(id);
 const mil=n=>Math.round(n||0).toLocaleString('es-CL');
 const mil1=n=>(n==null?'—':Number(n).toLocaleString('es-CL',{maximumFractionDigits:1}));
+/* Dosis: desde 10 kg se escribe entera, bajo 10 con un decimal. Es como
+   salen hoy en el informe que se manda, y 1,5 kg/ha no puede verse como 2. */
+const mil2=n=>n==null?'—':Number(n).toLocaleString('es-CL',
+  {minimumFractionDigits:0,maximumFractionDigits:Math.abs(n)>=10?0:1});
 const pc=n=>n==null?'—':(n*100).toLocaleString('es-CL',{maximumFractionDigits:1})+'%';
 const esc=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const MES=['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
@@ -420,17 +832,24 @@ function ir(v){
   document.querySelectorAll('.view').forEach(e=>e.classList.remove('on'));
   const el=$('v-'+v); if(el)el.classList.add('on');
   document.querySelectorAll('.s-item').forEach(e=>e.classList.remove('on'));
-  const mapa={hub:'nav-hub',cerezas:'nav-cer',flujo:'nav-flujo',estim:'nav-est',kilos:'nav-kilos'};
-  const b=$(mapa[v]); if(b)b.classList.add('on');
-  const dentro=(v!=='hub');
-  ['lbl-cer','nav-flujo','nav-est','nav-kilos'].forEach(i=>{
-    const e=$(i); if(e)e.style.display=dentro?'':'none';
-  });
+  const b=$('nav-'+v); if(b)b.classList.add('on');
+  if(v!=='hub') abrirEspecie('cer',true);
   if(v==='flujo')renFlujo();
   if(v==='estim')renEstim();
   if(v==='kilos')renKilos();
+  if(v==='fert')abrirFert();
+  if(v==='fito')abrirFito();
   cerrarMenu();
   window.scrollTo(0,0);
+}
+
+/* Abrir o cerrar una especie del menú. Con forzar=true solo abre. */
+function abrirEspecie(k,forzar){
+  const g=$('grp-'+k), s=$('sub-'+k);
+  if(!g||!s)return;
+  const abierto = forzar ? true : !s.classList.contains('on');
+  s.classList.toggle('on',abierto);
+  g.setAttribute('aria-expanded',abierto?'true':'false');
 }
 function abrirMenu(){ $('side').classList.add('open'); $('scrim').classList.add('on'); }
 function cerrarMenu(){ $('side').classList.remove('open'); $('scrim').classList.remove('on'); }
@@ -1022,6 +1441,640 @@ function dibujarKilos(filas, sems){
   $('l-ks').innerHTML=filas.filter(r=>Object.values(r.kg).some(v=>v))
     .map((r,k)=>'<span class="leg"><i style="background:'+PAL[k%PAL.length]+'"></i>'+esc(r.vari)+'</span>').join('');
 }
+
+
+/* ══════════════════════════════════════════════════════════════════
+   PROGRAMA DE FERTILIZACIÓN
+   ──────────────────────────────────────────────────────────────────
+   Las mismas cuentas que hacen las planillas .xlsm, en el mismo orden:
+
+     Demanda       de los kilos, el portainjerto y el vigor sale
+                   cuánto N, P, K, Ca y Mg pide el huerto, y cómo se
+                   reparte entre las 4 etapas.
+     Aporte        ese requerimiento se cubre con productos: cada uno
+                   según su concentración. El producto marcado como
+                   "resto" se lleva el nitrógeno que faltó.
+     Distribución  la dosis de cada etapa se divide entre sus
+                   aplicaciones, y se corrige por superficie y por
+                   eficiencia del riego.
+
+   Comprobado contra los 4 archivos estándar: 328 de 328 valores
+   iguales a lo que dejó guardado el Excel.
+   ══════════════════════════════════════════════════════════════════ */
+var FERT=null, FP=null, FPROG='lapins_bajo_vigor';
+
+/* Excel redondea 10,5 a 11. Math.round hace lo mismo con positivos,
+   pero no con negativos; acá siempre se redondea alejándose de cero. */
+function rExcel(x){ return x>=0 ? Math.floor(x+0.5) : Math.ceil(x-0.5); }
+
+/* ── 1 · Demanda ────────────────────────────────────────────────── */
+function fertCorreccionFoliar(nut){
+  if(!FERT||!FERT.foliar) return 0;
+  if((FERT.foliar.sinCorreccion||[]).indexOf(nut)>=0) return 0;
+  const v=FERT.foliar.analisis[nut], r=FERT.foliar.rangos[nut];
+  if(v==null||!r) return 0;
+  const msHoja=1000*FERT.foliar.msFrutos*FERT.foliar.reparto;
+  var c=0;
+  if(v<r.min)      c=((r.optimo-v)/100)*msHoja;
+  else if(v>r.max) c=(-1*(v-r.optimo)/100)*msHoja;
+  return r.mitad ? c*0.5 : c;
+}
+
+function fertDemanda(e){
+  const col=FERT.portainjertos.indexOf(e.portainjerto);
+  const fila=FERT.matrizN[String(Number(e.indiceVigor).toFixed(1))]
+          || FERT.matrizN[String(Number(e.indiceVigor))];
+  const b=FP.basal;
+  const basal={
+    N: fila?fila[col]:0,
+    P: b.P,
+    K: e.portainjerto==='Colt'?b.kColt:b.kOtro,
+    Ca:b.Ca,
+    Mg:(e.portainjerto==='Maxma 14'||e.portainjerto==='Maxma 60')?b.mgMaxma:b.mgOtro
+  };
+  const total={}, detalle={};
+  NUTRI.forEach(function(n){
+    const extraccion=basal[n]*(e.kgHa/1000);
+    const corr=fertCorreccionFoliar(n)*(e.kgHa/1000);
+    total[n]=extraccion+corr;
+    detalle[n]={basal:basal[n],extraccion:extraccion,correccion:corr};
+  });
+  const etapas=[0,1,2,3].map(function(i){
+    const o={}; NUTRI.forEach(function(n){ o[n]=FP.parcializacion[n][i]*total[n]; });
+    return o;
+  });
+  return {basal:basal,total:total,detalle:detalle,etapas:etapas};
+}
+
+/* ── 2 · Aporte ─────────────────────────────────────────────────── */
+function fertAporte(etapasKg){
+  return etapasKg.map(function(req,i){
+    const r={}; NUTRI.forEach(function(n){ r[n]=rExcel(req[n]); });
+    r.Zn=FP.receta[i].zn||0;
+    const dosis={}, aportadoN={};
+    var sumaN=0, resto=null;
+    FP.receta[i].productos.forEach(function(p){
+      if(p.prop==='resto'){ resto=p; return; }
+      const conc=(FERT.fuentes[p.prod]||{})[p.nut]||0;
+      const d=conc? (r[p.nut]*p.prop)/(conc/100) : 0;
+      dosis[p.prod]=d;
+      sumaN += d*((FERT.fuentes[p.prod]||{}).N||0)/100;
+    });
+    if(resto){
+      const conc=(FERT.fuentes[resto.prod]||{}).N||0;
+      dosis[resto.prod]=conc? Math.max(0,r.N-sumaN)/(conc/100) : 0;
+    }
+    /* cuánto quedó aportado de cada nutriente, para el cuadro de control */
+    const aportado={};
+    NUTRI.concat(['Zn']).forEach(function(n){
+      aportado[n]=0;
+      for(const prod in dosis)
+        aportado[n]+=dosis[prod]*((FERT.fuentes[prod]||{})[n]||0)/100;
+    });
+    return {requerido:r,dosis:dosis,aportado:aportado};
+  });
+}
+
+/* ── 3 · Distribución ───────────────────────────────────────────── */
+function fertDistribucion(ap,e){
+  const d=FP.distribucion, acum=[];
+  var t=0; d.aplicaciones.forEach(function(n){ t+=n; acum.push(t); });
+  const semanas=acum[acum.length-1];
+  const filas=[];
+
+  /* la fila que va antes de la semana 1, con dosis fijas */
+  if(d.previo && Object.keys(d.previo.dosis||{}).length){
+    const f={previo:true,titulo:d.previo.titulo,aplicacion:0,etapa:null,dosis:{}};
+    d.columnas.forEach(function(c){ f.dosis[c]=d.previo.dosis[c]||0; });
+    filas.push(f);
+  }
+
+  for(var s=1;s<=semanas;s++){
+    var etapa=-1;
+    for(var i=0;i<acum.length;i++) if(s<=acum[i]){ etapa=i; break; }
+    const f={previo:false,aplicacion:s,etapa:etapa,dosis:{}};
+    d.columnas.forEach(function(c){
+      var v=0;
+      if(ap[etapa].dosis[c]!=null)
+        v=(ap[etapa].dosis[c]/d.aplicaciones[etapa])*e.superficie/e.eficiencia;
+      const m=(d.manual[c]||{})[String(s)];
+      if(m!=null) v=m*e.superficie;
+      f.dosis[c]=v;
+    });
+    filas.push(f);
+  }
+
+  const total={};
+  d.columnas.forEach(function(c){
+    total[c]=filas.reduce(function(a,f){ return a+(f.dosis[c]||0); },0);
+  });
+  return {filas:filas,total:total,semanas:semanas,acum:acum};
+}
+
+/* ── todo junto ─────────────────────────────────────────────────── */
+function fertCalcular(){
+  const e=fertEntradas();
+  const dem=fertDemanda(e);
+  const ap=fertAporte(dem.etapas);
+  const dist=fertDistribucion(ap,e);
+  return {entradas:e,demanda:dem,aporte:ap,dist:dist};
+}
+
+/* ── colores y símbolos de cada etapa ─────────────────────────────── */
+const ET_COLOR=[
+  {b:'#EDF6F0',l:'#CFE8D8',c:'#2C7A46',h:'#E3F0E8',
+   i:'<path d="M12 2v6M12 22v-6M4.9 4.9l4.2 4.2M19.1 19.1l-4.2-4.2M2 12h6M22 12h-6M4.9 19.1l4.2-4.2M19.1 4.9l-4.2 4.2"/><circle cx="12" cy="12" r="3"/>'},
+  {b:'#EBF3F8',l:'#C3DCEA',c:'#2E6B8F',h:'#E1EDF4',
+   i:'<path d="M12 3c3.5 4 5.5 6.7 5.5 9.5a5.5 5.5 0 11-11 0C6.5 9.7 8.5 7 12 3z"/>'},
+  {b:'#FCF2E6',l:'#F0DCB0',c:'#B8791F',h:'#F8EADA',
+   i:'<circle cx="12" cy="13.5" r="6.5"/><path d="M12 7V3M12 3c1.6-.6 3-2 3.4-3"/>'},
+  {b:'#F4EFF6',l:'#E0D2E8',c:'#7B4B6B',h:'#EDE5F1',
+   i:'<path d="M12 22c0-7 3-11 8-13-1 7-4 10-8 13zM12 22c0-6-2.6-9.6-7-11.5.9 6 3.4 8.8 7 11.5z"/>'}
+];
+const ROMANO=['I','II','III','IV'];
+const NUT_COLOR={N:'#2C7A46',P:'#2E6B8F',K:'#7B4B6B',Ca:'#B8791F',Mg:'#C0503C'};
+const NUT_NOM={N:'Nitrógeno',P:'Fósforo',K:'Potasio',Ca:'Calcio',Mg:'Magnesio'};
+const NUTRI=['N','P','K','Ca','Mg'];
+
+/* ── lectura de las perillas ──────────────────────────────────────── */
+function fertEntradas(){
+  return {
+    cuartel: $('ft-cuartel').value.trim(),
+    portainjerto: $('ft-porta').value,
+    indiceVigor: Number($('ft-vigor').value),
+    kgHa: Math.max(0,Number($('ft-kg').value)||0),
+    superficie: Math.max(0.01,Number($('ft-sup').value)||1),
+    eficiencia: Math.min(1,Math.max(0.1,(Number($('ft-efic').value)||90)/100))
+  };
+}
+
+/* ── arranque de la sección ───────────────────────────────────────── */
+var FERT_LISTO=false;
+async function abrirFert(){
+  if(FERT_LISTO) return;
+  if(!FERT){
+    try{ const r=await fetch('./fertilizacion.json',{cache:'no-store'}); FERT=await r.json(); }
+    catch(e){
+      $('ft-tabla-w').innerHTML='<div class="empty">No se pudo leer <b>fertilizacion.json</b>. '+
+        'Hay que generarlo con <code>python3 scripts/generar_fertilizacion.py</code>.</div>';
+      return;
+    }
+  }
+  pintaProgramas();
+  $('ft-porta').innerHTML=FERT.portainjertos.map(function(p){
+    return '<option value="'+esc(p)+'">'+esc(p)+'</option>'; }).join('');
+  $('ft-vigor').innerHTML=Object.keys(FERT.matrizN).sort(function(a,b){return a-b;})
+    .map(function(v){
+      return '<option value="'+v+'">'+Number(v).toLocaleString('es-CL')+'</option>'; }).join('');
+  $('ft-temp').textContent=FERT.meta.temporada.replace('-',' – ');
+  FERT_LISTO=true;
+  fertCambiarPrograma();
+  pintaComentarios();
+}
+
+/* Cada programa tipo es una receta distinta: cambia el reparto del
+   nitrógeno entre etapas y de dónde sale el potasio. Por eso van los
+   cuatro a la vista y no escondidos en una lista. */
+const PROG_COLOR={lapins_bajo_vigor:'#2C7A46',lapins_vigorosa:'#2E6B8F',
+                  santina_bajo_vigor:'#B8791F',santina_vigorosa:'#7B4B6B'};
+function pintaProgramas(){
+  $('ft-progs').innerHTML=FERT.meta.programas.map(function(k){
+    const p=FERT.programas[k];
+    const n=p.parcializacion.N;
+    const kFuente=(p.receta[3].productos.filter(function(x){return x.nut==='K';})[0]||{}).prod||'—';
+    return '<button class="pg-c'+(k===FPROG?' on':'')+'" id="pgc-'+k+'" '+
+      'style="--pc:'+(PROG_COLOR[k]||'var(--g700)')+'" onclick="fertCambiarPrograma(\''+k+'\')">'+
+      '<div class="pg-t">'+esc(p.nombre)+'</div>'+
+      '<div class="pg-s">'+(p.vigor==='vigorosa'
+        ? 'Todo el nitrógeno a post cosecha'
+        : 'Nitrógeno repartido en la temporada')+'</div>'+
+      '<div class="pg-k">N '+n.map(function(x){return Math.round(x*100);}).join('/')+
+      '  ·  K desde '+esc(kFuente.replace(' de ',' '))+'</div></button>';
+  }).join('');
+}
+
+function fertCambiarPrograma(k){
+  if(k) FPROG=k;
+  FP=FERT.programas[FPROG];
+  document.querySelectorAll('.pg-c').forEach(function(e){ e.classList.remove('on'); });
+  const b=$('pgc-'+FPROG); if(b)b.classList.add('on');
+  fertRestablecer();
+}
+
+/* Devolver las perillas a como viene el programa estándar. */
+function fertRestablecer(){
+  if(!FP)return;
+  const d=FP.defecto, di=FP.distribucion;
+  $('ft-cuartel').value=d.cuartel;
+  $('ft-porta').value=d.portainjerto;
+  $('ft-vigor').value=String(Number(d.indiceVigor).toFixed(1));
+  if(!$('ft-vigor').value||$('ft-vigor').selectedIndex<0)
+    $('ft-vigor').value=String(d.indiceVigor);
+  $('ft-kg').value=d.kgHa;
+  $('ft-sup').value=di.superficie;
+  $('ft-efic').value=Math.round(di.eficiencia*100);
+  renFert();
+}
+
+/* ── dibujo ───────────────────────────────────────────────────────── */
+function renFert(){
+  if(!FP)return;
+  const R=fertCalcular();
+  const e=R.entradas, d=FP.distribucion;
+
+  const cal=FERT.calificativo[String(Number(e.indiceVigor).toFixed(1))]||
+            FERT.calificativo[String(e.indiceVigor)]||'';
+  $('ft-vigor-h').textContent=cal;
+  $('ft-sub').textContent=FP.nombre+' · '+esc(e.cuartel||'sin cuartel')+
+    ' · '+mil(e.kgHa)+' kg/ha';
+  $('ft-unidad').textContent=e.superficie===1
+    ? '(kg/ha)' : '(kg para '+mil1(e.superficie)+' ha)';
+
+  /* aviso: el programa tipo viene con un vigor y un portainjerto */
+  const cambiado=[];
+  if(e.portainjerto!==FP.defecto.portainjerto) cambiado.push('portainjerto');
+  if(Number(e.indiceVigor)!==Number(FP.defecto.indiceVigor)) cambiado.push('índice de vigor');
+  if(e.kgHa!==FP.defecto.kgHa) cambiado.push('producción');
+  $('ft-aviso').innerHTML=
+    'El reparto entre etapas y los productos los fija el <b>'+esc(FP.nombre)+'</b>. '+
+    (FP.vigor==='vigorosa'
+      ? 'En un huerto vigoroso todo el nitrógeno va a post cosecha y el potasio entra como sulfato, para no empujar más vigor.'
+      : 'En un huerto de vigor bajo el nitrógeno se reparte durante la temporada y el potasio entra como nitrato.')+
+    (cambiado.length? ' Cambiaste <b>'+cambiado.join(', ')+'</b> respecto del estándar.' : '');
+
+  pintaEtapas(R);
+  pintaNutrientes(R);
+  pintaTabla(R);
+}
+
+function pintaEtapas(R){
+  const d=FP.distribucion;
+  $('ft-etapas').innerHTML=d.estados.map(function(txt,i){
+    const c=ET_COLOR[i];
+    const kg=NUTRI.reduce(function(a,n){ return a+R.demanda.etapas[i][n]; },0);
+    return '<div class="et" style="--etb:'+c.b+';--etl:'+c.l+';--etc:'+c.c+'">'+
+      '<div class="et-h"><div class="et-i"><svg viewBox="0 0 24 24" fill="none" '+
+        'stroke="currentColor" stroke-width="1.9" stroke-linecap="round">'+c.i+'</svg></div>'+
+        '<div class="et-n">'+ROMANO[i]+'</div></div>'+
+      '<div class="et-t">'+esc(txt)+'</div>'+
+      '<div class="et-f">'+
+        '<span class="et-d"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><b>'+
+          d.aplicaciones[i]+'</b> aplicaciones</span>'+
+        '<span class="et-d"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M3 9h18M8 2v4M16 2v4"/></svg><b>'+
+          R.dist.acum[i]+'</b> semanas acumuladas</span>'+
+        '<span class="et-d"><b>'+mil1(kg)+'</b> kg/ha de nutriente</span>'+
+      '</div></div>';
+  }).join('');
+}
+
+function pintaNutrientes(R){
+  const tot=R.demanda.total;
+  const aportado={};
+  NUTRI.forEach(function(n){
+    aportado[n]=R.aporte.reduce(function(a,et){ return a+et.aportado[n]; },0);
+  });
+  const max=Math.max.apply(null,NUTRI.map(function(n){return Math.max(tot[n],aportado[n]);}))||1;
+
+  $('ft-nut').innerHTML=NUTRI.map(function(n){
+    const det=R.demanda.detalle[n];
+    const pct=Math.max(0,Math.min(100,(tot[n]/max)*100));
+    return '<div class="nu" style="--nc:'+NUT_COLOR[n]+'">'+
+      '<div class="nu-h"><span class="nu-s">'+n+'</span>'+
+        '<span class="nu-l">'+NUT_NOM[n]+'</span></div>'+
+      '<div class="nu-v">'+mil1(tot[n])+'<small>kg/ha</small></div>'+
+      '<div class="nu-b"><i style="width:'+pct+'%"></i></div>'+
+      '<div class="nu-f">'+mil1(det.basal)+' kg por tonelada'+
+        (Math.abs(det.correccion)>0.05
+          ? ' · foliar '+(det.correccion>0?'+':'')+mil1(det.correccion)+' kg/ha' : '')+
+        '<br>aportado '+mil1(aportado[n])+' kg/ha</div></div>';
+  }).join('');
+
+  /* ¿lo que se aplica cubre lo que se pide? */
+  const faltan=NUTRI.filter(function(n){
+    return tot[n]>0.5 && aportado[n] < tot[n]*0.95;
+  });
+  const sobran=NUTRI.filter(function(n){ return aportado[n] > tot[n]*1.12+1; });
+  var html='';
+  if(faltan.length)
+    html+='<div class="note note-w"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.3 3.9L1.8 18a2 2 0 001.7 3h17a2 2 0 001.7-3L13.7 3.9a2 2 0 00-3.4 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>'+
+      '<div><b>El programa no alcanza a cubrir '+faltan.join(', ')+'.</b> '+
+      'Pasa cuando una etapa pide un nutriente que ningún producto de esa etapa aporta. '+
+      'Revísalo antes de mandarlo.</div></div>';
+  else if(sobran.length)
+    html+='<div class="note note-i"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>'+
+      '<div>Se aporta más '+sobran.join(', ')+' del que pide el cálculo, porque viene '+
+      'de arrastre en otros productos (el nitrato de potasio trae nitrógeno, por ejemplo).</div></div>';
+  else
+    html+='<div class="note note-g"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M20 6L9 17l-5-5"/></svg>'+
+      '<div>Lo que aportan los productos cubre el requerimiento calculado en los cinco nutrientes.</div></div>';
+  $('ft-cuadra').innerHTML=html;
+}
+
+function pintaTabla(R){
+  const d=FP.distribucion, cols=d.columnas;
+  var h='<thead><tr><th class="l">Etapa</th><th>Aplicación</th>'+
+    cols.map(function(c){ return '<th>'+esc(c)+'</th>'; }).join('')+'</tr></thead><tbody>';
+
+  /* cuántas filas tiene cada etapa, para unir la celda de la izquierda */
+  const porEtapa={};
+  R.dist.filas.forEach(function(f){
+    if(f.previo)return;
+    porEtapa[f.etapa]=(porEtapa[f.etapa]||0)+1;
+  });
+  const yaPuesta={};
+
+  R.dist.filas.forEach(function(f){
+    if(f.previo){
+      h+='<tr><td class="l et-cell" style="--etc:var(--mut)">—<small>'+esc(f.titulo)+'</small></td>'+
+        '<td class="ap-cell">0</td>'+
+        cols.map(function(c){ return celda(f.dosis[c],false); }).join('')+'</tr>';
+      return;
+    }
+    const c=ET_COLOR[f.etapa];
+    h+='<tr style="--eb:'+c.b+';--ebh:'+c.h+'">';
+    if(!yaPuesta[f.etapa]){
+      yaPuesta[f.etapa]=true;
+      h+='<td class="l et-cell" rowspan="'+porEtapa[f.etapa]+'" style="--etc:'+c.c+
+         ';background:'+c.b+'">'+ROMANO[f.etapa]+
+         '<small>'+esc(d.estados[f.etapa])+'</small></td>';
+    }
+    h+='<td class="ap-cell">'+f.aplicacion+'</td>'+
+      cols.map(function(col){
+        const esManual=(d.manual[col]||{})[String(f.aplicacion)]!=null;
+        return celda(f.dosis[col],esManual);
+      }).join('')+'</tr>';
+  });
+
+  h+='</tbody><tfoot><tr><td class="l" colspan="2">Total</td>'+
+    cols.map(function(c){
+      const v=R.dist.total[c];
+      return '<td>'+(v>0.004?mil2(v):'—')+'</td>'; }).join('')+'</tr></tfoot>';
+  $('ft-tabla').innerHTML=h;
+
+  const nMan=cols.filter(function(c){ return Object.keys(d.manual[c]||{}).length; }).length;
+  $('ft-pie').innerHTML='Las dosis salen del requerimiento del huerto repartido entre las '+
+    'aplicaciones de cada etapa, corregido por la superficie del bloque y la eficiencia del riego. '+
+    'Las celdas con un punto <span style="display:inline-block;width:5px;height:5px;border-radius:50%;'+
+    'background:var(--warn);vertical-align:1px"></span> son dosis fijas del programa ('+nMan+
+    ' productos), no se calculan.';
+}
+
+function celda(v,manual){
+  if(v==null||v<0.004) return '<td><span class="z">—</span></td>';
+  return '<td'+(manual?' class="man"':'')+'>'+mil2(v)+'</td>';
+}
+
+function pintaComentarios(){
+  const c=FERT.comentarios||[];
+  $('ft-coment').innerHTML=c.map(function(t){
+    if(/^Comentarios:?$/i.test(t)) return '';
+    /* los párrafos que no terminan en punto y son cortos son títulos */
+    const titulo=/^[A-ZÁÉÍÓÚÑ0-9][^•]*:$/.test(t)||
+      (t.length<70 && !/[.;]$/.test(t) && !/^•/.test(t) && !/^\d\./.test(t));
+    const vinieta=/^•/.test(t);
+    const clase=titulo?'t':(vinieta?'b':'');
+    return '<p class="'+clase+'">'+esc(t.replace(/^•\s*/,''))+'</p>';
+  }).join('');
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   EXPORTAR EL INFORME
+   ──────────────────────────────────────────────────────────────────
+   Arma una hoja aparte con el mismo orden que el PDF que se manda
+   hoy: encabezado, etapas, tabla de dosis y los comentarios en la
+   segunda página. Después abre el diálogo de impresión del navegador,
+   donde se elige "Guardar como PDF".
+
+   Se hace así a propósito y no con una librería: el navegador pagina
+   solo, respeta las tildes y funciona sin internet. La librería
+   habría que bajarla de afuera y en el campo no siempre hay señal.
+   ══════════════════════════════════════════════════════════════════ */
+function fertImprimir(){
+  const R=fertCalcular(), e=R.entradas, d=FP.distribucion, cols=d.columnas;
+  const hoy=new Date().toLocaleDateString('es-CL',{day:'numeric',month:'long',year:'numeric'});
+
+  var dato=function(l,v){
+    return '<tr><td class="pk">'+esc(l)+'</td><td class="pv">'+esc(v)+'</td></tr>'; };
+
+  var h='<div class="pg">'+
+    '<div class="ph"><div><div class="ph-t">PROGRAMA DE FERTILIZACIÓN</div>'+
+      '<div class="ph-s">Temporada '+esc(FERT.meta.temporada)+' · '+esc(FP.nombre)+'</div></div>'+
+      '<img class="ph-l" src="'+LOGO_IMG+'" alt=""></div>'+
+
+    '<div class="pcols"><table class="pd">'+
+      dato('Cuartel',e.cuartel||'—')+
+      dato('Variedad',FP.variedad)+
+      dato('Portainjerto',e.portainjerto)+
+      dato('Índice de vigor',Number(e.indiceVigor).toLocaleString('es-CL')+
+           ' · '+(FERT.calificativo[String(e.indiceVigor.toFixed(1))]||
+                  FERT.calificativo[String(e.indiceVigor)]||''))+
+      dato('Producción esperada',mil(e.kgHa)+' kg/ha')+
+    '</table><table class="pd">'+
+      dato('Superficie bloque',mil1(e.superficie)+' ha')+
+      dato('Eficiencia sistema riego',Math.round(e.eficiencia*100)+'%')+
+      dato('Requerimiento total',NUTRI.map(function(n){
+        return n+' '+mil1(R.demanda.total[n]); }).join(' · ')+' kg/ha')+
+      dato('Emitido',hoy)+
+    '</table></div>'+
+
+    '<table class="pe"><thead><tr><th>Etapa</th><th>Estado fenológico</th>'+
+      '<th>N° aplicaciones</th><th>Semanas acumuladas</th></tr></thead><tbody>'+
+      d.estados.map(function(t,i){
+        return '<tr><td class="pr">'+ROMANO[i]+'</td><td>'+esc(t)+'</td>'+
+          '<td class="pn">'+d.aplicaciones[i]+'</td>'+
+          '<td class="pn">'+R.dist.acum[i]+'</td></tr>'; }).join('')+
+    '</tbody></table>'+
+
+    '<div class="pt-t">Dosis de fertilizante '+
+      (e.superficie===1?'(kg/ha)':'(kg para '+mil1(e.superficie)+' ha)')+'</div>'+
+    '<table class="pt"><thead><tr><th class="l">Etapa</th><th>Aplic.</th>'+
+      cols.map(function(c){ return '<th>'+esc(c)+'</th>'; }).join('')+'</tr></thead><tbody>';
+
+  const porEtapa={}, puesta={};
+  R.dist.filas.forEach(function(f){ if(!f.previo) porEtapa[f.etapa]=(porEtapa[f.etapa]||0)+1; });
+  R.dist.filas.forEach(function(f){
+    if(f.previo){
+      h+='<tr><td class="l">'+esc(f.titulo)+'</td><td class="pn">0</td>'+
+        cols.map(function(c){ return pcelda(f.dosis[c]); }).join('')+'</tr>';
+      return;
+    }
+    h+='<tr class="e'+f.etapa+'">';
+    if(!puesta[f.etapa]){
+      puesta[f.etapa]=true;
+      h+='<td class="l pr" rowspan="'+porEtapa[f.etapa]+'">'+ROMANO[f.etapa]+
+         '<i>'+esc(d.estados[f.etapa])+'</i></td>';
+    }
+    h+='<td class="pn">'+f.aplicacion+'</td>'+
+      cols.map(function(c){ return pcelda(f.dosis[c]); }).join('')+'</tr>';
+  });
+  h+='</tbody><tfoot><tr><td class="l" colspan="2">Total</td>'+
+    cols.map(function(c){ return '<td>'+(R.dist.total[c]>0.004?mil2(R.dist.total[c]):'—')+'</td>'; })
+    .join('')+'</tr></tfoot></table></div>';
+
+  /* segunda hoja: los comentarios, tal cual se mandan */
+  h+='<div class="pg pg2"><div class="ph"><div><div class="ph-t">COMENTARIOS Y RECOMENDACIONES</div>'+
+    '<div class="ph-s">'+esc(FP.nombre)+' · '+esc(e.cuartel||'')+'</div></div>'+
+    '<img class="ph-l" src="'+LOGO_IMG+'" alt=""></div><div class="pc">'+
+    $('ft-coment').innerHTML+'</div>'+
+    '<div class="pf">Exportadora Los Olmos · Departamento Técnico · '+esc(hoy)+'</div></div>';
+
+  const caja=document.getElementById('ft-print');
+  caja.innerHTML=h;
+  document.body.classList.add('imprimiendo');
+  window.print();
+  setTimeout(function(){
+    document.body.classList.remove('imprimiendo');
+    caja.innerHTML='';
+  },400);
+}
+
+function pcelda(v){
+  return '<td>'+(v==null||v<0.004?'':mil2(v))+'</td>';
+}
+
+
+/* ── Programa Fitosanitario: navegación entre sus cuatro partes ── */
+const FTABS=[['hub','Inicio'],['programa','Programa Cerezos 2026-27'],
+             ['giberelico','Calculadora Giberélico'],['alternativas','Alternativas']];
+var FITO_LISTO=false;
+function abrirFito(){
+  if(FITO_LISTO)return;
+  FITO_LISTO=true;
+  $('f-tabs').innerHTML=FTABS.map(function(t,i){
+    return '<button class="ftab'+(i?'':' on')+'" id="ftab-'+t[0]+
+      '" onclick="showFitoView(\''+t[0]+'\')">'+esc(t[1])+'</button>'; }).join('');
+  const el=$('gib-prod-list');
+  if(el) el.innerHTML=FITO_GIB_PRODUCTS.map(function(p){
+    return '<div class="gib-result-card"><div class="gib-result-name">'+esc(p.name)+
+      '</div><div class="gib-result-val">'+p.conc+
+      '<span class="gib-result-unit"> '+(p.unit==='gr'?'gr/Kg':'gr/L')+'</span></div></div>'; }).join('');
+  showFitoView('hub');
+}
+function showFitoView(v){
+  document.querySelectorAll('.fsec').forEach(function(e){ e.classList.remove('on'); });
+  const s=$('f-'+v); if(s)s.classList.add('on');
+  document.querySelectorAll('.ftab').forEach(function(e){ e.classList.remove('on'); });
+  const t=$('ftab-'+v); if(t)t.classList.add('on');
+  if(v==='programa')renderFitoPrograma();
+  if(v==='alternativas')renderFitoAlternativas();
+  if(v==='giberelico')calcGiberelico();
+  window.scrollTo(0,0);
+}
+
+var FITO_CEREZO=[{"epo":"Julio-Agosto"},{"ap":1,"epo":"17de julio al 5 de","sag":"SR","obj":"Adelantar ó concentrar","con":"+","prod":"Dormex","ing":"Cianamida Hidrogenada","tip":"Nebuliz.","d100":"2000 cc","moj":"1000","tot":"20 l","obs":"Esta aplicación solo en variedades que se desean adelantar"},{"epo":"Agosto","obj":"floración","prod":"Silwett","d100":"15 cc","tot":"0.15 l","obs":"su Floracion para coincidir con polinizantes y/o concentrar floraciones. Dosis es variable según objetivo, fecha y variedad"},{"obs":"Mojamiento se realiza de acuerdo a la copa del árbol"},{"ap":2,"epo":"5 dias despues","obj":"Uniformar Floracion","con":"+","prod":"Siberio","d100":"5000 cc","moj":"1000","tot":"50 l","obs":"Se concetra la floración y brotacion, se aplica al 5%"},{"prod":"Nitrato de calcio","d100":"6000 cc","tot":"60 l","obs":"Se aplica al 6 %"},{"epo":"Junto al homogenizador","obj":"Estimular division celular temprano","prod":"Cytoplan 400 0","ing":"Ascophillum nodossum, 400 ppm citoquininas naturales","tip":"Nebuliz.","d100":"200 cc","dha":"2 l","tot":"2 l","obs":"2l/ha"},{"ap":3,"epo":"Fines de Julio hasta 10 de Agosto","sag":"EP","obj":"Escama ","prod":"Delico 100 EC","ing":"Piriproxifen","car":"ST= CHN","tip":"Nebuliz.","d100":"70 cc","moj":"1000","tot":"0.7 l"},{"epo":"70 a 80% poblacion sensible","car":"7 (UK)","ppm":"1"},{"epo":"Mediados de Agosto"},{"ap":4,"epo":"Yema Hinchada: yema engrosada con separacion de escamas","sag":"SR","obj":"Cancer Bacterial","con":"ó","prod":"Hidroxicobre 50 WG","ing":"Hidroxido de cobre (500 gr cobre metalico)","tip":"Nebuliz.","d100":"200 gr","moj":"1000","tot":"2 kg","obs":"Aplicar una de las 2 alternativas. "},{"sag":"SR","obj":"Cytospora, Cancer Bacterial","prod":"Consul 65 WP","ing":"Dodina","car":"CHN","ppm":"3","d100":"200 gr","tot":"2 kg"},{"epo":"Fines de Agosto primeros dias de Septiembre"},{"ap":5,"epo":"Huertos con alta presencia de cancer bacterial ó a condición de huerto.","sag":"EP","obj":"Enfermedades de madera ","prod":"Apolo 430 SC","ing":"Tebuconazole","car":"15=UK;4=CHN","ppm":"1;4","tip":"Nebuliz.","d100":"60 cc","moj":"1000","tot":"0.6 l"},{"ap":6,"epo":"Boton verde cerrado a ramillete expuesto","obj":"Estimular division celular","prod":"Cytoplan 400 1","ing":"Ascophillum nodossum, 400 ppm citoquininas naturales","tip":"Nebuliz.","d100":"133 cc","dha":"2 l","moj":"1500","tot":"1.995 l","obs":"2l/ha"},{"obj":"Anti estrés abiotico","prod":"Naturamin WSP","ing":"80% aa; 12,8% Nt","d100":"67 gr","dha":"0,3-1 kg","tot":"1.0050000000000001 kg","obs":"1kg/ha"},{"prod":"Poly Ca ","ing":"Calcio 1","d100":"200 cc","dha":"3 l","tot":"3 l"},{"sag":"SR","obj":"Huevos de arañita","prod":"Winspray Miscible","ing":"Aceite mineral","d100":"2000 cc","tot":"30 l"},{"ap":7,"epo":"Botón Blanco a 20% de flor","sag":"EP","obj":"Monilia, Botrits,Pseudomonas","con":"ó","prod":"Indar 2F","ing":"Fenbuconazole","car":"5=UK;5=CHN","ppm":"1","tip":"Nebuliz.","d100":"75 cc","moj":"1500","tot":"1.125 l"},{"sag":"EP","obj":"Tizon de la flor","prod":"Apolo 430 SC","ing":"Tebuconazole","car":"15=UK;4=CHN","ppm":"1;4","d100":"70 cc","tot":"1.05 l"},{"obj":"Mejora crec. de tubo polinico, anti stress.","prod":"Kelpura 1","ing":"Auxinas 0,0011% Citoquininas 0,000003%","d100":"300 cc","dha":"3 l","tot":"4.5 l"},{"sag":"SR","obj":"cancer bacterial","prod":"Strepto plus","ing":"Estreptomicina - Oxitetraciclina","car":"SR","d100":"60 gr","tot":"0.9 kg","obs":"Utilizar en huertos con historial de pseudomonas o en condiciones de potencial desarrollo de bacterias "},{"prod":"Poly Boro","ing":"Boro","d100":"35 cc","dha":"0.5 l","tot":"0.525 l"},{"prod":"Poly Zn","ing":"Zinc","d100":"35 cc","dha":"0.5 l","tot":"0.525 l"},{"prod":"Poly Ca ","ing":"Calcio 2","d100":"200 cc","dha":"3 l","tot":"3 l"},{"epo":"PROGRAMA AUMENTO CUAJA","obs":"Para bajar costos, una opcion es combinar aplicación hilera por medio de Retain con Propulse."},{"epo":"OPCION 1: Boton Blanco: (Se exponen los capullos blancos antes de abrirse) a 60% flor","obj":"Aumentar cuaja y produccion","prod":"Retain","ing":"Clorhidrato de aviglicina*","tip":"Nebuliz.","dha":"830 gr","moj":"1000","tot":"0.83 kg","obs":"Se usa en situaciones de poca cuaja,  Recomendado en variedades como Regina, Bing, Kordia, Santina con frio invernal deficiente; en situaciones de podas fuertes y/o donde se ve exacerbado el vigor consultar Depto Tec. Se debe aplicar con 1000 lts. "},{"epo":"OPCION 2: 40 A 50 % Flores abiertas","obj":"Aumentar cuaja y produccion","prod":"Propulse","ing":"20% Acido 2-naftiloxiacético; 2,5% 4-CPA; 1% Ácido Giberélico","tip":"Nebuliz.","dha":"100 tabletas","moj":"1000","tot":"100 tabletas","obs":"Se usa en situaciones de poca cuaja,  Recomendado en variedades como Regina, Bing, Kordia, Santina con frio invernal deficiente; en situaciones de podas fuertes y/o donde se ve exacerbado el vigor consultar Depto Tec. Se debe aplicar con 1000 lts. "},{"epo":"OPCION 3:                                                                               Boton Blanco a 20% flor","obj":"Aumentar cuaja y produccion","prod":"Basfoliar FruitGrow SL","ing":"N=0,39%; P2O5 1,4%; K2O= 0,31%; 1,1 g/l AIA ó 1,1 g/l AIB; 0,31 mg/l de accion citoquininica","tip":"Nebuliz.","d100":"300 cc","dha":"3 lts","moj":"1000","tot":"3 l","obs":"Son dos aplicaciones, 20% flor y 80% flor, ensayos realizados vs Stone Gross, no muestran diferencia estadstica entre tratamientos. Recomendado en huertos donde se requiera asegurar cuaja pero no tener excesos, Ej Variedades muy fertiles bajo cubiertas, lapins vigorozas, entre otras."},{"epo":"      80% flor","obj":"Aumentar cuaja y produccion","prod":"Basfoliar FruitGrow SL","ing":"N=0,39%; P2O5 1,4%; K2O= 0,31%; 1,1 g/l AIA ó 1,1 g/l AIB; 0,31 mg/l de accion citoquininica","tip":"Nebuliz.","d100":"300 cc","dha":"3 lts","moj":"1000","tot":"3 l"},{"epo":"Etapa 1: Division celular desde plena flor hasta endurecimiento carozo (CIT-AUX)"},{"ap":8,"epo":"Plena Flor: (80% flor) ha abierto el 50 % de las flores y se han desprendido los primeros petalos","sag":"SR","obj":"Monilia, Botritis, Alternaria","prod":"Frontal 425 SC","ing":"Fenhexamida - Fludioxonilo","car":"SR","ppm":"7;5","tip":"Nebuliz.","d100":"133 cc","moj":"1500","tot":"1.995 l"},{"obj":"Mejora crec. de tubo polinico, anti stress.","prod":"Kelpura 2","ing":"Auxinas 0,0011% Citoquininas 0,000003%","d100":"300 cc","dha":"3 l","tot":"4.5 l"},{"obj":"Anti estrés abiotico","prod":"Naturamin WSP 2","ing":"80% aa; 12,8% Nt","d100":"67 gr","dha":"0,3-1 kg","tot":"1.0050000000000001 kg","obs":"1kg/ha"},{"prod":"Poly Ca","ing":"Calcio 3","d100":"200 cc","dha":"3 l","tot":"3 l"},{"prod":"Poly Boro","ing":"Boro","d100":"35 cc","dha":"0.5 l","tot":"0.525 l"},{"prod":"Poly Zn","ing":"Zinc","d100":"35 cc","dha":"0.5 l","tot":"0.525 l"},{"sag":"EP","obj":"cancer bacterial","prod":"Agrygent Pluss","ing":"Sulfato de Gentamicina","d100":"80 gr","tot":"1.2 kg","obs":"Aplicar a condicion."},{"ap":9,"epo":"Caída de pétalos: flores senecentes botando petalos, (almenos 2 petalos caidos en el 80% de las flores)","sag":"EP","obj":"Botritis, Monilias, Tizon","prod":"Captan 83 WP","ing":"Captan","car":"7=UK;7=CHN","ppm":"6;25","tip":"Nebuliz.","d100":"180 gr","moj":"1500","tot":"2.7 kg","obs":"El Captan se aplica a 2,7 kg/ha"},{"prod":"Poly Zn","ing":"Zinc","d100":"35 cc","dha":"0.5 l","tot":"0.525 l"},{"prod":"Poly Ca","ing":"Calcio 4","d100":"200 cc","dha":"3 l","tot":"3 l"},{"epo":"Octubre"},{"epo":"PROGRAMA CONTROL DE VIGOR"},{"epo":"Desde Brotes de 5 a 10 cm","obj":"Control de vigor","prod":"Regalis Pluss","ing":"Prohexadiona-calcio","d100":"200 gr","moj":"1000","tot":"2","obs":"Aplicar con volumen de agua de 1.000 a 1.500 lts"},{"epo":"7 dias despues","prod":"Molystar","ing":"7,2 % Fósforo; 17,2 % Molibdeno","d100":"18 cc","dha":"250 cc","tot":"0.18","obs":"Aplicaciones pueden coincidir con otras del programa"},{"epo":"7 dias despues","prod":"Molystar","ing":"7,2 % Fósforo; 17,2 % Molibdeno","d100":"18 cc","dha":"250 cc","tot":"0.18"},{"epo":"Caida de collar y restos florales: Riesgo sanitario con lluvias. 5 a 10 dias despues caida pet.","sag":"SR","obj":"Alternaria alternata, Botrytis cinerea, Monilia laxa, Monilia fruticola","prod":"Amistar Top ó Tatio 325 SC","ing":"20% Azoxistrobina; 12,5% Difenoconazole","car":"SR=UK;SR=CHN","ppm":"2/0,2","tip":"Nebuliz.","d100":"40 cc","dha":"0.6 l","moj":"1500","tot":"0.6 l","obs":"Repetir si hay condiciones predisponentes para la enfermedad."},{"ap":10,"obj":"Mejorar Calibre","prod":"Cytoplan 400 2","ing":"Ascophillum nodossum, 400 ppm citoquininas naturales","d100":"133 cc","dha":"2 l","tot":"1.995 l","obs":"Selefrut : 5,6% carbono orgánico, ademas P,K,Mg,Zn"},{"obj":"Resistencia planta-Promueve aux-cit.","prod":"Martello 1","ing":"Ascophillum ","d100":"133 cc","dha":"2 l","tot":"1.995 l"},{"prod":"Poly Ca","ing":"Calcio 5","d100":"200 cc","dha":"3 l","tot":"3 l"},{"obj":"Aumentar carbohidratos, disminuicion de pasma","prod":"CARBOFUEL","ing":"Ecklonia maxima 29%;a.alginico 2%;Manitol 0,1%;P2O5 19,4%, SO3:4,7%K2O 3,1%MgO 2%, Zn1,9%","d100":"200 cc","dha":"3 a 5 l","tot":"3 l","obs":"La floracion es uno de los  procesos que mas energia demanda, donde la planta consume la mayoria de las reservas, por eso es importante darle un impulso extra mientras comienza a generar su propio alimento mediante la fotosintesis y mas tarde con la absorcion de nutrientes via riego, CARBOFUEL podria ser como una bebida energetica para la planta."},{"sag":"SR","obj":"Control de burrito.","prod":"Exirel","ing":"Ciantraniliprole","car":"1=UK;1=CHN","ppm":"6","d100":"100 cc","tot":"1.5 l","obs":"Aplicar solo si hay presencia de burritos"},{"epo":"Mediados de Octubre.  Etapa 2: Endurecimiento del Carozo"},{"ap":11,"epo":"Inicio crec frutos: \"Fruto verde\"","sag":"RA","obj":"Arañita roja - bimaculada ","con":"+","prod":"Fast pluss","ing":"Abamectina","car":"12=UK;SR=CHN","ppm":"0,01;0,07","tip":"Nebuliz.","d100":"100 cc","moj":"1500","tot":"1.5 l","obs":"En caso de existir presion muy alta de Bimaculada, cambiar Abamectina por Espirodiclofen"},{"prod":"Silwet","d100":"10 cc","tot":"0.15 l"},{"prod":"Poly Ca","ing":"Calcio 5","d100":"200 cc","dha":"3 l","tot":"3 l"},{"prod":"Poly Boro","ing":"Boro","d100":"35 cc","dha":"0.5 l","tot":"0.525 l"},{"prod":"Poly Mg","ing":"Magnesio","d100":"35 cc","dha":"0.5 l","tot":"0.525 l"},{"obj":"Aumentar carbohidratos, disminuicion de pasma","prod":"CARBOFUEL","ing":"Ecklonia maxima 29%;a.alginico 2%;Manitol 0,1%;P2O5 19,4%, SO3:4,7%K2O 3,1%MgO 2%, Zn1,9%","d100":"200 cc","dha":"3 a 5 l","tot":"0 l","obs":"La floracion es uno de los  procesos que mas energia demanda, donde la planta consume la mayoria de las reservas, por eso es importante darle un impulso extra mientras comianza a generar su propio alimento mediante la fotosintesis y mas tarde con la absorcion de nutrientes via riego, CARBOFUEL podria ser como una bebida energetica para la planta."},{"obj":"Resistencia planta-Promueve aux-cit.","prod":"Martello 2","ing":"Ascophillum ","d100":"133 cc","dha":"2 l","tot":"1.995 l"},{"obj":"Anti cracking, piel de lagarto, mejorar pedicelo","con":"+","prod":"Silikon","ing":"30% Oxido de Silicio","d100":"133 cc","dha":"2 a 4 l","tot":"1.995 l","obs":"Doble barrera contra partiduras y fisuras: la sinergia entre silicio y glycina betaina reducen la tasa de frutos partidos por lluvia, silicio fortalece la cascara exterior, la glycina betaina"},{"obj":"Osmoprotector, anticracking, antioxidante","prod":"FITOMAAT","ing":"10% N; 10%Prolina; 80%Glicina betaina","d100":"133 gr","dha":"2 kg","tot":"1.995 kg","obs":"contola la presion interior.  En primaveras lluviosas repetir cada 15 dias y agregar aplicación extra 24 a 48hrs previo a lluvia en estados mas vulnerables."},{"sag":"SR","obj":"Chanchito blanco, Escama coma","prod":"Movento","ing":"Spirotetramato","car":"12=UK;SR=CHN","ppm":"3;2","d100":"100 cc","dha":"1.8 l","tot":"1.5 l","obs":"Aplicación no obligatoria, aplica solo si hay presencia. 1,5 l/ha, Chanchito blanco y escama coma son plagas cuarentenarias para CHINA"},{"epo":"Etapa 3: Elongacion Celular, Quiebre de color (AG3)"},{"epo":"Color Pajizo: ","sag":"SR","obj":"Alternaria alternata, Botrytis cinerea, Monilia laxa, Monilia fruticola","prod":"Amistar Top ó Tatio 325 SC","ing":"20% Azoxistrobina; 12,5% Difenoconazole","car":"SR=UK;SR=CHN","ppm":"2/0,2","tip":"Nebuliz.","d100":"40 cc","dha":"0.6 l","moj":"1500","tot":"0.6 l","obs":"Aplicar en forma preventiva al follaje, en viraje de color o color pajizo si hay condiciones predisponentes para alternaria."},{"ap":12,"obj":"Firmeza y Calibre","prod":"Proggib 4% SL, Activol 4% SL, N-large","ing":"Acido Giberelico ","d100":"31.3 cc","dha":"10 ppm","tot":"0.4695 l","obs":"Dosis de aplicación se debe realizar en base a carga frutal, variedad y fecha de cosecha. revizar tabla adjunta y consultar al DPTO TECNICO"},{"prod":"Gibeerpluss 2.0","d100":"50 cc","dha":"10 ppm","tot":"0.75 l"},{"con":"+","prod":"Proggib 40 SG, Activol 40 SG","d100":"2.5 gr","dha":"10 ppm","tot":"0.0375 gr"},{"obj":"Calibre","prod":"Martello 3","ing":"Ascophillum ","d100":"133 cc","dha":"2 l","tot":"1.995 l","obs":"Adicionar a las aplicaciones de acido giberelico."},{"sag":"RA","obj":"Escama, polilla, Thrips calif, Chanchito, drososphyla","prod":"Colt 45 WP","ing":"Acetamiprid 40%","car":"3=UK;2=CHN","ppm":"1,5;2","d100":"20 gr","tot":"0.3 kg","obs":"Especialmente donde haya escama, chanchito y thrips"},{"ing":"Lambda cihalotrina 5%","car":"4=UK;4=CHN","ppm":"0.3"},{"prod":"Poly Ca","ing":"Calcio 6","d100":"200 cc","dha":"3 l","tot":"3 l"},{"prod":"Poly Boro","ing":"Boro","d100":"35 cc","dha":"0.5 l","tot":"0.525 l"},{"ap":13,"epo":"Pinta: Frutos viran de amarillo pajizo ","sag":"EP","obj":"Botritis","prod":"Teldor 500 SC","ing":"Fenhexamida","car":"2=UK;2=CHN","ppm":"7","tip":"Nebuliz.","d100":"80 cc","dha":"1.2 l","moj":"1500","tot":"1.2 l"},{"sag":"RA","obj":"Control drosophila suzukii, Polilla, Trips","prod":"Succes","ing":"Spinosad","car":"7","ppm":"0.2","d100":"13 cc","dha":"200-250 cc","tot":"0.195 l"},{"obj":"Anti estrés abiotico","prod":"Naturamin WSP","ing":"80% aa; 12,8% Nt","d100":"67 gr","dha":"0,3-1 kg","tot":"1.0050000000000001 kg","obs":"1kg/ha"},{"epo":"a coloración rosado ó rojo","prod":"Poly K","ing":"Potasio","d100":"300 cc","dha":"3 a 5 l","tot":"4.5 l"},{"obj":"Anti cracking, piel de lagarto, mejorar pedicelo","con":"+","prod":"Silikon","ing":"30% Oxido de Silicio","d100":"133 cc","dha":"2 a 4 l","tot":"1.995 l","obs":"Doble barrera contra partiduras y fisuras: la sinergia entre silicio y glycina betaina reducen la tasa de frutos partidos por lluvia, silicio fortalece la cascara exterior, la glycina betaina"},{"obj":"Osmoprotector, anticracking, antioxidante","prod":"FITOMAAT","ing":"10% N; 10%Prolina; 80%Glicina betaina","d100":"133 gr","dha":"2 kg","tot":"1.995 kg","obs":"contola la presion interior.  En primaveras lluviosas repetir cada 15 dias y agregar aplicación extra 24 a 48hrs previo a lluvia en estados mas vulnerables."},{"obj":"Stress termico. Disminuir daños por golpe de sol, bajar t° antioxidante","con":"+","prod":"VP filter","ing":"K2O:5,25%;SO3:2,24%;Zn1,68%;Fe:0,56%;MO:34,4%","d100":"200 cc","dha":"3 a 4 l","tot":"3 l","obs":"Aplicaciones no obligatorias"},{"obj":"Stress termico, Activar metabolismo de plantas, ","prod":"Megafol","ing":"K2o: 8%; C:9%; N3%","d100":"100 cc","dha":"1 a 3 l","tot":"1.5 l","obs":"Aplicaciones no obligatorias"},{"obj":"Mejorar color de fruta","con":"ó","prod":"M 10 AD","ing":"P2O5: 15 % - K2O: 20%  - B: 0,01 %  - Mn: 0,1 %  - Mo: 0,01 % ","d100":"500 cc","tot":"7.5 l","obs":"Aplicaciones no obligatorias"},{"obj":"Mejorar color, calibre","con":"ó","prod":"VITAZYME","ing":"Vit B1,B2 , B6 K20","d100":"133 cc","dha":"1 a 2 l","tot":"1.995 l","obs":"Aplicaciones no obligatorias"},{"obj":"Mejorar color de fruta, Brix","prod":"MANVERT AVANZA","d100":"100 cc","dha":"1.5 l","tot":"1.5 l","obs":"Aplicaciones no obligatorias"},{"ap":14,"epo":"7 dias despues del Teldor","sag":"EP","obj":"Botrytis, Monilia, Pudricion acida","prod":"Apolo 430 SC","ing":"Tebuconazole","car":"15=UK;4=CHN","ppm":"1;4","tip":"Nebuliz.","d100":"70 cc","moj":"1500","tot":"1.05 l"},{"prod":"Poly K","ing":"Potasio","d100":"300 cc","dha":"3 a 5 l","tot":"4.5 l"},{"sag":"SR","obj":"Control drosophila suzukii, Polilla, trips, burrito","prod":"Exirel","ing":"Ciantraniliprole","car":"1=UK;1=CHN","ppm":"6","d100":"100 cc","tot":"1.5 l"},{"obj":"Mejorar color de fruta","con":"ó","prod":"M 10 AD","ing":"P2O5: 15 % - K2O: 20%  - B: 0,01 %  - Mn: 0,1 %  - Mo: 0,01 % ","d100":"500 cc","tot":"7.5 l","obs":"Aplicaciones no obligatorias"},{"obj":"Mejorar color, calibre","con":"ó","prod":"VITAZYME","ing":"Vit B1,B2 , B6 K20","d100":"133 cc","dha":"1 a 2 l","tot":"1.995 l","obs":"Aplicaciones no obligatorias"},{"obj":"Mejorar color de fruta, Brix","prod":"MANVERT AVANZA","d100":"100 cc","tot":"1.5 l","obs":"Aplicaciones no obligatorias"},{"ap":15,"epo":"5 A 7 dias despues del Sivor","sag":"RA","obj":"Control drosophila suzukii, Polilla, Trips","prod":"Succes","ing":"Spinosad","car":"7","ppm":"0.2","tip":"Nebuliz.","d100":"13 cc","dha":"200-250 cc","moj":"1500","tot":"0.195 l"},{"obj":"Anti cracking, piel de lagarto, mejorar pedicelo","con":"+","prod":"Silikon","ing":"30% Oxido de Silicio","d100":"133 cc","dha":"2 a 4 l","tot":"1.995 l","obs":"Doble barrera contra partiduras y fisuras: la sinergia entre silicio y glycina betaina reducen la tasa de frutos partidos por lluvia, silicio fortalece la cascara exterior, la glycina betaina"},{"obj":"Osmoprotector, anticracking, antioxidante","prod":"FITOMAAT","ing":"10% N; 10%Prolina; 80%Glicina betaina","d100":"133 gr","dha":"2 kg","tot":"1.995 kg","obs":"contola la presion interior.  En primaveras lluviosas repetir cada 15 dias y agregar aplicación extra 24 a 48hrs previo a lluvia en estados mas vulnerables."},{"ap":16,"epo":"4 a 5 dias Pre-cosecha","sag":"EP","obj":"Botrytis, Alternaria, Penicilium","prod":"Switch One","ing":"50% Fludioxonilo","car":"SR","ppm":"5","tip":"Nebuliz.","d100":"67 cc","dha":"1 kg","moj":"1500","tot":"1.0050000000000001 l"},{"obj":"Control drosophila suzukii","prod":"Grandevo","ing":"Chromobacterium subtsugae","d100":"200 gr","dha":"3 kg","tot":"3 kg"},{"epo":"Post Cosecha Diciembre/Enero"},{"ap":17,"epo":"Inmediatamente terminada la cosecha","sag":"SR","obj":"Arañitas Bimaculada","prod":"Acramite 480 SC","ing":"Bifenazato","tip":"Nebuliz.","d100":"50 cc","dha":"1.25 l","moj":"2500","tot":"1.25 l","obs":"(1,25l/ha, realizar una aplicación por temporada) Aplicar en funcion de monitoreo"},{"prod":"Poly K","ing":"Potasio","d100":"180 cc","dha":"3 a 5 l","tot":"4.5 l"},{"ap":18,"epo":"7 dias despues de la aplicación anterior","obj":"Anti estrés abiotico-Inductor de defensa","prod":"Actigen RTF fert","ing":"Quitosano 3,2%, ac salicilico 1%, Nitrato Ca 1%","tip":"Nebuliz.","d100":"700 gr","dha":"7 kg","moj":"1000","tot":"7 kg"},{"epo":"Enero"},{"ap":19,"obj":"Evitar Frutos dobles ó stress","con":"ó","prod":"Protecsol","ing":"95% caolin","tip":"Nebuliz.","d100":"3333 gr","dha":"50 kg","moj":"1500","tot":"49.995 kg","obs":"Solo una aplicación de caolinita"},{"prod":"Greenblock","ing":"95% caolin","d100":"2500 gr","dha":"37.5 kg","tot":"37.5 kg"},{"obj":"Anti stress potencia bloqueador solar","prod":"Silikon","ing":"30% Oxido de Silicio","d100":"300 cc","tot":"4.5 l"},{"obj":"Resistencia planta-Promueve aux-cit.","prod":"Martello 5","ing":"Ascophillum ","d100":"133 cc","dha":"2 l","tot":"1.995 l"},{"ap":20,"obj":"Aumentar carbohidratos, disminuicion de stress","prod":"CARBOFUEL","ing":"Ecklonia maxima 29%;a.alginico 2%;Manitol 0,1%;P2O5 19,4%, SO3:4,7%K2O 3,1%MgO 2%, Zn1,9%","tip":"Nebuliz.","d100":"200 cc","dha":"3 a 5 l","moj":"1500","tot":"3 l","obs":"Aumentar reservas, disminuir stress. Aplicación puede coincidir con la anterior ó con la siguiente."},{"ap":21,"epo":"15 a 20 dias de aplicación de araña anterior","sag":"SR","obj":"Arañitas Bimaculada, Arañita europea","prod":"Borneo 11 SC","ing":"Etoxazol","tip":"Nebuliz.","d100":"50 cc","dha":"1.25 l","moj":"2000","tot":"1 l","obs":"(1,25l/ha, realizar una aplicación por temporada) Aplicar en funcion de monitoreo"},{"prod":"Poly K","ing":"Potasio","d100":"180 cc","dha":"3 a 5 l","tot":"3.6 l"},{"ap":22,"epo":"Se puede juntar con otra aplicación","sag":"RA","obj":"Burritos, Polilla","prod":"Avaunt 30 WG","ing":"Indoxacarb","tip":"Nebuliz.","d100":"17 gr","moj":"2000","tot":"0.34 kg","obs":"Solo si se detecan burritos o presencia de brotes atacados"},{"sag":"RA","obj":"Chanchito Blanco, escama, Drosofila. ","prod":"Diazinon 40 WP","ing":"Diazinon","d100":"150 gr","tot":"3 kg","obs":"Solo si hay pesencia en forma importante"},{"ap":23,"epo":"15 a 20 dias despues del anterior ","obj":"Resistencia planta-Promueve aux-cit.","prod":"Martello 6","ing":"Ascophillum ","tip":"Nebuliz.","d100":"133 cc","dha":"2 l","moj":"1500","tot":"1.995 l"},{"obj":"Anti stress potencia bloqueador solar","prod":"Silikon","ing":"30% Oxido de Silicio","d100":"300 cc","tot":"4.5 l"},{"obj":"Stress termico. Disminuir daños por golpe de sol.","prod":"Vp filter","ing":"K2O:5,25%;SO3:2,24%;Zn1,68%;Fe:0,56%;MO:34,4%","d100":"200 cc","dha":"3 a 4 l","tot":"3 l"},{"epo":"Febrero"},{"ap":24,"epo":"1 al 15 de febrero","obj":"Resistencia planta-Promueve aux-cit.","prod":"Martello 7","ing":"Ascophillum ","tip":"Nebuliz.","d100":"135 cc","dha":"2 l","moj":"1500","tot":"2.0250000000000004 l"},{"prod":"Poly K","ing":"Potasio","d100":"133 cc","dha":"3 a 5 l","tot":"1.995 l"},{"obj":"Anti estrés abiotico","prod":"Megafol","ing":"extractos vegetales","d100":"150 cc","dha":"1 a 3 l","tot":"2.25 l"},{"epo":"Marzo"},{"ap":25,"epo":"1 al 15 de Marzo","obj":"Acumular reservas","prod":"Poly Mg","ing":"Magnesio","tip":"Nebuliz.","d100":"35 cc","dha":"0.5 l","moj":"1500","tot":"0.525 l"},{"prod":"Poly B","ing":"Boro","d100":"35 cc","dha":"0.5 l","tot":"0.525 l"},{"prod":"Poly Zn","ing":"Zinc","d100":"35 cc","dha":"0.5 l","tot":"0.525 l"},{"obj":"Aumentar carbohidratos, disminuicion de stress","prod":"CARBOFUEL","ing":"Ecklonia maxima 29%;a.alginico 2%;Manitol 0,1%;P2O5 19,4%, SO3:4,7%K2O 3,1%MgO 2%, Zn1,9%","d100":"200 cc","dha":"3 a 5 l","tot":"3 l","obs":"Aumentar reservas, disminuir stress. Aplicación puede coincidir con la anterior ó con la siguiente."},{"obj":"Favorecer la entrada en receso ","con":"ó","prod":"Microcat boro-molibdeno","ing":"Molibdeno","d100":"135 cc","dha":"2 l","tot":"2.0250000000000004 l"},{"obj":"Traslocacion de nutrientes ","prod":"Molistop","ing":"Molibdeno","d100":"30 cc","tot":"0.45 l","obs":"Repetir a los 15 dias"},{"ap":26,"epo":"15 al 30 de Marzo","obj":"Acumular reservas","prod":"Poly Mg","ing":"Magnesio","tip":"Nebuliz.","d100":"35 cc","dha":"0.5 l","moj":"1500","tot":"0.525 l"},{"prod":"Poly B","ing":"Boro","d100":"35 cc","dha":"0.5 l","tot":"0.525 l"},{"prod":"Poly Zn","ing":"Zinc","d100":"35 cc","dha":"0.5 l","tot":"0.525 l"},{"obj":"Favorecer la entrada en receso ","con":"ó","prod":"Microcat boro-molibdeno","ing":"Molibdeno","d100":"135 cc","dha":"2 l","tot":"2.0250000000000004 l"},{"obj":"Traslocacion de nutrientes ","prod":"Molistop","ing":"Molibdeno","d100":"30 cc","tot":"0.45 l","obs":"Repetir a los 15 dias"},{"epo":"Abril"},{"ap":27,"epo":"1 al 15 de abril","obj":"Acumular reservas","prod":"Poly Mg","ing":"Magnesio","tip":"Nebuliz.","d100":"35 cc","dha":"0.5 l","moj":"1500","tot":"0.525 l"},{"prod":"Poly B","ing":"Boro","d100":"35 cc","dha":"0.5 l","tot":"0.525 l"},{"prod":"Poly Zn","ing":"Zinc","d100":"35 cc","dha":"0.5 l","tot":"0.525 l"},{"obj":"Favorecer la entrada en receso ","con":"ó","prod":"Microcat boro-molibdeno","ing":"Molibdeno","d100":"135 cc","dha":"2 l","tot":"2.0250000000000004 l"},{"obj":"Traslocacion de nutrientes ","prod":"Molistop","ing":"Molibdeno","d100":"30 cc","tot":"0.45 l","obs":"Repetir a los 15 dias"},{"epo":"Abril-Mayo"},{"ap":28,"epo":"Huertos de 1 a 3 años","obj":"Cancer Bacterial","tip":"Brocha","obs":"Mezclar 1 galon de latex blanco de interior mas, 500 gr"},{"obj":"(Pintura de troncos)","tip":"a ","obs":"de Hidrocob + 10 gr de streptoplus + 1kg colafria, pintar los troncos unos 70 cm"},{"tip":"mano","obs":"desde el suelo. (Agregar agua si la mezcla queda espeza)"},{"ap":29,"epo":"Fines de abril a primeros dias de mayo","obj":"Estimular caída de","prod":"Urea","tip":"Nebuliz.","d100":"5000 gr","moj":"1500","tot":"75 kg","obs":"Aplicación solo en huertos con buen vigor. Es posible que en"},{"obj":"hojas","prod":"Sulfato de cobre","d100":"1500 gr","tot":"22.5 kg","obs":"huertos de 2° a 4° hoja se retrase a fines de Abril"},{"ap":30,"epo":"10 dias previo a caida de hojas","prod":"Baciforte","ing":"Bascillus subtillis cepa C55","tip":"Nebuliz.","d100":"150 cc","moj":"1500","tot":"2.25 l"},{"ap":31,"epo":"5 a 7 dias depues","prod":"Consul 65 WP","ing":"Dodina","tip":"Nebuliz.","d100":"200 gr","moj":"1500","tot":"3 l"},{"ap":32,"epo":"5 a 7 dias depues","prod":"Agrocopper","ing":"Sulfato de cobre pentahidratado","tip":"Nebuliz.","d100":"60 cc","moj":"1500","tot":"0.9 l","obs":"La cantidad de aplicaciones de Cobre, estará determinada de acuerdo al tiempo que demore en caer la hoja. Hoja amarilla se considera hoja caida"},{"ap":33,"epo":"10 a 15 dias despues ","prod":"Agrocopper","ing":"Sulfato de cobre pentahidratado","tip":"Nebuliz.","d100":"60 cc","moj":"1500","tot":"0.9 l"},{"ap":34,"epo":"20 a 25 dias despues ó a condicion (Heladas, alzas de t° sobre los 20° C","prod":"Agrocopper","ing":"Sulfato de cobre pentahidratado","tip":"Nebuliz.","d100":"60 cc","moj":"1500","tot":"0.9 l"},{"ap":35,"epo":"Inicio de invierno ó previo a lluvias sobre 30 mm, que no permitan el ingreso posterior al campo","obj":"Cancer Bacterial ","con":"ó","prod":"Caldo Bordeles Valles","ing":"Caldo bordales","tip":"Nebuliz.","d100":"750 gr","moj":"1500","tot":"11.25 kg","obs":"Especialmente en huertos con presencia de cancer"},{"prod":"Cuprobordales Agrospec","ing":"Caldo bordales"},{"obs":"Mojamiento se realiza de acuerdo a la copa del árbol"}];var FITO_ALT=[{"n":1,"prog":"NATURAMIN WSP","progD":"0,3-1Kg","alt":"VINTAC 80 SP","altD":"0,3-1Kg"},{"n":2,"prog":"CYTOPLAN 400","progD":"2L","alt":"MANVERT FOLIKIN","altD":"200cc"},{"alt":"BRIO 440","altD":"2L"},{"n":3,"prog":"MARTELLO","progD":"2L","alt":"STIMPLEX","altD":"3L"},{"alt":"CALIPER PLUSS","altD":"2 A 3L"},{"n":4,"prog":"KELPURA ","progD":"3L","alt":"KELPAK","altD":"3L"},{"alt":"VITAPLANT KELP","altD":"300 cc"},{"alt":"BASFOLIAR KELP","altD":"3L"},{"n":5,"prog":"STREPTO PLUS","progD":"60 gr","alt":"AGRIGENT PLUS","altD":"80 gr"},{"n":6,"prog":"INDAR 2F","progD":"75 cc","alt":"APOLO 430 SC","altD":"40 cc"},{"n":7,"prog":"FRONTAL 425 SC","progD":"2L","alt":"FUSION 425 SC","altD":"2L"},{"alt":"FONTELIS","altD":"1,4-1,6 L"},{"n":8,"prog":"TELDOR 500 SC","progD":"1,2 L","alt":"ALTIVO 500 SC","altD":"1,2 L"},{"n":9,"prog":"SWITCH ONE","progD":"1 KG","alt":"FRONTAL 425 SC","altD":"2L"},{"n":10,"prog":"CONSUL 65 WP","progD":"100-200 gr","alt":"SILLYT 400 SC","altD":"163-325 cc"},{"n":11,"prog":"CAPTAN 83 WP","progD":"180 gr","alt":"CAPTAN  GOLD 80 WG","altD":"180 gr"},{"n":12,"prog":"APOLO 430 SC","progD":"70 gr","alt":"VERTICE 43 SC","altD":"70 gr"},{"n":13,"prog":"SIVOR","progD":"100 cc","alt":"EXIREL","altD":"100 cc"},{"n":14,"prog":"DELEGATE ","progD":"300 gr","alt":"SUCCESS 48","altD":"250 cc"},{"n":15,"prog":"FAST PLUS","progD":"100 cc","alt":"VERTIMEC 018 EC","altD":"100 cc"},{"n":16,"prog":"ACRAMITE 480 SC","progD":"50 cc","alt":"SPIRIT 500 SC","altD":"50 cc"}];
+
+var FITO_GIB_PRODUCTS=[
+  {name:'Progib 4% SL / Activol 4% SL / N-Large',conc:32,unit:'cc'},
+  {name:'Gibberpluss 2.0 SL',conc:20,unit:'cc'},
+  {name:'Progibb 40% SG / Activol 40% SG',conc:400,unit:'gr'}
+];
+
+var FITO_PROG_GROUPS=null;
+
+function calcGiberelico(){
+  var el=document.getElementById('gib-results');
+  if(!el)return;
+  var ppmI=document.getElementById('gib-ppm'),mojI=document.getElementById('gib-moj');
+  var ppm=parseFloat(ppmI&&ppmI.value)||0;
+  var moj=parseFloat(mojI&&mojI.value)||0;
+  var acGrHa=ppm*moj/1000;
+  el.innerHTML=FITO_GIB_PRODUCTS.map(function(p){
+    var prodHa=p.conc>0?(acGrHa/p.conc*1000):0;
+    var prod100=moj>0?(prodHa/moj*100):0;
+    return '<div class="gib-result-card">'+
+      '<div><div class="gib-result-name">'+p.name+'</div><div class="gib-result-sub">Concentración: '+p.conc+' '+(p.unit==='gr'?'gr/Kg':'gr/L')+' · Ac. Giberélico: '+acGrHa.toFixed(2)+' gr/Ha</div></div>'+
+      '<div style="text-align:right"><div class="gib-result-val">'+prodHa.toFixed(2)+'<span class="gib-result-unit"> '+p.unit+'/Ha</span></div><div class="gib-result-sub">'+prod100.toFixed(3)+' '+p.unit+'/100L</div></div>'+
+    '</div>';
+  }).join('');
+}
+
+function fitoItemLine(it){
+  var parts=[];
+  if(it.d100)parts.push(it.d100+'/100L');
+  if(it.dha)parts.push(it.dha+'/Ha');
+  var dosisTxt=parts.join(' · ');
+  var head='<strong>'+(it.prod||'—')+'</strong>'+(it.con?' <span style="color:var(--s400)">'+it.con+'</span>':'');
+  return '<div class="fito-row" style="display:flex;justify-content:space-between;gap:8px"><span>'+head+(it.obj?' — '+it.obj:'')+'</span><span style="white-space:nowrap;color:var(--g700);font-weight:700">'+dosisTxt+'</span></div>'+
+    (it.ing?'<div class="fito-row" style="color:var(--s400);font-size:10.5px">'+it.ing+(it.car?' · Carencia: '+it.car:'')+'</div>':'')+
+    (it.obs?'<div class="fito-obs">'+it.obs+'</div>':'');
+}
+
+function groupFitoAlt(){
+  var groups=[],cur=null;
+  FITO_ALT.forEach(function(r){
+    if(r.n){
+      cur={n:r.n,prog:r.prog,progD:r.progD,alts:[]};
+      groups.push(cur);
+    }
+    if(cur&&r.alt)cur.alts.push({name:r.alt,d:r.altD});
+  });
+  return groups;
+}
+
+function groupFitoPrograma(){
+  if(FITO_PROG_GROUPS)return FITO_PROG_GROUPS;
+  var blocks=[],cur=null;
+  FITO_CEREZO.forEach(function(r){
+    var hasCore=!!(r.prod||r.obj);
+    if(r.ap){
+      cur={ap:r.ap,epo:r.epo,sag:r.sag,items:[]};
+      blocks.push(cur);
+      cur.items.push(r);
+    }else if(!hasCore){
+      blocks.push({divider:true,text:r.fen||r.epo||'',obs:r.obs});
+      cur=null;
+    }else{
+      if(!cur){cur={ap:null,epo:r.epo,sag:r.sag,items:[]};blocks.push(cur);}
+      if(!cur.epo&&r.epo)cur.epo=r.epo;
+      if(!cur.sag&&r.sag)cur.sag=r.sag;
+      cur.items.push(r);
+    }
+  });
+  FITO_PROG_GROUPS=blocks;
+  return blocks;
+}
+
+function renderFitoAlternativas(){
+  var el=document.getElementById('fito-alt-list');
+  if(!el)return;
+  var groups=groupFitoAlt();
+  el.innerHTML=groups.map(function(g){
+    return '<div class="fito-card">'+
+      '<div class="fito-card-hdr"><div class="fito-card-n">'+g.n+'</div><div style="flex:1"><div class="fito-card-title">'+g.prog+'</div><div class="fito-card-sub">Dosis programa: '+(g.progD||'—')+'</div></div></div>'+
+      '<div class="fito-row" style="color:var(--s500);font-weight:700;font-size:10.5px;margin-top:4px">ALTERNATIVAS</div>'+
+      g.alts.map(function(a){return '<div class="fito-row">• '+a.name+' <span style="color:var(--s400)">('+(a.d||'—')+')</span></div>';}).join('')+
+    '</div>';
+  }).join('');
+}
+
+function renderFitoPrograma(){
+  var el=document.getElementById('fito-prog-list');
+  if(!el)return;
+  var qI=document.getElementById('fito-prog-search');
+  var q=((qI&&qI.value)||'').toLowerCase().trim();
+  var groups=groupFitoPrograma();
+  var html='';
+  groups.forEach(function(g){
+    if(g.divider){
+      if(!q){
+        html+='<div style="font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--s500);font-weight:700;padding:12px 2px 6px">'+g.text+'</div>';
+      }
+      return;
+    }
+    var text=(g.epo||'')+' '+g.items.map(function(it){return [it.prod,it.obj,it.ing].filter(Boolean).join(' ');}).join(' ');
+    if(q&&text.toLowerCase().indexOf(q)<0)return;
+    var badges='';
+    if(g.sag)badges+='<span class="fito-badge sag">SAG: '+g.sag+'</span>';
+    html+='<div class="fito-card">'+
+      '<div class="fito-card-hdr"><div class="fito-card-n">'+(g.ap||'·')+'</div><div style="flex:1"><div class="fito-card-title">'+(g.epo||'Aplicación')+'</div>'+(badges?'<div class="fito-badges">'+badges+'</div>':'')+'</div></div>'+
+      g.items.map(fitoItemLine).join('')+
+    '</div>';
+  });
+  if(!html)html='<div class="empty-st"><svg class="empty-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><div class="empty-t">Sin resultados</div><div class="empty-s">Prueba con otro término de búsqueda</div></div>';
+  el.innerHTML=html;
+}
+
+
 
 /* ── arranque ── */
 window.addEventListener('resize',()=>{

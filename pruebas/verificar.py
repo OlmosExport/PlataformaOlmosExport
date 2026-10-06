@@ -25,7 +25,8 @@ import tempfile
 RAIZ = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PAGINAS = ["index.html", "clima.html", "tecnica.html", "tecnico.html", "sag.html"]
 JSONS = ["datos.json", "config.json", "cuarteles.json", "cosecha.json",
-         "pesticidas.json", "heladas_comunas.json", "manifest.webmanifest"]
+         "pesticidas.json", "fertilizacion.json", "heladas_comunas.json",
+         "manifest.webmanifest"]
 OBLIGATORIOS = PAGINAS + JSONS + ["sw.js", "icon-192.png", "icon-512.png",
                                   "apple-touch-icon.png", "LEEME.txt"]
 
@@ -446,6 +447,57 @@ def r_pesticidas():
             aviso("pesticidas", "%s no trae fecha de descarga" % e.get("especie"))
 
 
+def r_fertilizacion():
+    """Que los cuatro programas estén completos y sigan siendo distintos.
+
+    Si dos programas quedan iguales, alguien pisó una receta: el de vigor
+    bajo y el vigoroso NO pueden repartir el nitrógeno de la misma forma.
+    """
+    ruta = os.path.join(RAIZ, "fertilizacion.json")
+    if not os.path.exists(ruta):
+        return
+    try:
+        d = json.load(open(ruta, encoding="utf-8"))
+    except Exception:
+        return
+    progs = d.get("programas") or {}
+    if len(progs) < 4:
+        error("fertilizacion", "se esperaban 4 programas tipo y hay %d" % len(progs))
+    for clave in ("portainjertos", "matrizN", "fuentes", "comentarios"):
+        if not d.get(clave):
+            error("fertilizacion", "fertilizacion.json no trae '%s'" % clave)
+
+    firmas = {}
+    for k, p in progs.items():
+        for campo in ("parcializacion", "receta", "distribucion", "defecto"):
+            if not p.get(campo):
+                error("fertilizacion", "%s no trae '%s'" % (k, campo))
+                break
+        else:
+            for n, v in p["parcializacion"].items():
+                if abs(sum(v) - 1) > 0.001:
+                    error("fertilizacion", "en %s el reparto de %s suma %.0f%%, no 100%%"
+                          % (k, n, sum(v) * 100))
+            # cada producto de la receta tiene que existir en la lista de fuentes
+            for i, et in enumerate(p["receta"], 1):
+                for pr in et["productos"]:
+                    if pr["prod"] not in d["fuentes"]:
+                        error("fertilizacion", "%s etapa %d usa '%s', que no está "
+                              "en la lista de productos" % (k, i, pr["prod"]))
+            kf = [x["prod"] for x in p["receta"][3]["productos"] if x["nut"] == "K"]
+            firmas[k] = (tuple(p["parcializacion"]["N"]), tuple(sorted(kf)))
+
+    vig = [k for k in firmas if "vigorosa" in k]
+    baj = [k for k in firmas if "bajo" in k]
+    if vig and baj and firmas[vig[0]] == firmas[baj[0]]:
+        error("fertilizacion", "el programa vigoroso y el de vigor bajo quedaron "
+                               "con la misma receta")
+    esp = os.path.join(RAIZ, "pruebas", "esperado_fertilizacion.json")
+    if not os.path.exists(esp):
+        aviso("fertilizacion", "falta pruebas/esperado_fertilizacion.json, "
+                               "sin eso no se puede comparar contra las planillas")
+
+
 # ─────────────────────────────────────────────────────────────
 REVISIONES = [
     ("archivos del sitio", r_archivos),
@@ -463,6 +515,7 @@ REVISIONES = [
     ("estados fenológicos", r_fenologia),
     ("datos de cosecha", r_cosecha),
     ("agenda de pesticidas", r_pesticidas),
+    ("programas de fertilización", r_fertilizacion),
 ]
 
 

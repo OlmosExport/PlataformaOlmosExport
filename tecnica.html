@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Plataforma de Campo · Exportadora Los Olmos</title>
 <meta name="theme-color" content="#14301C">
-<meta name="app-version" content="4.9">
+<meta name="app-version" content="5.0">
 <link rel="manifest" href="./manifest.webmanifest">
 <link rel="apple-touch-icon" href="./apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -823,9 +823,6 @@ body.drawer-open{overflow:hidden}
       <button class="dnav-btn" onclick="closeDrawer();openSec('feno')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/><circle cx="12" cy="12" r="4"/></svg><span>Fenología</span></button>
       <button class="dnav-btn" onclick="closeDrawer();openSec('checklist')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><polyline points="9 16 11 18 15 14"/></svg><span>Check List</span></button>
 
-      <div class="dnav-lbl">Fitosanitario</div>
-      <button class="dnav-btn" onclick="closeDrawer();openSec('fito')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 2v6.5L4 17a2 2 0 001.7 3h12.6a2 2 0 001.7-3l-5-8.5V2"/><line x1="8" y1="2" x2="16" y2="2"/></svg><span>Programa Fitosanitario</span><span class="beta-tag" style="margin-left:auto">BETA</span></button>
-
       <div class="dnav-lbl">Estimación</div>
       <button class="dnav-btn" onclick="closeDrawer();document.getElementById('h-home').style.display='block';showEstCer()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg><span>Estimación Cerezos</span></button>
       <button class="dnav-btn" onclick="closeDrawer();document.getElementById('h-home').style.display='block';showV('est-uva');setHdr('Estimación Uva de Mesa','Cálculo productivo en kilos por hectárea');document.getElementById('bnav').style.display='none'"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg><span>Estimación Uva de Mesa</span></button>
@@ -949,11 +946,6 @@ body.drawer-open{overflow:hidden}
         <div class="hub-card" data-cat="est" onclick="openSec('estimacion')">
           <div class="hub-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></div>
           <div><div class="hub-card-title">Estimación</div><div class="hub-card-sub">Cálculo productivo Kg/ha</div></div>
-        </div>
-        <div class="hub-card" data-cat="fito" onclick="openSec('fito')" style="position:relative">
-          <span class="beta-tag" style="position:absolute;top:12px;right:12px">BETA</span>
-          <div class="hub-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 2v6.5L4 17a2 2 0 001.7 3h12.6a2 2 0 001.7-3l-5-8.5V2"/><line x1="8" y1="2" x2="16" y2="2"/></svg></div>
-          <div><div class="hub-card-title">Programa Fitosanitario</div><div class="hub-card-sub">Cerezos · Giberélico · Alternativas</div></div>
         </div>
       </div>
       <div class="bak-card" style="margin-top:14px">
@@ -1549,65 +1541,7 @@ body.drawer-open{overflow:hidden}
     </div>
   </div>
 
-  <!-- PROGRAMA FITOSANITARIO (BETA) -->
-  <div class="view" id="view-fito-hub">
-    <div class="sec-hdr">
-      <div class="sec-back" onclick="goHub()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg></div>
-      <div><div class="sec-hdr-title">Programa Fitosanitario</div><div class="sec-hdr-sub">Cerezos · temporada 2026-27</div></div>
-    </div>
-    <div class="fito-beta">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#B8791F" stroke-width="2" style="flex-shrink:0;margin-top:1px"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-      <div><strong>Sección BETA.</strong> Contenido digitalizado desde la planilla del Departamento Técnico. Puede contener errores, omisiones o quedar desactualizado. Verifica siempre dosis, productos y carencias con el Depto. Técnico antes de aplicar en terreno.</div>
-    </div>
-    <div class="submenu-grid fito-grid">
-      <div class="sm-card" onclick="showFitoView('programa')">
-        <div class="sm-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 3H5a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-4"/><path d="M18 2l4 4-10 10H8v-4z"/></svg></div>
-        <div class="sm-card-title">Programa Cerezos 2026-27</div>
-      </div>
-      <div class="sm-card" onclick="showFitoView('giberelico')">
-        <div class="sm-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 2v6.5L4 17a2 2 0 001.7 3h12.6a2 2 0 001.7-3l-5-8.5V2"/><line x1="8" y1="2" x2="16" y2="2"/><line x1="8" y1="16" x2="16" y2="16"/></svg></div>
-        <div class="sm-card-title">Calculadora Giberélico</div>
-      </div>
-      <div class="sm-card" onclick="showFitoView('alternativas')">
-        <div class="sm-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 1l4 4-4 4"/><path d="M3 11V9a4 4 0 014-4h14"/><path d="M7 23l-4-4 4-4"/><path d="M21 13v2a4 4 0 01-4 4H3"/></svg></div>
-        <div class="sm-card-title">Alternativas de Aplicación</div>
-      </div>
-    </div>
-  </div>
-
-  <div class="view" id="view-fito-programa">
-    <div class="sec-hdr">
-      <div class="sec-back" onclick="showV('fito-hub')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg></div>
-      <div><div class="sec-hdr-title">Programa Cerezos 2026-27</div><div class="sec-hdr-sub">Programa fitosanitario · en construcción</div></div>
-    </div>
-    <div class="fito-beta"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#B8791F" stroke-width="2" style="flex-shrink:0;margin-top:1px"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg><div><strong>BETA:</strong> puede contener errores. Programa referencial para huertos adultos de cerezos; consulta al Depto. Técnico antes de aplicar.</div></div>
-    <div class="sel-card"><div class="sel-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div><div class="sel-content"><input class="sel-input" type="text" id="fito-prog-search" placeholder="Buscar producto, objetivo, época, ingrediente..." oninput="renderFitoPrograma()" style="border:none;background:transparent;padding:0;width:100%"></div></div>
-    <div id="fito-prog-list"></div>
-  </div>
-
-  <div class="view" id="view-fito-giberelico">
-    <div class="sec-hdr">
-      <div class="sec-back" onclick="showV('fito-hub')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg></div>
-      <div><div class="sec-hdr-title">Calculadora Giberélico</div><div class="sec-hdr-sub">Ácido giberélico · en construcción</div></div>
-    </div>
-    <div class="fito-beta"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#B8791F" stroke-width="2" style="flex-shrink:0;margin-top:1px"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg><div><strong>BETA:</strong> calculadora de referencia según el cuadro del Depto. Técnico. Verifica siempre la dosis final con el Depto. Técnico antes de aplicar.</div></div>
-    <div class="flabel">Datos de la aplicación</div>
-    <div class="sel-card"><div class="sel-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg></div><div class="sel-content"><div class="sel-sublabel">Concentración objetivo</div><input class="sel-input" type="number" id="gib-ppm" value="10" min="0" step="0.5" oninput="calcGiberelico()" style="border:none;background:transparent;padding:0;width:100%"></div><div style="font-size:11px;color:var(--s400);font-weight:700;align-self:center">ppm</div></div>
-    <div class="sel-card"><div class="sel-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2.69s-5 5.5-5 9.31a5 5 0 0010 0c0-3.81-5-9.31-5-9.31z"/></svg></div><div class="sel-content"><div class="sel-sublabel">Mojamiento</div><input class="sel-input" type="number" id="gib-moj" value="1000" min="1" step="10" oninput="calcGiberelico()" style="border:none;background:transparent;padding:0;width:100%"></div><div style="font-size:11px;color:var(--s400);font-weight:700;align-self:center">L/Ha</div></div>
-    <div class="flabel" style="margin-top:16px">Dosis de producto comercial</div>
-    <div id="gib-results"></div>
-    <div style="font-size:10.5px;color:var(--s400);margin-top:10px;line-height:1.5">Fórmula: gramos de ácido giberélico/Ha = ppm × mojamiento (L/Ha) ÷ 1000. Dosis de producto comercial = gramos Ac. Giberélico/Ha ÷ concentración del producto × 1000.</div>
-  </div>
-
-  <div class="view" id="view-fito-alternativas">
-    <div class="sec-hdr">
-      <div class="sec-back" onclick="showV('fito-hub')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg></div>
-      <div><div class="sec-hdr-title">Alternativas de Aplicación</div><div class="sec-hdr-sub">Sustitutos al programa · en construcción</div></div>
-    </div>
-    <div class="fito-beta"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#B8791F" stroke-width="2" style="flex-shrink:0;margin-top:1px"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg><div><strong>BETA:</strong> puede contener errores. Productos alternativos equivalentes a los del programa base; confirma dosis con el Depto. Técnico.</div></div>
-    <div id="fito-alt-list"></div>
-  </div>
-  </div>
+  </div><!-- /app-content -->
 
   <!-- BOTTOM NAV (solo en tabs de datos) -->
   <nav class="bottom-nav" id="bnav" style="display:none">
@@ -3091,25 +3025,9 @@ function openSec(s){
   }else if(s==='estimacion'){
     showV('estimacion');setHdr('Estimación','Elige la especie con la que vas a trabajar');
     document.getElementById('bnav').style.display='none';
-  }else if(s==='fito'){
-    showV('fito-hub');setHdr('Programa Fitosanitario','Cerezos 2026-27 · en construcción');
-    document.getElementById('bnav').style.display='none';
   }
 }
-function showFitoView(which){
-  document.getElementById('h-home').style.display='block';
-  document.getElementById('bnav').style.display='none';
-  if(which==='programa'){
-    showV('fito-programa');setHdr('Programa Cerezos 2026-27','Programa fitosanitario · en construcción');
-    renderFitoPrograma();
-  }else if(which==='giberelico'){
-    showV('fito-giberelico');setHdr('Calculadora Giberélico','Ácido giberélico · en construcción');
-    calcGiberelico();
-  }else if(which==='alternativas'){
-    showV('fito-alternativas');setHdr('Alternativas de Aplicación','Sustitutos al programa · en construcción');
-    renderFitoAlternativas();
-  }
-}
+
 function showEstCer(){
   showV('est-cer');setHdr('Estimación Cerezos','Cálculo productivo en kilos por hectárea');
   document.getElementById('bnav').style.display='none';
@@ -5153,113 +5071,18 @@ function showT(msg){
   var t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');
   setTimeout(function(){t.classList.remove('show');},2500);
 }
-var FITO_CEREZO=[{"epo":"Julio-Agosto"},{"ap":1,"epo":"17de julio al 5 de","sag":"SR","obj":"Adelantar ó concentrar","con":"+","prod":"Dormex","ing":"Cianamida Hidrogenada","tip":"Nebuliz.","d100":"2000 cc","moj":"1000","tot":"20 l","obs":"Esta aplicación solo en variedades que se desean adelantar"},{"epo":"Agosto","obj":"floración","prod":"Silwett","d100":"15 cc","tot":"0.15 l","obs":"su Floracion para coincidir con polinizantes y/o concentrar floraciones. Dosis es variable según objetivo, fecha y variedad"},{"obs":"Mojamiento se realiza de acuerdo a la copa del árbol"},{"ap":2,"epo":"5 dias despues","obj":"Uniformar Floracion","con":"+","prod":"Siberio","d100":"5000 cc","moj":"1000","tot":"50 l","obs":"Se concetra la floración y brotacion, se aplica al 5%"},{"prod":"Nitrato de calcio","d100":"6000 cc","tot":"60 l","obs":"Se aplica al 6 %"},{"epo":"Junto al homogenizador","obj":"Estimular division celular temprano","prod":"Cytoplan 400 0","ing":"Ascophillum nodossum, 400 ppm citoquininas naturales","tip":"Nebuliz.","d100":"200 cc","dha":"2 l","tot":"2 l","obs":"2l/ha"},{"ap":3,"epo":"Fines de Julio hasta 10 de Agosto","sag":"EP","obj":"Escama ","prod":"Delico 100 EC","ing":"Piriproxifen","car":"ST= CHN","tip":"Nebuliz.","d100":"70 cc","moj":"1000","tot":"0.7 l"},{"epo":"70 a 80% poblacion sensible","car":"7 (UK)","ppm":"1"},{"epo":"Mediados de Agosto"},{"ap":4,"epo":"Yema Hinchada: yema engrosada con separacion de escamas","sag":"SR","obj":"Cancer Bacterial","con":"ó","prod":"Hidroxicobre 50 WG","ing":"Hidroxido de cobre (500 gr cobre metalico)","tip":"Nebuliz.","d100":"200 gr","moj":"1000","tot":"2 kg","obs":"Aplicar una de las 2 alternativas. "},{"sag":"SR","obj":"Cytospora, Cancer Bacterial","prod":"Consul 65 WP","ing":"Dodina","car":"CHN","ppm":"3","d100":"200 gr","tot":"2 kg"},{"epo":"Fines de Agosto primeros dias de Septiembre"},{"ap":5,"epo":"Huertos con alta presencia de cancer bacterial ó a condición de huerto.","sag":"EP","obj":"Enfermedades de madera ","prod":"Apolo 430 SC","ing":"Tebuconazole","car":"15=UK;4=CHN","ppm":"1;4","tip":"Nebuliz.","d100":"60 cc","moj":"1000","tot":"0.6 l"},{"ap":6,"epo":"Boton verde cerrado a ramillete expuesto","obj":"Estimular division celular","prod":"Cytoplan 400 1","ing":"Ascophillum nodossum, 400 ppm citoquininas naturales","tip":"Nebuliz.","d100":"133 cc","dha":"2 l","moj":"1500","tot":"1.995 l","obs":"2l/ha"},{"obj":"Anti estrés abiotico","prod":"Naturamin WSP","ing":"80% aa; 12,8% Nt","d100":"67 gr","dha":"0,3-1 kg","tot":"1.0050000000000001 kg","obs":"1kg/ha"},{"prod":"Poly Ca ","ing":"Calcio 1","d100":"200 cc","dha":"3 l","tot":"3 l"},{"sag":"SR","obj":"Huevos de arañita","prod":"Winspray Miscible","ing":"Aceite mineral","d100":"2000 cc","tot":"30 l"},{"ap":7,"epo":"Botón Blanco a 20% de flor","sag":"EP","obj":"Monilia, Botrits,Pseudomonas","con":"ó","prod":"Indar 2F","ing":"Fenbuconazole","car":"5=UK;5=CHN","ppm":"1","tip":"Nebuliz.","d100":"75 cc","moj":"1500","tot":"1.125 l"},{"sag":"EP","obj":"Tizon de la flor","prod":"Apolo 430 SC","ing":"Tebuconazole","car":"15=UK;4=CHN","ppm":"1;4","d100":"70 cc","tot":"1.05 l"},{"obj":"Mejora crec. de tubo polinico, anti stress.","prod":"Kelpura 1","ing":"Auxinas 0,0011% Citoquininas 0,000003%","d100":"300 cc","dha":"3 l","tot":"4.5 l"},{"sag":"SR","obj":"cancer bacterial","prod":"Strepto plus","ing":"Estreptomicina - Oxitetraciclina","car":"SR","d100":"60 gr","tot":"0.9 kg","obs":"Utilizar en huertos con historial de pseudomonas o en condiciones de potencial desarrollo de bacterias "},{"prod":"Poly Boro","ing":"Boro","d100":"35 cc","dha":"0.5 l","tot":"0.525 l"},{"prod":"Poly Zn","ing":"Zinc","d100":"35 cc","dha":"0.5 l","tot":"0.525 l"},{"prod":"Poly Ca ","ing":"Calcio 2","d100":"200 cc","dha":"3 l","tot":"3 l"},{"epo":"PROGRAMA AUMENTO CUAJA","obs":"Para bajar costos, una opcion es combinar aplicación hilera por medio de Retain con Propulse."},{"epo":"OPCION 1: Boton Blanco: (Se exponen los capullos blancos antes de abrirse) a 60% flor","obj":"Aumentar cuaja y produccion","prod":"Retain","ing":"Clorhidrato de aviglicina*","tip":"Nebuliz.","dha":"830 gr","moj":"1000","tot":"0.83 kg","obs":"Se usa en situaciones de poca cuaja,  Recomendado en variedades como Regina, Bing, Kordia, Santina con frio invernal deficiente; en situaciones de podas fuertes y/o donde se ve exacerbado el vigor consultar Depto Tec. Se debe aplicar con 1000 lts. "},{"epo":"OPCION 2: 40 A 50 % Flores abiertas","obj":"Aumentar cuaja y produccion","prod":"Propulse","ing":"20% Acido 2-naftiloxiacético; 2,5% 4-CPA; 1% Ácido Giberélico","tip":"Nebuliz.","dha":"100 tabletas","moj":"1000","tot":"100 tabletas","obs":"Se usa en situaciones de poca cuaja,  Recomendado en variedades como Regina, Bing, Kordia, Santina con frio invernal deficiente; en situaciones de podas fuertes y/o donde se ve exacerbado el vigor consultar Depto Tec. Se debe aplicar con 1000 lts. "},{"epo":"OPCION 3:                                                                               Boton Blanco a 20% flor","obj":"Aumentar cuaja y produccion","prod":"Basfoliar FruitGrow SL","ing":"N=0,39%; P2O5 1,4%; K2O= 0,31%; 1,1 g/l AIA ó 1,1 g/l AIB; 0,31 mg/l de accion citoquininica","tip":"Nebuliz.","d100":"300 cc","dha":"3 lts","moj":"1000","tot":"3 l","obs":"Son dos aplicaciones, 20% flor y 80% flor, ensayos realizados vs Stone Gross, no muestran diferencia estadstica entre tratamientos. Recomendado en huertos donde se requiera asegurar cuaja pero no tener excesos, Ej Variedades muy fertiles bajo cubiertas, lapins vigorozas, entre otras."},{"epo":"      80% flor","obj":"Aumentar cuaja y produccion","prod":"Basfoliar FruitGrow SL","ing":"N=0,39%; P2O5 1,4%; K2O= 0,31%; 1,1 g/l AIA ó 1,1 g/l AIB; 0,31 mg/l de accion citoquininica","tip":"Nebuliz.","d100":"300 cc","dha":"3 lts","moj":"1000","tot":"3 l"},{"epo":"Etapa 1: Division celular desde plena flor hasta endurecimiento carozo (CIT-AUX)"},{"ap":8,"epo":"Plena Flor: (80% flor) ha abierto el 50 % de las flores y se han desprendido los primeros petalos","sag":"SR","obj":"Monilia, Botritis, Alternaria","prod":"Frontal 425 SC","ing":"Fenhexamida - Fludioxonilo","car":"SR","ppm":"7;5","tip":"Nebuliz.","d100":"133 cc","moj":"1500","tot":"1.995 l"},{"obj":"Mejora crec. de tubo polinico, anti stress.","prod":"Kelpura 2","ing":"Auxinas 0,0011% Citoquininas 0,000003%","d100":"300 cc","dha":"3 l","tot":"4.5 l"},{"obj":"Anti estrés abiotico","prod":"Naturamin WSP 2","ing":"80% aa; 12,8% Nt","d100":"67 gr","dha":"0,3-1 kg","tot":"1.0050000000000001 kg","obs":"1kg/ha"},{"prod":"Poly Ca","ing":"Calcio 3","d100":"200 cc","dha":"3 l","tot":"3 l"},{"prod":"Poly Boro","ing":"Boro","d100":"35 cc","dha":"0.5 l","tot":"0.525 l"},{"prod":"Poly Zn","ing":"Zinc","d100":"35 cc","dha":"0.5 l","tot":"0.525 l"},{"sag":"EP","obj":"cancer bacterial","prod":"Agrygent Pluss","ing":"Sulfato de Gentamicina","d100":"80 gr","tot":"1.2 kg","obs":"Aplicar a condicion."},{"ap":9,"epo":"Caída de pétalos: flores senecentes botando petalos, (almenos 2 petalos caidos en el 80% de las flores)","sag":"EP","obj":"Botritis, Monilias, Tizon","prod":"Captan 83 WP","ing":"Captan","car":"7=UK;7=CHN","ppm":"6;25","tip":"Nebuliz.","d100":"180 gr","moj":"1500","tot":"2.7 kg","obs":"El Captan se aplica a 2,7 kg/ha"},{"prod":"Poly Zn","ing":"Zinc","d100":"35 cc","dha":"0.5 l","tot":"0.525 l"},{"prod":"Poly Ca","ing":"Calcio 4","d100":"200 cc","dha":"3 l","tot":"3 l"},{"epo":"Octubre"},{"epo":"PROGRAMA CONTROL DE VIGOR"},{"epo":"Desde Brotes de 5 a 10 cm","obj":"Control de vigor","prod":"Regalis Pluss","ing":"Prohexadiona-calcio","d100":"200 gr","moj":"1000","tot":"2","obs":"Aplicar con volumen de agua de 1.000 a 1.500 lts"},{"epo":"7 dias despues","prod":"Molystar","ing":"7,2 % Fósforo; 17,2 % Molibdeno","d100":"18 cc","dha":"250 cc","tot":"0.18","obs":"Aplicaciones pueden coincidir con otras del programa"},{"epo":"7 dias despues","prod":"Molystar","ing":"7,2 % Fósforo; 17,2 % Molibdeno","d100":"18 cc","dha":"250 cc","tot":"0.18"},{"epo":"Caida de collar y restos florales: Riesgo sanitario con lluvias. 5 a 10 dias despues caida pet.","sag":"SR","obj":"Alternaria alternata, Botrytis cinerea, Monilia laxa, Monilia fruticola","prod":"Amistar Top ó Tatio 325 SC","ing":"20% Azoxistrobina; 12,5% Difenoconazole","car":"SR=UK;SR=CHN","ppm":"2/0,2","tip":"Nebuliz.","d100":"40 cc","dha":"0.6 l","moj":"1500","tot":"0.6 l","obs":"Repetir si hay condiciones predisponentes para la enfermedad."},{"ap":10,"obj":"Mejorar Calibre","prod":"Cytoplan 400 2","ing":"Ascophillum nodossum, 400 ppm citoquininas naturales","d100":"133 cc","dha":"2 l","tot":"1.995 l","obs":"Selefrut : 5,6% carbono orgánico, ademas P,K,Mg,Zn"},{"obj":"Resistencia planta-Promueve aux-cit.","prod":"Martello 1","ing":"Ascophillum ","d100":"133 cc","dha":"2 l","tot":"1.995 l"},{"prod":"Poly Ca","ing":"Calcio 5","d100":"200 cc","dha":"3 l","tot":"3 l"},{"obj":"Aumentar carbohidratos, disminuicion de pasma","prod":"CARBOFUEL","ing":"Ecklonia maxima 29%;a.alginico 2%;Manitol 0,1%;P2O5 19,4%, SO3:4,7%K2O 3,1%MgO 2%, Zn1,9%","d100":"200 cc","dha":"3 a 5 l","tot":"3 l","obs":"La floracion es uno de los  procesos que mas energia demanda, donde la planta consume la mayoria de las reservas, por eso es importante darle un impulso extra mientras comienza a generar su propio alimento mediante la fotosintesis y mas tarde con la absorcion de nutrientes via riego, CARBOFUEL podria ser como una bebida energetica para la planta."},{"sag":"SR","obj":"Control de burrito.","prod":"Exirel","ing":"Ciantraniliprole","car":"1=UK;1=CHN","ppm":"6","d100":"100 cc","tot":"1.5 l","obs":"Aplicar solo si hay presencia de burritos"},{"epo":"Mediados de Octubre.  Etapa 2: Endurecimiento del Carozo"},{"ap":11,"epo":"Inicio crec frutos: \"Fruto verde\"","sag":"RA","obj":"Arañita roja - bimaculada ","con":"+","prod":"Fast pluss","ing":"Abamectina","car":"12=UK;SR=CHN","ppm":"0,01;0,07","tip":"Nebuliz.","d100":"100 cc","moj":"1500","tot":"1.5 l","obs":"En caso de existir presion muy alta de Bimaculada, cambiar Abamectina por Espirodiclofen"},{"prod":"Silwet","d100":"10 cc","tot":"0.15 l"},{"prod":"Poly Ca","ing":"Calcio 5","d100":"200 cc","dha":"3 l","tot":"3 l"},{"prod":"Poly Boro","ing":"Boro","d100":"35 cc","dha":"0.5 l","tot":"0.525 l"},{"prod":"Poly Mg","ing":"Magnesio","d100":"35 cc","dha":"0.5 l","tot":"0.525 l"},{"obj":"Aumentar carbohidratos, disminuicion de pasma","prod":"CARBOFUEL","ing":"Ecklonia maxima 29%;a.alginico 2%;Manitol 0,1%;P2O5 19,4%, SO3:4,7%K2O 3,1%MgO 2%, Zn1,9%","d100":"200 cc","dha":"3 a 5 l","tot":"0 l","obs":"La floracion es uno de los  procesos que mas energia demanda, donde la planta consume la mayoria de las reservas, por eso es importante darle un impulso extra mientras comianza a generar su propio alimento mediante la fotosintesis y mas tarde con la absorcion de nutrientes via riego, CARBOFUEL podria ser como una bebida energetica para la planta."},{"obj":"Resistencia planta-Promueve aux-cit.","prod":"Martello 2","ing":"Ascophillum ","d100":"133 cc","dha":"2 l","tot":"1.995 l"},{"obj":"Anti cracking, piel de lagarto, mejorar pedicelo","con":"+","prod":"Silikon","ing":"30% Oxido de Silicio","d100":"133 cc","dha":"2 a 4 l","tot":"1.995 l","obs":"Doble barrera contra partiduras y fisuras: la sinergia entre silicio y glycina betaina reducen la tasa de frutos partidos por lluvia, silicio fortalece la cascara exterior, la glycina betaina"},{"obj":"Osmoprotector, anticracking, antioxidante","prod":"FITOMAAT","ing":"10% N; 10%Prolina; 80%Glicina betaina","d100":"133 gr","dha":"2 kg","tot":"1.995 kg","obs":"contola la presion interior.  En primaveras lluviosas repetir cada 15 dias y agregar aplicación extra 24 a 48hrs previo a lluvia en estados mas vulnerables."},{"sag":"SR","obj":"Chanchito blanco, Escama coma","prod":"Movento","ing":"Spirotetramato","car":"12=UK;SR=CHN","ppm":"3;2","d100":"100 cc","dha":"1.8 l","tot":"1.5 l","obs":"Aplicación no obligatoria, aplica solo si hay presencia. 1,5 l/ha, Chanchito blanco y escama coma son plagas cuarentenarias para CHINA"},{"epo":"Etapa 3: Elongacion Celular, Quiebre de color (AG3)"},{"epo":"Color Pajizo: ","sag":"SR","obj":"Alternaria alternata, Botrytis cinerea, Monilia laxa, Monilia fruticola","prod":"Amistar Top ó Tatio 325 SC","ing":"20% Azoxistrobina; 12,5% Difenoconazole","car":"SR=UK;SR=CHN","ppm":"2/0,2","tip":"Nebuliz.","d100":"40 cc","dha":"0.6 l","moj":"1500","tot":"0.6 l","obs":"Aplicar en forma preventiva al follaje, en viraje de color o color pajizo si hay condiciones predisponentes para alternaria."},{"ap":12,"obj":"Firmeza y Calibre","prod":"Proggib 4% SL, Activol 4% SL, N-large","ing":"Acido Giberelico ","d100":"31.3 cc","dha":"10 ppm","tot":"0.4695 l","obs":"Dosis de aplicación se debe realizar en base a carga frutal, variedad y fecha de cosecha. revizar tabla adjunta y consultar al DPTO TECNICO"},{"prod":"Gibeerpluss 2.0","d100":"50 cc","dha":"10 ppm","tot":"0.75 l"},{"con":"+","prod":"Proggib 40 SG, Activol 40 SG","d100":"2.5 gr","dha":"10 ppm","tot":"0.0375 gr"},{"obj":"Calibre","prod":"Martello 3","ing":"Ascophillum ","d100":"133 cc","dha":"2 l","tot":"1.995 l","obs":"Adicionar a las aplicaciones de acido giberelico."},{"sag":"RA","obj":"Escama, polilla, Thrips calif, Chanchito, drososphyla","prod":"Colt 45 WP","ing":"Acetamiprid 40%","car":"3=UK;2=CHN","ppm":"1,5;2","d100":"20 gr","tot":"0.3 kg","obs":"Especialmente donde haya escama, chanchito y thrips"},{"ing":"Lambda cihalotrina 5%","car":"4=UK;4=CHN","ppm":"0.3"},{"prod":"Poly Ca","ing":"Calcio 6","d100":"200 cc","dha":"3 l","tot":"3 l"},{"prod":"Poly Boro","ing":"Boro","d100":"35 cc","dha":"0.5 l","tot":"0.525 l"},{"ap":13,"epo":"Pinta: Frutos viran de amarillo pajizo ","sag":"EP","obj":"Botritis","prod":"Teldor 500 SC","ing":"Fenhexamida","car":"2=UK;2=CHN","ppm":"7","tip":"Nebuliz.","d100":"80 cc","dha":"1.2 l","moj":"1500","tot":"1.2 l"},{"sag":"RA","obj":"Control drosophila suzukii, Polilla, Trips","prod":"Succes","ing":"Spinosad","car":"7","ppm":"0.2","d100":"13 cc","dha":"200-250 cc","tot":"0.195 l"},{"obj":"Anti estrés abiotico","prod":"Naturamin WSP","ing":"80% aa; 12,8% Nt","d100":"67 gr","dha":"0,3-1 kg","tot":"1.0050000000000001 kg","obs":"1kg/ha"},{"epo":"a coloración rosado ó rojo","prod":"Poly K","ing":"Potasio","d100":"300 cc","dha":"3 a 5 l","tot":"4.5 l"},{"obj":"Anti cracking, piel de lagarto, mejorar pedicelo","con":"+","prod":"Silikon","ing":"30% Oxido de Silicio","d100":"133 cc","dha":"2 a 4 l","tot":"1.995 l","obs":"Doble barrera contra partiduras y fisuras: la sinergia entre silicio y glycina betaina reducen la tasa de frutos partidos por lluvia, silicio fortalece la cascara exterior, la glycina betaina"},{"obj":"Osmoprotector, anticracking, antioxidante","prod":"FITOMAAT","ing":"10% N; 10%Prolina; 80%Glicina betaina","d100":"133 gr","dha":"2 kg","tot":"1.995 kg","obs":"contola la presion interior.  En primaveras lluviosas repetir cada 15 dias y agregar aplicación extra 24 a 48hrs previo a lluvia en estados mas vulnerables."},{"obj":"Stress termico. Disminuir daños por golpe de sol, bajar t° antioxidante","con":"+","prod":"VP filter","ing":"K2O:5,25%;SO3:2,24%;Zn1,68%;Fe:0,56%;MO:34,4%","d100":"200 cc","dha":"3 a 4 l","tot":"3 l","obs":"Aplicaciones no obligatorias"},{"obj":"Stress termico, Activar metabolismo de plantas, ","prod":"Megafol","ing":"K2o: 8%; C:9%; N3%","d100":"100 cc","dha":"1 a 3 l","tot":"1.5 l","obs":"Aplicaciones no obligatorias"},{"obj":"Mejorar color de fruta","con":"ó","prod":"M 10 AD","ing":"P2O5: 15 % - K2O: 20%  - B: 0,01 %  - Mn: 0,1 %  - Mo: 0,01 % ","d100":"500 cc","tot":"7.5 l","obs":"Aplicaciones no obligatorias"},{"obj":"Mejorar color, calibre","con":"ó","prod":"VITAZYME","ing":"Vit B1,B2 , B6 K20","d100":"133 cc","dha":"1 a 2 l","tot":"1.995 l","obs":"Aplicaciones no obligatorias"},{"obj":"Mejorar color de fruta, Brix","prod":"MANVERT AVANZA","d100":"100 cc","dha":"1.5 l","tot":"1.5 l","obs":"Aplicaciones no obligatorias"},{"ap":14,"epo":"7 dias despues del Teldor","sag":"EP","obj":"Botrytis, Monilia, Pudricion acida","prod":"Apolo 430 SC","ing":"Tebuconazole","car":"15=UK;4=CHN","ppm":"1;4","tip":"Nebuliz.","d100":"70 cc","moj":"1500","tot":"1.05 l"},{"prod":"Poly K","ing":"Potasio","d100":"300 cc","dha":"3 a 5 l","tot":"4.5 l"},{"sag":"SR","obj":"Control drosophila suzukii, Polilla, trips, burrito","prod":"Exirel","ing":"Ciantraniliprole","car":"1=UK;1=CHN","ppm":"6","d100":"100 cc","tot":"1.5 l"},{"obj":"Mejorar color de fruta","con":"ó","prod":"M 10 AD","ing":"P2O5: 15 % - K2O: 20%  - B: 0,01 %  - Mn: 0,1 %  - Mo: 0,01 % ","d100":"500 cc","tot":"7.5 l","obs":"Aplicaciones no obligatorias"},{"obj":"Mejorar color, calibre","con":"ó","prod":"VITAZYME","ing":"Vit B1,B2 , B6 K20","d100":"133 cc","dha":"1 a 2 l","tot":"1.995 l","obs":"Aplicaciones no obligatorias"},{"obj":"Mejorar color de fruta, Brix","prod":"MANVERT AVANZA","d100":"100 cc","tot":"1.5 l","obs":"Aplicaciones no obligatorias"},{"ap":15,"epo":"5 A 7 dias despues del Sivor","sag":"RA","obj":"Control drosophila suzukii, Polilla, Trips","prod":"Succes","ing":"Spinosad","car":"7","ppm":"0.2","tip":"Nebuliz.","d100":"13 cc","dha":"200-250 cc","moj":"1500","tot":"0.195 l"},{"obj":"Anti cracking, piel de lagarto, mejorar pedicelo","con":"+","prod":"Silikon","ing":"30% Oxido de Silicio","d100":"133 cc","dha":"2 a 4 l","tot":"1.995 l","obs":"Doble barrera contra partiduras y fisuras: la sinergia entre silicio y glycina betaina reducen la tasa de frutos partidos por lluvia, silicio fortalece la cascara exterior, la glycina betaina"},{"obj":"Osmoprotector, anticracking, antioxidante","prod":"FITOMAAT","ing":"10% N; 10%Prolina; 80%Glicina betaina","d100":"133 gr","dha":"2 kg","tot":"1.995 kg","obs":"contola la presion interior.  En primaveras lluviosas repetir cada 15 dias y agregar aplicación extra 24 a 48hrs previo a lluvia en estados mas vulnerables."},{"ap":16,"epo":"4 a 5 dias Pre-cosecha","sag":"EP","obj":"Botrytis, Alternaria, Penicilium","prod":"Switch One","ing":"50% Fludioxonilo","car":"SR","ppm":"5","tip":"Nebuliz.","d100":"67 cc","dha":"1 kg","moj":"1500","tot":"1.0050000000000001 l"},{"obj":"Control drosophila suzukii","prod":"Grandevo","ing":"Chromobacterium subtsugae","d100":"200 gr","dha":"3 kg","tot":"3 kg"},{"epo":"Post Cosecha Diciembre/Enero"},{"ap":17,"epo":"Inmediatamente terminada la cosecha","sag":"SR","obj":"Arañitas Bimaculada","prod":"Acramite 480 SC","ing":"Bifenazato","tip":"Nebuliz.","d100":"50 cc","dha":"1.25 l","moj":"2500","tot":"1.25 l","obs":"(1,25l/ha, realizar una aplicación por temporada) Aplicar en funcion de monitoreo"},{"prod":"Poly K","ing":"Potasio","d100":"180 cc","dha":"3 a 5 l","tot":"4.5 l"},{"ap":18,"epo":"7 dias despues de la aplicación anterior","obj":"Anti estrés abiotico-Inductor de defensa","prod":"Actigen RTF fert","ing":"Quitosano 3,2%, ac salicilico 1%, Nitrato Ca 1%","tip":"Nebuliz.","d100":"700 gr","dha":"7 kg","moj":"1000","tot":"7 kg"},{"epo":"Enero"},{"ap":19,"obj":"Evitar Frutos dobles ó stress","con":"ó","prod":"Protecsol","ing":"95% caolin","tip":"Nebuliz.","d100":"3333 gr","dha":"50 kg","moj":"1500","tot":"49.995 kg","obs":"Solo una aplicación de caolinita"},{"prod":"Greenblock","ing":"95% caolin","d100":"2500 gr","dha":"37.5 kg","tot":"37.5 kg"},{"obj":"Anti stress potencia bloqueador solar","prod":"Silikon","ing":"30% Oxido de Silicio","d100":"300 cc","tot":"4.5 l"},{"obj":"Resistencia planta-Promueve aux-cit.","prod":"Martello 5","ing":"Ascophillum ","d100":"133 cc","dha":"2 l","tot":"1.995 l"},{"ap":20,"obj":"Aumentar carbohidratos, disminuicion de stress","prod":"CARBOFUEL","ing":"Ecklonia maxima 29%;a.alginico 2%;Manitol 0,1%;P2O5 19,4%, SO3:4,7%K2O 3,1%MgO 2%, Zn1,9%","tip":"Nebuliz.","d100":"200 cc","dha":"3 a 5 l","moj":"1500","tot":"3 l","obs":"Aumentar reservas, disminuir stress. Aplicación puede coincidir con la anterior ó con la siguiente."},{"ap":21,"epo":"15 a 20 dias de aplicación de araña anterior","sag":"SR","obj":"Arañitas Bimaculada, Arañita europea","prod":"Borneo 11 SC","ing":"Etoxazol","tip":"Nebuliz.","d100":"50 cc","dha":"1.25 l","moj":"2000","tot":"1 l","obs":"(1,25l/ha, realizar una aplicación por temporada) Aplicar en funcion de monitoreo"},{"prod":"Poly K","ing":"Potasio","d100":"180 cc","dha":"3 a 5 l","tot":"3.6 l"},{"ap":22,"epo":"Se puede juntar con otra aplicación","sag":"RA","obj":"Burritos, Polilla","prod":"Avaunt 30 WG","ing":"Indoxacarb","tip":"Nebuliz.","d100":"17 gr","moj":"2000","tot":"0.34 kg","obs":"Solo si se detecan burritos o presencia de brotes atacados"},{"sag":"RA","obj":"Chanchito Blanco, escama, Drosofila. ","prod":"Diazinon 40 WP","ing":"Diazinon","d100":"150 gr","tot":"3 kg","obs":"Solo si hay pesencia en forma importante"},{"ap":23,"epo":"15 a 20 dias despues del anterior ","obj":"Resistencia planta-Promueve aux-cit.","prod":"Martello 6","ing":"Ascophillum ","tip":"Nebuliz.","d100":"133 cc","dha":"2 l","moj":"1500","tot":"1.995 l"},{"obj":"Anti stress potencia bloqueador solar","prod":"Silikon","ing":"30% Oxido de Silicio","d100":"300 cc","tot":"4.5 l"},{"obj":"Stress termico. Disminuir daños por golpe de sol.","prod":"Vp filter","ing":"K2O:5,25%;SO3:2,24%;Zn1,68%;Fe:0,56%;MO:34,4%","d100":"200 cc","dha":"3 a 4 l","tot":"3 l"},{"epo":"Febrero"},{"ap":24,"epo":"1 al 15 de febrero","obj":"Resistencia planta-Promueve aux-cit.","prod":"Martello 7","ing":"Ascophillum ","tip":"Nebuliz.","d100":"135 cc","dha":"2 l","moj":"1500","tot":"2.0250000000000004 l"},{"prod":"Poly K","ing":"Potasio","d100":"133 cc","dha":"3 a 5 l","tot":"1.995 l"},{"obj":"Anti estrés abiotico","prod":"Megafol","ing":"extractos vegetales","d100":"150 cc","dha":"1 a 3 l","tot":"2.25 l"},{"epo":"Marzo"},{"ap":25,"epo":"1 al 15 de Marzo","obj":"Acumular reservas","prod":"Poly Mg","ing":"Magnesio","tip":"Nebuliz.","d100":"35 cc","dha":"0.5 l","moj":"1500","tot":"0.525 l"},{"prod":"Poly B","ing":"Boro","d100":"35 cc","dha":"0.5 l","tot":"0.525 l"},{"prod":"Poly Zn","ing":"Zinc","d100":"35 cc","dha":"0.5 l","tot":"0.525 l"},{"obj":"Aumentar carbohidratos, disminuicion de stress","prod":"CARBOFUEL","ing":"Ecklonia maxima 29%;a.alginico 2%;Manitol 0,1%;P2O5 19,4%, SO3:4,7%K2O 3,1%MgO 2%, Zn1,9%","d100":"200 cc","dha":"3 a 5 l","tot":"3 l","obs":"Aumentar reservas, disminuir stress. Aplicación puede coincidir con la anterior ó con la siguiente."},{"obj":"Favorecer la entrada en receso ","con":"ó","prod":"Microcat boro-molibdeno","ing":"Molibdeno","d100":"135 cc","dha":"2 l","tot":"2.0250000000000004 l"},{"obj":"Traslocacion de nutrientes ","prod":"Molistop","ing":"Molibdeno","d100":"30 cc","tot":"0.45 l","obs":"Repetir a los 15 dias"},{"ap":26,"epo":"15 al 30 de Marzo","obj":"Acumular reservas","prod":"Poly Mg","ing":"Magnesio","tip":"Nebuliz.","d100":"35 cc","dha":"0.5 l","moj":"1500","tot":"0.525 l"},{"prod":"Poly B","ing":"Boro","d100":"35 cc","dha":"0.5 l","tot":"0.525 l"},{"prod":"Poly Zn","ing":"Zinc","d100":"35 cc","dha":"0.5 l","tot":"0.525 l"},{"obj":"Favorecer la entrada en receso ","con":"ó","prod":"Microcat boro-molibdeno","ing":"Molibdeno","d100":"135 cc","dha":"2 l","tot":"2.0250000000000004 l"},{"obj":"Traslocacion de nutrientes ","prod":"Molistop","ing":"Molibdeno","d100":"30 cc","tot":"0.45 l","obs":"Repetir a los 15 dias"},{"epo":"Abril"},{"ap":27,"epo":"1 al 15 de abril","obj":"Acumular reservas","prod":"Poly Mg","ing":"Magnesio","tip":"Nebuliz.","d100":"35 cc","dha":"0.5 l","moj":"1500","tot":"0.525 l"},{"prod":"Poly B","ing":"Boro","d100":"35 cc","dha":"0.5 l","tot":"0.525 l"},{"prod":"Poly Zn","ing":"Zinc","d100":"35 cc","dha":"0.5 l","tot":"0.525 l"},{"obj":"Favorecer la entrada en receso ","con":"ó","prod":"Microcat boro-molibdeno","ing":"Molibdeno","d100":"135 cc","dha":"2 l","tot":"2.0250000000000004 l"},{"obj":"Traslocacion de nutrientes ","prod":"Molistop","ing":"Molibdeno","d100":"30 cc","tot":"0.45 l","obs":"Repetir a los 15 dias"},{"epo":"Abril-Mayo"},{"ap":28,"epo":"Huertos de 1 a 3 años","obj":"Cancer Bacterial","tip":"Brocha","obs":"Mezclar 1 galon de latex blanco de interior mas, 500 gr"},{"obj":"(Pintura de troncos)","tip":"a ","obs":"de Hidrocob + 10 gr de streptoplus + 1kg colafria, pintar los troncos unos 70 cm"},{"tip":"mano","obs":"desde el suelo. (Agregar agua si la mezcla queda espeza)"},{"ap":29,"epo":"Fines de abril a primeros dias de mayo","obj":"Estimular caída de","prod":"Urea","tip":"Nebuliz.","d100":"5000 gr","moj":"1500","tot":"75 kg","obs":"Aplicación solo en huertos con buen vigor. Es posible que en"},{"obj":"hojas","prod":"Sulfato de cobre","d100":"1500 gr","tot":"22.5 kg","obs":"huertos de 2° a 4° hoja se retrase a fines de Abril"},{"ap":30,"epo":"10 dias previo a caida de hojas","prod":"Baciforte","ing":"Bascillus subtillis cepa C55","tip":"Nebuliz.","d100":"150 cc","moj":"1500","tot":"2.25 l"},{"ap":31,"epo":"5 a 7 dias depues","prod":"Consul 65 WP","ing":"Dodina","tip":"Nebuliz.","d100":"200 gr","moj":"1500","tot":"3 l"},{"ap":32,"epo":"5 a 7 dias depues","prod":"Agrocopper","ing":"Sulfato de cobre pentahidratado","tip":"Nebuliz.","d100":"60 cc","moj":"1500","tot":"0.9 l","obs":"La cantidad de aplicaciones de Cobre, estará determinada de acuerdo al tiempo que demore en caer la hoja. Hoja amarilla se considera hoja caida"},{"ap":33,"epo":"10 a 15 dias despues ","prod":"Agrocopper","ing":"Sulfato de cobre pentahidratado","tip":"Nebuliz.","d100":"60 cc","moj":"1500","tot":"0.9 l"},{"ap":34,"epo":"20 a 25 dias despues ó a condicion (Heladas, alzas de t° sobre los 20° C","prod":"Agrocopper","ing":"Sulfato de cobre pentahidratado","tip":"Nebuliz.","d100":"60 cc","moj":"1500","tot":"0.9 l"},{"ap":35,"epo":"Inicio de invierno ó previo a lluvias sobre 30 mm, que no permitan el ingreso posterior al campo","obj":"Cancer Bacterial ","con":"ó","prod":"Caldo Bordeles Valles","ing":"Caldo bordales","tip":"Nebuliz.","d100":"750 gr","moj":"1500","tot":"11.25 kg","obs":"Especialmente en huertos con presencia de cancer"},{"prod":"Cuprobordales Agrospec","ing":"Caldo bordales"},{"obs":"Mojamiento se realiza de acuerdo a la copa del árbol"}];var FITO_ALT=[{"n":1,"prog":"NATURAMIN WSP","progD":"0,3-1Kg","alt":"VINTAC 80 SP","altD":"0,3-1Kg"},{"n":2,"prog":"CYTOPLAN 400","progD":"2L","alt":"MANVERT FOLIKIN","altD":"200cc"},{"alt":"BRIO 440","altD":"2L"},{"n":3,"prog":"MARTELLO","progD":"2L","alt":"STIMPLEX","altD":"3L"},{"alt":"CALIPER PLUSS","altD":"2 A 3L"},{"n":4,"prog":"KELPURA ","progD":"3L","alt":"KELPAK","altD":"3L"},{"alt":"VITAPLANT KELP","altD":"300 cc"},{"alt":"BASFOLIAR KELP","altD":"3L"},{"n":5,"prog":"STREPTO PLUS","progD":"60 gr","alt":"AGRIGENT PLUS","altD":"80 gr"},{"n":6,"prog":"INDAR 2F","progD":"75 cc","alt":"APOLO 430 SC","altD":"40 cc"},{"n":7,"prog":"FRONTAL 425 SC","progD":"2L","alt":"FUSION 425 SC","altD":"2L"},{"alt":"FONTELIS","altD":"1,4-1,6 L"},{"n":8,"prog":"TELDOR 500 SC","progD":"1,2 L","alt":"ALTIVO 500 SC","altD":"1,2 L"},{"n":9,"prog":"SWITCH ONE","progD":"1 KG","alt":"FRONTAL 425 SC","altD":"2L"},{"n":10,"prog":"CONSUL 65 WP","progD":"100-200 gr","alt":"SILLYT 400 SC","altD":"163-325 cc"},{"n":11,"prog":"CAPTAN 83 WP","progD":"180 gr","alt":"CAPTAN  GOLD 80 WG","altD":"180 gr"},{"n":12,"prog":"APOLO 430 SC","progD":"70 gr","alt":"VERTICE 43 SC","altD":"70 gr"},{"n":13,"prog":"SIVOR","progD":"100 cc","alt":"EXIREL","altD":"100 cc"},{"n":14,"prog":"DELEGATE ","progD":"300 gr","alt":"SUCCESS 48","altD":"250 cc"},{"n":15,"prog":"FAST PLUS","progD":"100 cc","alt":"VERTIMEC 018 EC","altD":"100 cc"},{"n":16,"prog":"ACRAMITE 480 SC","progD":"50 cc","alt":"SPIRIT 500 SC","altD":"50 cc"}];
+
 // ===== PROGRAMA FITOSANITARIO (BETA) =====
-var FITO_GIB_PRODUCTS=[
-  {name:'Progib 4% SL / Activol 4% SL / N-Large',conc:32,unit:'cc'},
-  {name:'Gibberpluss 2.0 SL',conc:20,unit:'cc'},
-  {name:'Progibb 40% SG / Activol 40% SG',conc:400,unit:'gr'}
-];
-function calcGiberelico(){
-  var el=document.getElementById('gib-results');
-  if(!el)return;
-  var ppmI=document.getElementById('gib-ppm'),mojI=document.getElementById('gib-moj');
-  var ppm=parseFloat(ppmI&&ppmI.value)||0;
-  var moj=parseFloat(mojI&&mojI.value)||0;
-  var acGrHa=ppm*moj/1000;
-  el.innerHTML=FITO_GIB_PRODUCTS.map(function(p){
-    var prodHa=p.conc>0?(acGrHa/p.conc*1000):0;
-    var prod100=moj>0?(prodHa/moj*100):0;
-    return '<div class="gib-result-card">'+
-      '<div><div class="gib-result-name">'+p.name+'</div><div class="gib-result-sub">Concentración: '+p.conc+' '+(p.unit==='gr'?'gr/Kg':'gr/L')+' · Ac. Giberélico: '+acGrHa.toFixed(2)+' gr/Ha</div></div>'+
-      '<div style="text-align:right"><div class="gib-result-val">'+prodHa.toFixed(2)+'<span class="gib-result-unit"> '+p.unit+'/Ha</span></div><div class="gib-result-sub">'+prod100.toFixed(3)+' '+p.unit+'/100L</div></div>'+
-    '</div>';
-  }).join('');
-}
 
-var FITO_PROG_GROUPS=null;
-function groupFitoPrograma(){
-  if(FITO_PROG_GROUPS)return FITO_PROG_GROUPS;
-  var blocks=[],cur=null;
-  FITO_CEREZO.forEach(function(r){
-    var hasCore=!!(r.prod||r.obj);
-    if(r.ap){
-      cur={ap:r.ap,epo:r.epo,sag:r.sag,items:[]};
-      blocks.push(cur);
-      cur.items.push(r);
-    }else if(!hasCore){
-      blocks.push({divider:true,text:r.fen||r.epo||'',obs:r.obs});
-      cur=null;
-    }else{
-      if(!cur){cur={ap:null,epo:r.epo,sag:r.sag,items:[]};blocks.push(cur);}
-      if(!cur.epo&&r.epo)cur.epo=r.epo;
-      if(!cur.sag&&r.sag)cur.sag=r.sag;
-      cur.items.push(r);
-    }
-  });
-  FITO_PROG_GROUPS=blocks;
-  return blocks;
-}
-function fitoItemLine(it){
-  var parts=[];
-  if(it.d100)parts.push(it.d100+'/100L');
-  if(it.dha)parts.push(it.dha+'/Ha');
-  var dosisTxt=parts.join(' · ');
-  var head='<strong>'+(it.prod||'—')+'</strong>'+(it.con?' <span style="color:var(--s400)">'+it.con+'</span>':'');
-  return '<div class="fito-row" style="display:flex;justify-content:space-between;gap:8px"><span>'+head+(it.obj?' — '+it.obj:'')+'</span><span style="white-space:nowrap;color:var(--g700);font-weight:700">'+dosisTxt+'</span></div>'+
-    (it.ing?'<div class="fito-row" style="color:var(--s400);font-size:10.5px">'+it.ing+(it.car?' · Carencia: '+it.car:'')+'</div>':'')+
-    (it.obs?'<div class="fito-obs">'+it.obs+'</div>':'');
-}
-function renderFitoPrograma(){
-  var el=document.getElementById('fito-prog-list');
-  if(!el)return;
-  var qI=document.getElementById('fito-prog-search');
-  var q=((qI&&qI.value)||'').toLowerCase().trim();
-  var groups=groupFitoPrograma();
-  var html='';
-  groups.forEach(function(g){
-    if(g.divider){
-      if(!q){
-        html+='<div style="font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--s500);font-weight:700;padding:12px 2px 6px">'+g.text+'</div>';
-      }
-      return;
-    }
-    var text=(g.epo||'')+' '+g.items.map(function(it){return [it.prod,it.obj,it.ing].filter(Boolean).join(' ');}).join(' ');
-    if(q&&text.toLowerCase().indexOf(q)<0)return;
-    var badges='';
-    if(g.sag)badges+='<span class="fito-badge sag">SAG: '+g.sag+'</span>';
-    html+='<div class="fito-card">'+
-      '<div class="fito-card-hdr"><div class="fito-card-n">'+(g.ap||'·')+'</div><div style="flex:1"><div class="fito-card-title">'+(g.epo||'Aplicación')+'</div>'+(badges?'<div class="fito-badges">'+badges+'</div>':'')+'</div></div>'+
-      g.items.map(fitoItemLine).join('')+
-    '</div>';
-  });
-  if(!html)html='<div class="empty-st"><svg class="empty-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><div class="empty-t">Sin resultados</div><div class="empty-s">Prueba con otro término de búsqueda</div></div>';
-  el.innerHTML=html;
-}
 
-function groupFitoAlt(){
-  var groups=[],cur=null;
-  FITO_ALT.forEach(function(r){
-    if(r.n){
-      cur={n:r.n,prog:r.prog,progD:r.progD,alts:[]};
-      groups.push(cur);
-    }
-    if(cur&&r.alt)cur.alts.push({name:r.alt,d:r.altD});
-  });
-  return groups;
-}
-function renderFitoAlternativas(){
-  var el=document.getElementById('fito-alt-list');
-  if(!el)return;
-  var groups=groupFitoAlt();
-  el.innerHTML=groups.map(function(g){
-    return '<div class="fito-card">'+
-      '<div class="fito-card-hdr"><div class="fito-card-n">'+g.n+'</div><div style="flex:1"><div class="fito-card-title">'+g.prog+'</div><div class="fito-card-sub">Dosis programa: '+(g.progD||'—')+'</div></div></div>'+
-      '<div class="fito-row" style="color:var(--s500);font-weight:700;font-size:10.5px;margin-top:4px">ALTERNATIVAS</div>'+
-      g.alts.map(function(a){return '<div class="fito-row">• '+a.name+' <span style="color:var(--s400)">('+(a.d||'—')+')</span></div>';}).join('')+
-    '</div>';
-  }).join('');
-}
+
+
+
+
+
+
+
+
 
 // ===== ARRANQUE AUTOMÁTICO (sin login) =====
 init();

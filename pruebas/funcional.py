@@ -451,12 +451,23 @@ def correr(pw):
     anchos = pg.evaluate("""() => {
         openSec('feno');
         const o = [...document.querySelectorAll('#view-feno-hub > .fh-opt')];
-        const cont = document.querySelector('.app-content').clientWidth;
-        return {n: o.length, max: Math.max(...o.map(e => e.offsetWidth)), cont};
+        const c = document.querySelector('.app-content');
+        const v = document.getElementById('view-feno-hub');
+        return {n: o.length, max: Math.max(...o.map(e => e.offsetWidth)),
+                cont: c.clientWidth, vista: v.offsetWidth,
+                padre: v.parentElement.className};
     }""")
+    # la ficha tiene que ocupar cerca de un tercio: ni de lado a lado ni
+    # aplastada, que es lo que pasa si la vista se sale del contenido
     prueba("las filas de menú se ponen de a tres",
-           anchos["n"] > 0 and anchos["max"] < anchos["cont"] * .4,
+           anchos["n"] > 0 and
+           anchos["cont"] * .22 < anchos["max"] < anchos["cont"] * .40,
            "%d fichas de %d px en %d" % (anchos["n"], anchos["max"], anchos["cont"]))
+    prueba("las vistas quedan dentro del área de contenido",
+           "app-content" in (anchos["padre"] or "") and
+           anchos["vista"] > anchos["cont"] * .8,
+           "vista de %d px dentro de %d · padre %s"
+           % (anchos["vista"], anchos["cont"], anchos["padre"]))
 
     campos = pg.evaluate("""() => {
         openSec('fenologia');
@@ -465,7 +476,8 @@ def correr(pw):
         return {n: c.length, max: Math.max(...c.map(e => e.offsetWidth)), cont};
     }""")
     prueba("los campos del formulario se ponen de a tres",
-           campos["n"] > 0 and campos["max"] < campos["cont"] * .4,
+           campos["n"] > 0 and
+           campos["cont"] * .22 < campos["max"] < campos["cont"] * .40,
            "%d campos de %d px en %d" % (campos["n"], campos["max"], campos["cont"]))
 
     # el título ya no dice que esto es el Departamento Técnico
@@ -517,6 +529,145 @@ def correr(pw):
            and cel["iconoKpi"] != "none")
     reales = [f for f in fallas if "librer" not in f.lower()]
     prueba("la Plataforma de Campo no da errores en el teléfono", not reales,
+           reales[0][:60] if reales else "")
+    ctx.close()
+
+    # 9 · Programa de Fertilización: el cálculo tiene que dar lo mismo
+    #     que las planillas .xlsm de las que salió
+    ctx = nav.new_context(viewport={"width": 1500, "height": 1000})
+    pg = ctx.new_page()
+    fallas = []
+    pg.on("pageerror", lambda e: fallas.append(str(e)))
+    pg.goto("%s/tecnico.html" % BASE, wait_until="domcontentloaded")
+    pg.wait_for_timeout(4000)
+    pg.evaluate("() => ir('fert')")
+    pg.wait_for_timeout(2500)
+
+    esp = json.load(open(os.path.join(RAIZ, "pruebas", "esperado_fertilizacion.json"),
+                         encoding="utf-8"))["programas"]
+    iguales, distintos, detalle = 0, 0, []
+    for k, e in esp.items():
+        got = pg.evaluate("""(k) => {
+            fertCambiarPrograma(k);
+            const R = fertCalcular(), f = {};
+            R.dist.filas.forEach(x => { f[x.previo ? '0' : String(x.aplicacion)] = x.dosis; });
+            return {total: R.demanda.total, filas: f, entradas: R.entradas};
+        }""", k)
+        for n in ("N", "P", "K", "Ca", "Mg"):
+            if abs(got["total"][n] - e["total"][n]) < 0.6:
+                iguales += 1
+            else:
+                distintos += 1
+                detalle.append("%s total %s: %.1f vs %.1f"
+                               % (k, n, got["total"][n], e["total"][n]))
+        for sem, prods in e["filas"].items():
+            for prod, v in prods.items():
+                g = (got["filas"].get(sem) or {}).get(prod, 0) or 0
+                if abs(g - v) < 0.15:
+                    iguales += 1
+                else:
+                    distintos += 1
+                    detalle.append("%s sem%s %s: %.2f vs %.2f" % (k, sem, prod, g, v))
+    prueba("el cálculo coincide con las planillas de origen", not distintos,
+           "%d celdas iguales%s" % (iguales,
+            "" if not distintos else " · " + "; ".join(detalle[:3])))
+
+    # mover los kilos tiene que mover los aportes
+    mueve = pg.evaluate("""() => {
+        fertCambiarPrograma('lapins_bajo_vigor');
+        const a = fertCalcular().demanda.total.N;
+        document.getElementById('ft-kg').value = 20000; renFert();
+        const b = fertCalcular().demanda.total.N;
+        document.getElementById('ft-porta').value = 'Gisela 5'; renFert();
+        const c = fertCalcular().demanda.total.N;
+        document.getElementById('ft-vigor').value = '5.0'; renFert();
+        const d = fertCalcular().demanda.total.N;
+        fertRestablecer();
+        return {base: a, kg: b, porta: c, vigor: d, vuelta: fertCalcular().demanda.total.N};
+    }""")
+    prueba("mover los kilos mueve el requerimiento",
+           abs(mueve["kg"] - mueve["base"] * 20000 / 15000) < 0.5,
+           "%.0f → %.0f kg/ha de N" % (mueve["base"], mueve["kg"]))
+    prueba("cambiar el portainjerto mueve el requerimiento",
+           mueve["porta"] > mueve["kg"] * 2,
+           "Colt %.0f → Gisela 5 %.0f kg/ha de N" % (mueve["kg"], mueve["porta"]))
+    prueba("subir el vigor baja el nitrógeno",
+           mueve["vigor"] < mueve["porta"],
+           "vigor 3 %.0f → vigor 5 %.0f kg/ha" % (mueve["porta"], mueve["vigor"]))
+    prueba("volver al estándar deja todo como estaba",
+           abs(mueve["vuelta"] - mueve["base"]) < 0.01)
+
+    # los cuatro programas tienen que ser distintos entre sí
+    recetas = pg.evaluate("""() => {
+        const o = {};
+        FERT.meta.programas.forEach(k => {
+            const p = FERT.programas[k];
+            o[k] = {n: p.parcializacion.N.join('/'),
+                    k: p.receta[3].productos.filter(x => x.nut === 'K').map(x => x.prod).join()};
+        });
+        return o;
+    }""")
+    firmas = set("%s|%s" % (v["n"], v["k"]) for v in recetas.values())
+    prueba("los cuatro programas no son el mismo",
+           len(firmas) >= 2 and
+           recetas["lapins_vigorosa"]["n"] != recetas["lapins_bajo_vigor"]["n"] and
+           recetas["lapins_vigorosa"]["k"] != recetas["lapins_bajo_vigor"]["k"],
+           "vigorosa N %s con %s · bajo vigor N %s con %s"
+           % (recetas["lapins_vigorosa"]["n"], recetas["lapins_vigorosa"]["k"],
+              recetas["lapins_bajo_vigor"]["n"], recetas["lapins_bajo_vigor"]["k"]))
+
+    # el informe se arma con las dos páginas del formato de entrega
+    hoja = pg.evaluate("""() => {
+        const f = window.print, t = window.setTimeout;
+        window.print = function(){}; window.setTimeout = function(){};
+        fertImprimir();
+        window.print = f; window.setTimeout = t;
+        const p = document.getElementById('ft-print');
+        return {paginas: p.querySelectorAll('.pg').length,
+                filas: p.querySelectorAll('.pt tbody tr').length,
+                comentarios: p.querySelectorAll('.pc p').length,
+                largo: p.innerHTML.length};
+    }""")
+    prueba("el informe trae las dos páginas del formato de entrega",
+           hoja["paginas"] == 2 and hoja["filas"] >= 12 and hoja["comentarios"] >= 20,
+           "%d páginas · %d filas de dosis · %d comentarios"
+           % (hoja["paginas"], hoja["filas"], hoja["comentarios"]))
+
+    # el Programa Fitosanitario quedó acá y ya no en la Plataforma de Campo
+    fito = pg.evaluate("""() => {
+        ir('fito');
+        return {secciones: document.querySelectorAll('#v-fito .fsec').length,
+                pestanas: document.querySelectorAll('#f-tabs .ftab').length,
+                aplicaciones: (typeof FITO_CEREZO !== 'undefined') ? FITO_CEREZO.length : 0};
+    }""")
+    prueba("el Programa Fitosanitario vive en el Departamento Técnico",
+           fito["secciones"] == 4 and fito["pestanas"] == 4 and fito["aplicaciones"] > 100,
+           "%d secciones · %d pestañas · %d líneas de programa"
+           % (fito["secciones"], fito["pestanas"], fito["aplicaciones"]))
+
+    reales = [f for f in fallas if "librer" not in f.lower()]
+    prueba("el Programa de Fertilización no da errores", not reales,
+           reales[0][:60] if reales else "")
+    ctx.close()
+
+    # 10 · ...y ya no está en la Plataforma de Campo
+    ctx = nav.new_context(viewport={"width": 1440, "height": 950})
+    pg = ctx.new_page()
+    fallas = []
+    pg.on("pageerror", lambda e: fallas.append(str(e)))
+    pg.goto("%s/tecnica.html" % BASE, wait_until="domcontentloaded")
+    pg.wait_for_timeout(4500)
+    resto = pg.evaluate("""() => ({
+        vistas: document.querySelectorAll('[id^=view-fito]').length,
+        datos: typeof FITO_CEREZO !== 'undefined',
+        boton: document.body.innerHTML.indexOf('Programa Fitosanitario') >= 0
+    })""")
+    prueba("la Plataforma de Campo ya no lleva el Fitosanitario",
+           not resto["vistas"] and not resto["datos"] and not resto["boton"],
+           "vistas %d · datos %s · botón %s"
+           % (resto["vistas"], resto["datos"], resto["boton"]))
+    reales = [f for f in fallas if "librer" not in f.lower()]
+    prueba("la Plataforma de Campo sigue sin errores", not reales,
            reales[0][:60] if reales else "")
     ctx.close()
     nav.close()
