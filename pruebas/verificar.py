@@ -25,7 +25,8 @@ import tempfile
 RAIZ = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PAGINAS = ["index.html", "clima.html", "tecnica.html", "tecnico.html", "sag.html"]
 JSONS = ["datos.json", "config.json", "cuarteles.json", "cosecha.json",
-         "pesticidas.json", "fertilizacion.json", "heladas_comunas.json",
+         "pesticidas.json", "fertilizacion.json", "precios.json",
+         "heladas_comunas.json",
          "manifest.webmanifest"]
 OBLIGATORIOS = PAGINAS + JSONS + ["sw.js", "icon-192.png", "icon-512.png",
                                   "apple-touch-icon.png", "LEEME.txt"]
@@ -498,6 +499,52 @@ def r_fertilizacion():
                                "sin eso no se puede comparar contra las planillas")
 
 
+def r_precios():
+    """Que el mejor precio sea de verdad el menor de la fila.
+
+    La planilla de origen tenía esa columna mal en 74 filas; si el
+    generador se rompe, acá se nota antes de publicar.
+    """
+    ruta = os.path.join(RAIZ, "precios.json")
+    if not os.path.exists(ruta):
+        return
+    try:
+        d = json.load(open(ruta, encoding="utf-8"))
+    except Exception:
+        return
+    prods = d.get("productos") or []
+    if not prods:
+        error("precios", "precios.json no trae ningún producto")
+        return
+    if not d.get("proveedores"):
+        error("precios", "precios.json no trae la lista de proveedores")
+
+    malos, ceros, sin = 0, 0, 0
+    for p in prods:
+        v = list((p.get("precios") or {}).values())
+        if any(x <= 0 for x in v):
+            ceros += 1
+        if not v:
+            sin += 1
+            if p.get("mejor") is not None:
+                error("precios", "%s no tiene precios pero trae un mejor precio"
+                      % p.get("nombre"))
+            continue
+        if p.get("mejor") is None or abs(p["mejor"] - min(v)) > 0.001:
+            malos += 1
+        elif p["precios"].get(p.get("prov")) != p["mejor"]:
+            malos += 1
+    if malos:
+        error("precios", "en %d productos el mejor precio no es el menor de la fila" % malos)
+    if ceros:
+        error("precios", "%d productos traen un precio en cero o negativo" % ceros)
+    if sin:
+        aviso("precios", "%d productos no tienen precio en ningún proveedor" % sin)
+    if d["meta"].get("sospechosos"):
+        aviso("precios", "%d productos tienen un proveedor 20 veces más caro que el "
+              "más barato: revisar la unidad en la planilla" % d["meta"]["sospechosos"])
+
+
 # ─────────────────────────────────────────────────────────────
 REVISIONES = [
     ("archivos del sitio", r_archivos),
@@ -516,6 +563,7 @@ REVISIONES = [
     ("datos de cosecha", r_cosecha),
     ("agenda de pesticidas", r_pesticidas),
     ("programas de fertilización", r_fertilizacion),
+    ("precios de agroquímicos", r_precios),
 ]
 
 

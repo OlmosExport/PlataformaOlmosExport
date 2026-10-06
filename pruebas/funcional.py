@@ -616,22 +616,63 @@ def correr(pw):
            % (recetas["lapins_vigorosa"]["n"], recetas["lapins_vigorosa"]["k"],
               recetas["lapins_bajo_vigor"]["n"], recetas["lapins_bajo_vigor"]["k"]))
 
-    # el informe se arma con las dos páginas del formato de entrega
+    # el informe tiene que salir igual que el PDF que se manda hoy:
+    # una hoja, con el encabezado, las etapas, la tabla y los comentarios
     hoja = pg.evaluate("""() => {
         const f = window.print, t = window.setTimeout;
         window.print = function(){}; window.setTimeout = function(){};
         fertImprimir();
         window.print = f; window.setTimeout = t;
         const p = document.getElementById('ft-print');
-        return {paginas: p.querySelectorAll('.pg').length,
-                filas: p.querySelectorAll('.pt tbody tr').length,
-                comentarios: p.querySelectorAll('.pc p').length,
-                largo: p.innerHTML.length};
+        const cab = [...p.querySelectorAll('.hdatos .ik')].map(e => e.textContent.trim());
+        return {hojas: p.querySelectorAll('.hoja').length,
+                etapas: p.querySelectorAll('.hetapas tbody tr').length,
+                filas: p.querySelectorAll('.htabla tbody tr').length,
+                comentarios: p.querySelectorAll('.hcom p').length,
+                cabecera: cab};
     }""")
-    prueba("el informe trae las dos páginas del formato de entrega",
-           hoja["paginas"] == 2 and hoja["filas"] >= 12 and hoja["comentarios"] >= 20,
-           "%d páginas · %d filas de dosis · %d comentarios"
-           % (hoja["paginas"], hoja["filas"], hoja["comentarios"]))
+    prueba("el informe sale con el formato del PDF que se manda",
+           hoja["hojas"] == 1 and hoja["etapas"] == 4 and hoja["filas"] >= 12
+           and hoja["comentarios"] >= 20,
+           "%d hoja · %d etapas · %d filas de dosis · %d comentarios"
+           % (hoja["hojas"], hoja["etapas"], hoja["filas"], hoja["comentarios"]))
+    # al productor le interesan cuatro datos; el resto es cálculo interno
+    sobra = [c for c in hoja["cabecera"]
+             if "vigor" in c.lower() or "requerimiento" in c.lower() or "emitido" in c.lower()]
+    prueba("el informe no lleva datos del cálculo interno", not sobra,
+           "lleva: " + " · ".join(hoja["cabecera"]))
+
+    # la imagen de la tabla se descarga sin librerías
+    img = pg.evaluate("""() => new Promise(res => {
+        const _c = HTMLAnchorElement.prototype.click;
+        HTMLAnchorElement.prototype.click = function(){};
+        const _u = URL.createObjectURL; let blob = null, nombre = '';
+        URL.createObjectURL = function(b){ blob = b; return 'blob:x'; };
+        const _a = document.createElement.bind(document);
+        fertImagen();
+        const t = setInterval(() => { if (blob) { clearInterval(t);
+            URL.createObjectURL = _u; HTMLAnchorElement.prototype.click = _c;
+            res({bytes: blob.size, tipo: blob.type}); } }, 100);
+        setTimeout(() => { clearInterval(t); URL.createObjectURL = _u;
+            HTMLAnchorElement.prototype.click = _c; res({bytes: 0, tipo: ''}); }, 6000);
+    })""")
+    prueba("la tabla se descarga como imagen",
+           img["tipo"] == "image/png" and img["bytes"] > 20000,
+           "%s · %.0f KB" % (img["tipo"] or "sin imagen", img["bytes"] / 1024))
+
+    # las perillas son listas, no fichas gigantes
+    forma = pg.evaluate("""() => ({
+        controles: document.querySelectorAll('#ft-barra .bc').length,
+        alto: document.getElementById('ft-barra').offsetHeight,
+        etapas: document.getElementById('ft-etapas').offsetHeight,
+        nutrientes: !!document.getElementById('ft-nut')
+    })""")
+    prueba("las perillas caben en una barra",
+           forma["controles"] >= 6 and forma["alto"] < 120,
+           "%d controles en %d px de alto" % (forma["controles"], forma["alto"]))
+    prueba("las etapas no se comen la pantalla", forma["etapas"] < 120,
+           "%d px de alto" % forma["etapas"])
+    prueba("ya no está el panel de requerimiento", not forma["nutrientes"])
 
     # el Programa Fitosanitario quedó acá y ya no en la Plataforma de Campo
     fito = pg.evaluate("""() => {
@@ -668,6 +709,109 @@ def correr(pw):
            % (resto["vistas"], resto["datos"], resto["boton"]))
     reales = [f for f in fallas if "librer" not in f.lower()]
     prueba("la Plataforma de Campo sigue sin errores", not reales,
+           reales[0][:60] if reales else "")
+    ctx.close()
+
+    # 11 · Precios de agroquímicos
+    ctx = nav.new_context(viewport={"width": 1500, "height": 1050})
+    pg = ctx.new_page()
+    fallas = []
+    pg.on("pageerror", lambda e: fallas.append(str(e)))
+    pg.goto("%s/tecnico.html" % BASE, wait_until="domcontentloaded")
+    pg.wait_for_timeout(4000)
+    pg.evaluate("() => ir('precios')")
+    pg.wait_for_timeout(2500)
+
+    pr = json.load(open(os.path.join(RAIZ, "precios.json"), encoding="utf-8"))
+
+    # el mejor precio tiene que ser el menor de la fila, siempre.
+    # Es justo lo que la planilla hacía mal en 74 filas.
+    mal = []
+    for p in pr["productos"]:
+        v = list(p["precios"].values())
+        if not v:
+            if p["mejor"] is not None:
+                mal.append(p["nombre"] + ": sin precios pero trae mejor")
+            continue
+        if abs(p["mejor"] - min(v)) > 0.001:
+            mal.append("%s: %s vs %s" % (p["nombre"], p["mejor"], min(v)))
+        if p["precios"][p["prov"]] != p["mejor"]:
+            mal.append(p["nombre"] + ": el proveedor no es el del mejor precio")
+    prueba("el mejor precio es siempre el menor de la fila", not mal,
+           "%d productos revisados%s" % (len(pr["productos"]),
+            "" if not mal else " · " + "; ".join(mal[:2])))
+
+    # un precio vacío no puede contar como cero
+    ceros = [p["nombre"] for p in pr["productos"]
+             if any(v <= 0 for v in p["precios"].values())]
+    prueba("ningún precio vacío quedó como cero", not ceros,
+           "" if not ceros else ", ".join(ceros[:3]))
+
+    vista = pg.evaluate("""() => ({
+        total: PRECIOS.productos.length,
+        fichas: document.querySelectorAll('.pr-c').length,
+        cats: document.querySelectorAll('#pr-cats .cat').length,
+        mejores: document.querySelectorAll('.pr-best').length
+    })""")
+    prueba("el catálogo se dibuja completo",
+           vista["fichas"] == vista["total"] and vista["cats"] >= 5,
+           "%d fichas · %d categorías" % (vista["fichas"], vista["cats"]))
+
+    # filtrar por categoría y buscar
+    filtros = pg.evaluate("""() => {
+        const todo = document.querySelectorAll('.pr-c').length;
+        prFiltrarCat('Fungicida');
+        const fung = document.querySelectorAll('.pr-c').length;
+        document.getElementById('pr-q').value = 'cobre'; renPrecios();
+        const cobre = document.querySelectorAll('.pr-c').length;
+        document.getElementById('pr-q').value = ''; prFiltrarCat('Fungicida');
+        return {todo, fung, cobre};
+    }""")
+    prueba("las categorías y la búsqueda filtran",
+           filtros["todo"] > filtros["fung"] > filtros["cobre"] > 0,
+           "%d → %d fungicidas → %d con «cobre»"
+           % (filtros["todo"], filtros["fung"], filtros["cobre"]))
+
+    # la vista tabla trae una columna por proveedor
+    tabla = pg.evaluate("""() => {
+        prVista('tabla');
+        const th = [...document.querySelectorAll('#pr-tabla thead th')].map(e => e.textContent.trim());
+        const mejores = document.querySelectorAll('#pr-tabla .mejor').length;
+        prVista('fichas');
+        return {cols: th.length, th, mejores};
+    }""")
+    prueba("la vista tabla trae todos los proveedores",
+           tabla["cols"] == len(pr["proveedores"]) + 4 and
+           "Mejor precio" in " ".join(tabla["th"]),
+           "%d columnas para %d proveedores" % (tabla["cols"], len(pr["proveedores"])))
+
+    # comparar productos
+    cmp_ = pg.evaluate("""() => {
+        PR_SEL = [];
+        const n = PRECIOS.productos.filter(p => p.mejor != null).slice(0, 3).map(p => p.nombre);
+        n.forEach(prSeleccionar);
+        prAbrirComparar();
+        return {filas: document.querySelectorAll('#pr-comparar tbody tr').length,
+                mejores: document.querySelectorAll('#pr-comparar .mejor').length};
+    }""")
+    prueba("el comparador arma su tabla",
+           cmp_["filas"] == 3 and cmp_["mejores"] >= 3,
+           "%d productos comparados" % cmp_["filas"])
+
+    # reclasificar un producto
+    recat = pg.evaluate("""() => {
+        const p = PRECIOS.productos.filter(x => x.cat === 'Otros')[0];
+        if (!p) return {ok: true, nota: 'no quedan productos en Otros'};
+        const antes = p.cat;
+        prCambiarCat(p.nombre, 'Fungicida');
+        const g = JSON.parse(localStorage.getItem('olo_precios_cat') || '{}');
+        prCambiarCat(p.nombre, antes);
+        return {ok: g[p.nombre] === 'Fungicida', nota: p.nombre};
+    }""")
+    prueba("se puede corregir la categoría de un producto", recat["ok"], recat["nota"])
+
+    reales = [f for f in fallas if "librer" not in f.lower()]
+    prueba("Precios de Agroquímicos no da errores", not reales,
            reales[0][:60] if reales else "")
     ctx.close()
     nav.close()

@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Departamento Técnico · Exportadora Los Olmos</title>
 <meta name="description" content="Estimación y flujo de cosecha de Exportadora Los Olmos.">
-<meta name="app-version" content="5.0">
+<meta name="app-version" content="5.1">
 <meta name="theme-color" content="#14301C">
 <link rel="manifest" href="./manifest.webmanifest">
 <link rel="apple-touch-icon" href="./apple-touch-icon.png">
@@ -252,6 +252,7 @@ thead th.stick{z-index:4;background:var(--g50)}
   .f-g{min-width:120px}
 }
 
+
 /* ══ PROGRAMA DE FERTILIZACIÓN ══ */
 .crumb{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--mut2);
   margin-bottom:10px;font-weight:600}
@@ -259,192 +260,180 @@ thead th.stick{z-index:4;background:var(--g50)}
 .crumb b{color:var(--g700);font-weight:700}
 
 .btn-g,.btn-p{display:inline-flex;align-items:center;gap:7px;font-size:12.5px;font-weight:700;
-  padding:9px 15px;border-radius:10px;cursor:pointer;transition:.16s;font-family:var(--font);
-  border:1px solid var(--line);background:var(--card);color:var(--ink);box-shadow:var(--sh1)}
+  padding:9px 15px;border-radius:9px;cursor:pointer;transition:.16s;font-family:var(--font);
+  border:1px solid var(--line);background:var(--card);color:var(--ink);white-space:nowrap}
 .btn-g:hover{border-color:var(--g200);color:var(--g700);background:var(--g50)}
 .btn-g svg,.btn-p svg{width:15px;height:15px}
 .btn-p{background:var(--g800);border-color:var(--g800);color:#fff}
 .btn-p:hover{background:var(--g900);border-color:var(--g900);color:#fff}
 
-/* perillas: se ven como las fichas de la referencia, pero se mueven */
-.ctrls{display:grid;grid-template-columns:repeat(auto-fit,minmax(164px,1fr));gap:12px}
-.ctrl{background:var(--card);border:1px solid var(--line);border-radius:var(--r);
-  padding:11px 14px;box-shadow:var(--sh1);display:flex;flex-direction:column;gap:5px;
-  cursor:pointer;transition:.16s}
-.ctrl:hover,.ctrl:focus-within{border-color:var(--g200);box-shadow:var(--sh2)}
-.ctrl-l{font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:.11em;
-  text-transform:uppercase;color:var(--mut2)}
-.ctrl select,.ctrl input{font-family:var(--font);font-size:15px;font-weight:800;color:var(--ink);
-  border:none;background:transparent;padding:0;width:100%;letter-spacing:-.02em;cursor:pointer}
-.ctrl input{cursor:text}
-.ctrl select:focus,.ctrl input:focus{outline:none}
-.ctrl-u{display:flex;align-items:baseline;gap:5px}
-.ctrl-u i{font-style:normal;font-family:var(--mono);font-size:10px;color:var(--mut2);
-  font-weight:600;flex-shrink:0}
-.ctrl-h{font-size:9.5px;color:var(--mut2);line-height:1.35;margin-top:-1px}
-.ctrl-n{font-size:11.5px;color:var(--mut);margin-top:10px;line-height:1.5}
-.ctrl-n b{color:var(--g800)}
+/* ── una sola barra con todas las perillas ──
+   Antes cada dato era una ficha grande; ocupaban media pantalla para
+   decir siete cosas. Acá van en línea, como un formulario de verdad. */
+.barra{display:flex;gap:0;background:var(--card);border:1px solid var(--line);
+  border-radius:var(--r);box-shadow:var(--sh1);overflow:hidden;flex-wrap:wrap}
+.bc{flex:1 1 120px;min-width:0;display:flex;flex-direction:column;gap:2px;
+  padding:9px 13px;border-right:1px solid var(--line2);cursor:pointer;transition:.14s}
+.bc:hover,.bc:focus-within{background:var(--g50)}
+.bc-w{flex:1.6 1 190px}
+.bc-n{flex:.8 1 104px}
+.bc>span{font-family:var(--mono);font-size:8.5px;font-weight:600;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--mut2);white-space:nowrap;overflow:hidden;
+  text-overflow:ellipsis}
+.bc select,.bc input{font-family:var(--font);font-size:13.5px;font-weight:700;color:var(--ink);
+  border:none;background:transparent;padding:0;width:100%;letter-spacing:-.01em;cursor:pointer;
+  appearance:none;-webkit-appearance:none}
+.bc input{cursor:text}
+.bc select:focus,.bc input:focus{outline:none}
+.bc select{background:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' \
+  viewBox='0 0 24 24' fill='none' stroke='%239AA79C' stroke-width='2.6'>\
+  <polyline points='6 9 12 15 18 9'/></svg>") no-repeat right center/11px}
+.bc-r{flex:0 0 auto;border:none;border-left:1px solid var(--line2);background:var(--card);
+  color:var(--mut2);cursor:pointer;padding:0 15px;transition:.14s}
+.bc-r:hover{background:var(--g50);color:var(--g700)}
+.bc-r svg{width:15px;height:15px;display:block}
+.barra-n{font-size:11.5px;color:var(--mut);margin:9px 2px 0;line-height:1.5}
+.barra-n b{color:var(--g800);font-weight:700}
 
-/* los cuatro programas tipo, siempre a la vista */
-.plbl{font-family:var(--mono);font-size:10px;font-weight:600;letter-spacing:.13em;
-  text-transform:uppercase;color:var(--mut2);margin:0 0 10px}
-.progs{display:grid;grid-template-columns:repeat(auto-fit,minmax(196px,1fr));gap:10px;
-  margin-bottom:18px}
-.pg-c{background:var(--card);border:1px solid var(--line);border-radius:var(--r);
-  padding:13px 15px;box-shadow:var(--sh1);cursor:pointer;text-align:left;transition:.18s;
-  font-family:var(--font);position:relative;overflow:hidden}
-.pg-c:hover{border-color:var(--g200);box-shadow:var(--sh2)}
-.pg-c::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;
-  background:var(--pc);opacity:.35;transition:.18s}
-.pg-c.on{border-color:var(--g700);box-shadow:var(--sh2)}
-.pg-c.on::before{opacity:1;width:4px}
-.pg-t{font-size:14px;font-weight:800;letter-spacing:-.02em;color:var(--ink)}
-.pg-s{font-size:10.5px;color:var(--mut);margin-top:4px;line-height:1.45}
-.pg-c.on .pg-t{color:var(--g800)}
-.pg-k{font-family:var(--mono);font-size:9.5px;color:var(--mut2);margin-top:7px;
-  padding-top:7px;border-top:1px solid var(--line2)}
+/* ── las etapas, en una tira ── */
+.etbar{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:1px;
+  background:var(--line);border:1px solid var(--line);border-radius:var(--r);
+  overflow:hidden;margin-top:18px;box-shadow:var(--sh1)}
+.etb{background:var(--etb);padding:10px 13px;display:flex;align-items:center;gap:10px;min-width:0}
+.etb-n{font-family:var(--mono);font-size:13px;font-weight:700;color:var(--etc);
+  flex-shrink:0;width:26px;text-align:center}
+.etb-x{min-width:0;flex:1}
+.etb-t{font-size:11.5px;font-weight:700;color:var(--ink);line-height:1.3;
+  overflow:hidden;text-overflow:ellipsis;display:-webkit-box;-webkit-line-clamp:2;
+  -webkit-box-orient:vertical}
+.etb-s{font-family:var(--mono);font-size:9px;color:var(--mut);margin-top:3px}
 
-/* etapas */
-.etapas{display:grid;grid-template-columns:repeat(auto-fit,minmax(224px,1fr));gap:12px;
-  align-items:stretch}
-.et{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:17px 18px;
-  box-shadow:var(--sh1);position:relative;overflow:hidden;
-  background:var(--etb,var(--card));border-color:var(--etl,var(--line))}
-.et-h{display:flex;align-items:center;gap:11px;margin-bottom:11px}
-.et-i{width:38px;height:38px;border-radius:12px;display:flex;align-items:center;
-  justify-content:center;background:rgba(255,255,255,.7);color:var(--etc,var(--g700));flex-shrink:0}
-.et-i svg{width:20px;height:20px}
-.et-n{font-family:var(--mono);font-size:17px;font-weight:600;color:var(--etc,var(--g700));
-  letter-spacing:.04em}
-.et-t{font-size:12.5px;font-weight:700;line-height:1.4;color:var(--ink);min-height:2.8em}
-.et-f{display:flex;flex-direction:column;gap:6px;margin-top:13px;padding-top:11px;
-  border-top:1px solid rgba(22,33,26,.08)}
-.et-d{display:flex;align-items:center;gap:6px;font-family:var(--mono);font-size:10px;
-  color:var(--mut);font-weight:600}
-.et-d svg{width:12px;height:12px;opacity:.6}
-.et-d b{color:var(--ink);font-weight:700}
+/* ── la tabla ── */
+.tbar{display:flex;align-items:center;justify-content:space-between;gap:14px;
+  flex-wrap:wrap;margin:24px 0 11px}
+.tbar-t{font-size:16px;font-weight:800;letter-spacing:-.02em}
+.tbar-t b{font-family:var(--mono);font-size:11px;font-weight:500;color:var(--mut2);
+  margin-left:5px;letter-spacing:0}
+.tbar-b{display:flex;gap:8px;flex-wrap:wrap}
 
-/* requerimiento por nutriente */
-.nut{display:grid;grid-template-columns:repeat(auto-fit,minmax(168px,1fr));gap:12px}
-.nu{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:14px 15px;
-  box-shadow:var(--sh1);position:relative;overflow:hidden}
-.nu::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--nc)}
-.nu-h{display:flex;align-items:baseline;justify-content:space-between;gap:8px;margin-bottom:9px}
-.nu-s{font-family:var(--mono);font-size:15px;font-weight:600;color:var(--nc)}
-.nu-l{font-size:9.5px;color:var(--mut2);font-weight:600}
-.nu-v{font-size:23px;font-weight:800;letter-spacing:-.03em;font-variant-numeric:tabular-nums;
-  line-height:1}
-.nu-v small{font-size:11px;font-weight:600;color:var(--mut2);margin-left:3px;letter-spacing:0}
-.nu-b{height:5px;border-radius:3px;background:var(--line2);margin-top:10px;overflow:hidden;display:flex}
-.nu-b i{display:block;height:100%;background:var(--nc);opacity:.85}
-.nu-f{margin-top:7px;font-family:var(--mono);font-size:9.5px;color:var(--mut2);line-height:1.5}
-
-/* tabla de dosis, con bandas por etapa */
-#ft-tabla thead th{font-size:9px;letter-spacing:.03em;padding:9px 7px;line-height:1.3;
-  white-space:normal;min-width:62px;vertical-align:bottom}
-#ft-tabla thead th.l{min-width:150px}
-#ft-tabla tbody td{padding:7px;font-size:11.5px}
-#ft-tabla tbody tr td{background:var(--eb,transparent)}
-#ft-tabla tbody tr:hover td{background:var(--ebh,var(--g50))}
-.et-cell{font-weight:700;color:var(--etc);font-family:var(--mono);font-size:12px;
-  text-align:center;vertical-align:middle;border-right:1px solid var(--line2)}
-.et-cell small{display:block;font-family:var(--font);font-size:9.5px;font-weight:600;
-  color:var(--mut);margin-top:3px;line-height:1.35;letter-spacing:0}
-.ap-cell{font-family:var(--mono);font-weight:600;color:var(--mut);text-align:center}
-#ft-tabla .z{color:var(--line);font-weight:400}
-#ft-tabla tfoot td{background:var(--g900)!important;color:#fff;font-weight:800;
-  padding:10px 7px;font-family:var(--mono);font-size:12px;position:sticky;bottom:0}
-#ft-tabla tfoot td.l{text-align:left;letter-spacing:.08em;font-size:10px}
+.ftw{max-height:none;border-radius:10px;overflow:auto}
+#ft-tabla{font-size:11.5px;border-collapse:collapse}
+#ft-tabla th,#ft-tabla td{border:1px solid #D8DEE6}
+#ft-tabla thead th{position:sticky;top:0;z-index:3;background:#203764;color:#fff;
+  font-family:var(--font);font-size:9.5px;font-weight:700;letter-spacing:0;
+  text-transform:none;padding:8px 5px;line-height:1.25;vertical-align:middle;
+  text-align:center;white-space:normal;overflow-wrap:break-word;word-break:normal;
+  hyphens:none;min-width:70px}
+#ft-tabla thead th.l{text-align:center;min-width:168px}
+#ft-tabla thead tr.sup th{font-size:10.5px;letter-spacing:.04em}
+#ft-tabla tbody td{padding:6px 5px;text-align:center;font-variant-numeric:tabular-nums;
+  background:var(--eb);color:#16211A;font-weight:600}
+#ft-tabla tbody td.et{text-align:left;font-size:11px;font-weight:700;line-height:1.3;
+  padding:6px 9px;vertical-align:middle}
+#ft-tabla tbody td.rom{font-family:var(--mono);font-weight:700;color:var(--etc);
+  font-size:11px;width:44px}
+#ft-tabla tbody td.ap{font-family:var(--mono);font-weight:700;width:58px}
+#ft-tabla tbody tr:hover td{filter:brightness(.97)}
+#ft-tabla tfoot td{background:#203764;color:#fff;font-weight:800;padding:8px 5px;
+  font-family:var(--mono);font-size:11.5px;text-align:center;border-color:#203764}
+#ft-tabla tfoot td.l{text-align:center;letter-spacing:.06em;font-size:10.5px}
+#ft-tabla .z{color:transparent}
 .man{position:relative}
-.man::after{content:'';position:absolute;top:5px;right:4px;width:4px;height:4px;
-  border-radius:50%;background:var(--warn);opacity:.75}
+.man::after{content:'';position:absolute;top:3px;right:3px;width:4px;height:4px;
+  border-radius:50%;background:#B8791F;opacity:.8}
 
-.lbl-u{font-family:var(--mono);font-size:9.5px;color:var(--mut2);text-transform:none;
-  letter-spacing:0;font-weight:500}
-
-/* comentarios */
-.coment{background:var(--card);border:1px solid var(--line);border-radius:var(--r);
-  padding:4px 20px 18px;box-shadow:var(--sh1)}
-.coment p{font-size:12.5px;line-height:1.65;color:var(--mut);margin:11px 0}
-.coment p.t{font-weight:800;color:var(--ink);font-size:13px;margin:20px 0 4px;
-  letter-spacing:-.01em}
+/* ── comentarios plegados ── */
+.coment-d{background:var(--card);border:1px solid var(--line);border-radius:var(--r);
+  box-shadow:var(--sh1);margin-top:22px;overflow:hidden}
+.coment-d>summary{padding:13px 18px;font-size:12.5px;font-weight:700;color:var(--ink);
+  cursor:pointer;list-style:none;display:flex;align-items:center;gap:9px;transition:.14s}
+.coment-d>summary::-webkit-details-marker{display:none}
+.coment-d>summary::before{content:'';width:0;height:0;border-left:5px solid var(--mut2);
+  border-top:4px solid transparent;border-bottom:4px solid transparent;transition:transform .2s}
+.coment-d[open]>summary::before{transform:rotate(90deg)}
+.coment-d>summary:hover{background:var(--g50)}
+.coment-d>summary span{font-family:var(--mono);font-size:9.5px;color:var(--mut2);
+  font-weight:500;margin-left:auto}
+.coment{padding:2px 20px 18px}
+.coment p{font-size:12.5px;line-height:1.6;color:var(--mut);margin:9px 0}
+.coment p.t{font-weight:800;color:var(--ink);font-size:12.5px;margin:17px 0 3px}
 .coment p.b{padding-left:14px;position:relative}
-.coment p.b::before{content:'';position:absolute;left:0;top:8px;width:5px;height:5px;
+.coment p.b::before{content:'';position:absolute;left:0;top:7px;width:5px;height:5px;
   border-radius:50%;background:var(--g300)}
 
 @media (max-width:900px){
-  .ctrls{grid-template-columns:repeat(auto-fit,minmax(142px,1fr))}
-  .etapas{grid-template-columns:1fr}
-  .et-t{min-height:0}
+  .bc{flex:1 1 44%}
+  .etbar{grid-template-columns:1fr}
 }
 
-/* ══ HOJA DE IMPRESIÓN DEL INFORME ══
-   Solo existe cuando se exporta. En pantalla está escondida. */
+/* ══ HOJA DEL INFORME ══
+   Reproduce el PDF que se entrega hoy. Solo existe al exportar. */
 #ft-print{display:none}
 .imprimiendo #ft-print{display:block}
 
 @media print{
-  @page{size:A4 landscape;margin:10mm 9mm}
+  @page{size:A4 portrait;margin:8mm}
   body.imprimiendo{background:#fff}
-  body.imprimiendo .wrap,body.imprimiendo .burger,body.imprimiendo .scrim{display:none!important}
+  body.imprimiendo .wrap,body.imprimiendo .burger,body.imprimiendo .scrim,
+  body.imprimiendo .ft-toast{display:none!important}
   body.imprimiendo #ft-print{display:block;position:static}
-  .pg{page-break-after:always;color:#16211A;font-family:var(--font)}
-  .pg:last-child{page-break-after:auto}
-  .pg2{page-break-before:always}
 }
 
 #ft-print{font-family:var(--font);color:#16211A}
-.ph{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;
-  border-bottom:2px solid #14301C;padding-bottom:9px;margin-bottom:12px}
-.ph-t{font-size:15px;font-weight:800;letter-spacing:.02em;color:#14301C}
-.ph-s{font-size:10px;color:#6B7A6E;margin-top:3px;font-weight:600}
-.ph-l{height:30px;width:auto;filter:brightness(0) saturate(100%) invert(14%) sepia(18%)
-  saturate(1500%) hue-rotate(95deg) brightness(95%) contrast(95%)}
+.hoja{width:100%}
+.hcab{background:#203764;color:#fff;text-align:center;font-weight:800;font-size:12px;
+  line-height:1.5;padding:9px 10px;letter-spacing:.02em}
 
-.pcols{display:flex;gap:14px;margin-bottom:12px}
-.pd{border-collapse:collapse;flex:1;font-size:9.5px}
-.pd td{padding:3.5px 7px;border-bottom:1px solid #ECF0EA}
-.pk{color:#6B7A6E;font-weight:600;width:42%}
-.pv{font-weight:800;color:#16211A}
+.hfila{display:flex;align-items:flex-start;gap:16px;margin:7px 0 8px}
+.hdatos{border-collapse:collapse;font-size:7.5px}
+.hdatos td{border:1px solid #fff;padding:3px 7px;background:#203764;color:#fff}
+.ik{font-weight:700;min-width:124px}
+.iv{font-weight:800;text-align:center;min-width:70px}
+.hd2 .ik{min-width:112px}
+.hlogo{height:34px;width:auto;margin-left:auto;align-self:center}
 
-.pe{border-collapse:collapse;width:100%;font-size:9px;margin-bottom:13px}
-.pe th{background:#14301C;color:#fff;padding:5px 7px;text-align:left;font-weight:700;
-  font-size:8px;letter-spacing:.05em;text-transform:uppercase}
-.pe th:first-child{text-align:center;width:46px}
-.pe th:nth-child(2){width:auto}
-.pe td:nth-child(2){text-align:left}
-.pe td{padding:4px 7px;border-bottom:1px solid #ECF0EA}
-.pe .pr{font-family:var(--mono);font-weight:700;color:#2C7A46;width:46px;text-align:center}
-.pe .pn{text-align:center;font-family:var(--mono);width:95px}
+.hetapas{border-collapse:collapse;width:100%;font-size:7px;margin-bottom:8px}
+.hetapas th{background:#203764;color:#fff;padding:4px 5px;font-weight:700;font-size:6.5px;
+  border:1px solid #fff;text-align:center;line-height:1.3}
+.hetapas td{border:1px solid #fff;padding:2px 5px;text-align:center}
+.hetapas .he{font-weight:700;width:120px}
+.hetapas .hf{background:#B4C7E7}
+.hetapas .e0{background:#C6E0B4} .hetapas .e1{background:#8EA9DB}
+.hetapas .e2{background:#F8CBAD} .hetapas .e3{background:#C9A6E4}
 
-.pt-t{font-size:11px;font-weight:800;margin-bottom:5px;color:#14301C}
-.pt{border-collapse:collapse;width:100%;font-size:8px;table-layout:fixed}
-.pt th{background:#14301C;color:#fff;padding:5px 3px;font-weight:700;font-size:6.6px;
-  line-height:1.2;vertical-align:bottom;text-align:center;
-  white-space:normal;overflow-wrap:anywhere;hyphens:auto}
-.pt th.l{text-align:left;width:118px}
-.pt td{padding:3.5px 3px;text-align:center;border-bottom:1px solid #E5EAE4;
+.htabla{border-collapse:collapse;width:100%;font-size:6.5px;table-layout:fixed}
+.htabla th{background:#203764;color:#fff;padding:3.5px 2px;font-weight:700;font-size:6px;
+  line-height:1.2;text-align:center;vertical-align:middle;border:1px solid #fff;
+  white-space:normal;overflow-wrap:break-word;word-break:normal;hyphens:none}
+.htabla th.vacio{background:#fff;border-color:#fff}
+.htabla th.banda{font-size:7px;letter-spacing:.03em}
+.htabla th.l{width:168px} .htabla th.r{width:24px}
+.htabla td{border:1px solid #fff;padding:2.4px 2px;text-align:center;
   font-variant-numeric:tabular-nums}
-.pt td.l{text-align:left;font-family:var(--mono);font-weight:700;vertical-align:middle;
-  font-size:10px;color:#2C7A46}
-.pt td.l i{display:block;font-style:normal;font-family:var(--font);font-size:7px;
-  font-weight:600;color:#374238;margin-top:2px;line-height:1.3}
-.pt .pn{font-family:var(--mono);font-weight:600;color:#6B7A6E}
-.pt tr.e0 td{background:#EDF6F0} .pt tr.e0 td.l{color:#2C7A46}
-.pt tr.e1 td{background:#EBF3F8} .pt tr.e1 td.l{color:#2E6B8F}
-.pt tr.e2 td{background:#FCF2E6} .pt tr.e2 td.l{color:#B8791F}
-.pt tr.e3 td{background:#F4EFF6} .pt tr.e3 td.l{color:#7B4B6B}
-.pt tfoot td{background:#14301C!important;color:#fff;font-weight:800;padding:5px 3px;
-  font-family:var(--mono);font-size:8.5px}
-.pt tfoot td.l{text-align:left;letter-spacing:.08em;color:#fff}
+.htabla td.l{text-align:left;font-size:6.5px;padding-left:4px;vertical-align:middle;
+  line-height:1.25}
+.htabla td.r{font-weight:700}
+.htabla tr.ep td{background:#DFC9EF}
+.htabla tr.e0 td{background:#C6E0B4}
+.htabla tr.e1 td{background:#8EA9DB}
+.htabla tr.e2 td{background:#F8CBAD}
+.htabla tr.e3 td{background:#C9A6E4}
+.htabla tfoot td{background:#203764;color:#fff;font-weight:800;padding:4px 2px}
+.htabla tfoot td.l{background:#fff;border-color:#fff}
 
-.pc{column-count:2;column-gap:22px;font-size:8.5px;line-height:1.5}
-.pc p{margin:0 0 6px;break-inside:avoid;color:#374238}
-.pc p.t{font-weight:800;color:#14301C;font-size:9.5px;margin:10px 0 3px}
-.pc p.b{padding-left:9px;position:relative}
-.pc p.b::before{content:'•';position:absolute;left:0;color:#4F9E68}
-.pf{margin-top:12px;padding-top:7px;border-top:1px solid #E5EAE4;font-size:8px;
-  color:#9AA79C;font-family:var(--mono)}
+.hcom{margin-top:8px;border:1px solid #BFBFBF;padding:5px 7px;font-size:5.4px;
+  line-height:1.36}
+.hcom p{margin:0 0 2px;color:#1a1a1a;break-inside:avoid}
+.hcom p.t{font-weight:800;margin:4px 0 1px;color:#000}
+.hcom p.b{padding-left:7px;position:relative}
+.hcom p.b::before{content:'•';position:absolute;left:0}
+
+/* aviso corto al aplicar o descargar */
+.ft-toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%) translateY(12px);
+  background:var(--g900);color:#fff;font-size:12.5px;font-weight:600;padding:11px 18px;
+  border-radius:100px;box-shadow:var(--sh3);opacity:0;pointer-events:none;z-index:900;
+  transition:.26s var(--ease);max-width:min(560px,calc(100vw - 40px));text-align:center}
+.ft-toast.on{opacity:1;transform:translateX(-50%)}
 
 /* ══ PROGRAMA FITOSANITARIO ══ */
 .ftabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
@@ -495,6 +484,127 @@ thead th.stick{z-index:4;background:var(--g50)}
 .gib-result-val{font-size:19px;font-weight:800;color:var(--g700);font-family:var(--mono);white-space:nowrap}
 .gib-result-unit{font-size:10.5px;color:var(--s400);font-weight:600}
 
+/* ══ PRECIOS DE AGROQUÍMICOS ══ */
+.cats{display:grid;grid-template-columns:repeat(auto-fit,minmax(136px,1fr));gap:10px}
+.cat{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:13px 14px;
+  box-shadow:var(--sh1);cursor:pointer;transition:.18s;font-family:var(--font);text-align:left;
+  position:relative;overflow:hidden}
+.cat:hover{border-color:var(--cc);box-shadow:var(--sh2);transform:translateY(-2px)}
+.cat.on{border-color:var(--cc);box-shadow:0 0 0 1px var(--cc),var(--sh2)}
+.cat-i{width:30px;height:30px;border-radius:9px;background:var(--cb);color:var(--cc);
+  display:flex;align-items:center;justify-content:center;margin-bottom:9px}
+.cat-i svg{width:16px;height:16px}
+.cat-t{font-size:12.5px;font-weight:800;letter-spacing:-.01em;line-height:1.25}
+.cat-n{font-family:var(--mono);font-size:10px;color:var(--mut2);margin-top:3px}
+.cat.on .cat-t{color:var(--cc)}
+
+.vistas{display:flex;align-self:flex-end;border:1px solid var(--line);border-radius:9px;
+  overflow:hidden;background:var(--g50)}
+.vbtn{display:inline-flex;align-items:center;gap:6px;font-size:11.5px;font-weight:700;
+  padding:9px 13px;border:none;background:transparent;color:var(--mut);cursor:pointer;
+  font-family:var(--font);transition:.14s;white-space:nowrap}
+.vbtn svg{width:13px;height:13px}
+.vbtn:hover{color:var(--g700)}
+.vbtn.on{background:var(--card);color:var(--g800);box-shadow:var(--sh1)}
+
+/* fichas de producto */
+.prods{display:grid;grid-template-columns:repeat(auto-fill,minmax(282px,1fr));gap:12px}
+.pr-c{background:var(--card);border:1px solid var(--line);border-radius:16px;
+  box-shadow:var(--sh1);overflow:hidden;transition:.18s;display:flex;flex-direction:column}
+.pr-c:hover{box-shadow:var(--sh2);border-color:var(--line)}
+.pr-c.sel{border-color:var(--g700);box-shadow:0 0 0 1px var(--g700),var(--sh2)}
+.pr-h{padding:13px 15px 11px;border-bottom:1px solid var(--line2);position:relative}
+.pr-h::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--cc)}
+.pr-t{font-size:13.5px;font-weight:800;letter-spacing:-.015em;line-height:1.3;padding-right:26px}
+.pr-ing{font-size:11px;color:var(--mut);margin-top:3px;line-height:1.4}
+.pr-tags{display:flex;gap:5px;flex-wrap:wrap;margin-top:9px}
+.pr-tag{font-family:var(--mono);font-size:8.5px;font-weight:600;padding:2px 7px;
+  border-radius:20px;background:var(--cb);color:var(--cc);border:1px solid var(--cb)}
+.pr-tag.f{background:var(--line2);color:var(--mut);border-color:var(--line)}
+.pr-chk{position:absolute;top:12px;right:12px;width:18px;height:18px;border-radius:5px;
+  border:1.5px solid var(--line);background:var(--card);cursor:pointer;display:flex;
+  align-items:center;justify-content:center;transition:.14s;padding:0}
+.pr-chk:hover{border-color:var(--g500)}
+.pr-chk.on{background:var(--g700);border-color:var(--g700)}
+.pr-chk svg{width:11px;height:11px;color:#fff;opacity:0}
+.pr-chk.on svg{opacity:1}
+
+.pr-p{padding:9px 15px 4px;flex:1}
+.pr-row{display:flex;align-items:baseline;justify-content:space-between;gap:10px;
+  font-size:11.5px;padding:3.5px 0;color:var(--mut)}
+.pr-row b{font-family:var(--mono);font-weight:600;color:var(--ink);font-size:11.5px;
+  white-space:nowrap}
+.pr-row.best{color:var(--g800);font-weight:700}
+.pr-row.best b{color:var(--g700);font-weight:700}
+.pr-best{margin:8px 15px 13px;background:var(--g100);border:1px solid var(--g200);
+  border-radius:11px;padding:9px 12px;display:flex;align-items:center;
+  justify-content:space-between;gap:10px}
+.pr-best-l{font-family:var(--mono);font-size:8.5px;font-weight:600;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--g700)}
+.pr-best-p{font-size:10.5px;color:var(--mut);margin-top:2px;line-height:1.3}
+.pr-best-v{font-size:18px;font-weight:800;color:var(--g800);letter-spacing:-.02em;
+  font-variant-numeric:tabular-nums;white-space:nowrap}
+.pr-best-v small{font-size:10px;font-weight:600;color:var(--mut2);margin-right:3px}
+.pr-nop{margin:8px 15px 13px;background:var(--g50);border:1px dashed var(--line);
+  border-radius:11px;padding:11px 12px;font-size:11.5px;color:var(--mut2);text-align:center}
+.pr-dif{font-family:var(--mono);font-size:9px;color:var(--mut2);padding:0 15px 11px}
+.pr-dif b{color:var(--warn);font-weight:600}
+.pr-dif.susp{color:var(--red);line-height:1.5}
+.pr-dif.susp b{color:var(--red)}
+
+/* cambiar la categoría de un producto */
+.pr-cat{position:relative}
+.pr-cat select{font-family:var(--mono);font-size:8.5px;font-weight:600;padding:2px 7px;
+  border-radius:20px;background:var(--cb);color:var(--cc);border:1px solid var(--cb);
+  appearance:none;-webkit-appearance:none;cursor:pointer;padding-right:16px}
+.pr-cat::after{content:'';position:absolute;right:5px;top:50%;width:0;height:0;
+  border-left:3px solid transparent;border-right:3px solid transparent;
+  border-top:3.5px solid currentColor;color:var(--cc);transform:translateY(-50%);
+  pointer-events:none;opacity:.6}
+
+/* comparador */
+.cmp{background:var(--card);border:1px solid var(--g200);border-radius:var(--r);
+  box-shadow:var(--sh2);padding:4px 0 0;margin-bottom:16px;overflow:hidden}
+.cmp-h{display:flex;align-items:center;justify-content:space-between;gap:12px;
+  padding:12px 18px 11px;border-bottom:1px solid var(--line2)}
+.cmp-t{font-size:13.5px;font-weight:800;letter-spacing:-.02em}
+.cmp table{width:100%;font-size:12px;border-collapse:collapse}
+.cmp th{background:var(--g50);font-family:var(--mono);font-size:9px;font-weight:600;
+  letter-spacing:.06em;text-transform:uppercase;color:var(--mut);padding:8px 10px;
+  text-align:right;border-bottom:1px solid var(--line)}
+.cmp th.l{text-align:left}
+.cmp td{padding:8px 10px;text-align:right;border-bottom:1px solid var(--line2);
+  font-variant-numeric:tabular-nums}
+.cmp td.l{text-align:left}
+.cmp tr:last-child td{border-bottom:none}
+.cmp .mejor{background:var(--g100);font-weight:700;color:var(--g800)}
+.cmp .vacio{color:var(--line)}
+
+/* tabla completa */
+.prtw{background:var(--card);border:1px solid var(--line);border-radius:var(--r);
+  box-shadow:var(--sh1);overflow:auto;max-height:74vh}
+#pr-tabla{border-collapse:separate;border-spacing:0;width:100%;font-size:11.5px}
+#pr-tabla thead th{position:sticky;top:0;z-index:3;background:var(--g50);color:var(--mut);
+  font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:.05em;
+  text-transform:uppercase;text-align:right;padding:9px 8px;white-space:nowrap;
+  border-bottom:1px solid var(--line)}
+#pr-tabla thead th.l{text-align:left}
+#pr-tabla tbody td{padding:7px 8px;text-align:right;border-bottom:1px solid var(--line2);
+  font-variant-numeric:tabular-nums;white-space:nowrap}
+#pr-tabla tbody td.l{text-align:left;white-space:normal}
+#pr-tabla tbody tr:hover td{background:var(--g50)}
+#pr-tabla .mejor{background:var(--g100);font-weight:700;color:var(--g800)}
+#pr-tabla tbody tr:hover .mejor{background:var(--g200)}
+#pr-tabla .vacio{color:var(--line)}
+.pr-nm{font-weight:700;color:var(--ink);line-height:1.3}
+.pr-sb{font-size:10px;color:var(--mut2);margin-top:1px;line-height:1.35}
+
+@media (max-width:900px){
+  .cats{grid-template-columns:repeat(auto-fit,minmax(118px,1fr))}
+  .prods{grid-template-columns:1fr}
+  .vistas{align-self:stretch}
+}
+
 @media (prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;transition-duration:.01ms!important}}
 </style>
 </head>
@@ -510,6 +620,10 @@ thead th.stick{z-index:4;background:var(--g50)}
       <button class="s-item on" id="nav-hub" onclick="ir('hub')">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
         <span>Todas las especies</span></button>
+
+      <button class="s-item" id="nav-precios" onclick="ir('precios')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M12 1v22"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
+        <span>Precios de Agroquímicos</span></button>
 
       <div class="s-lbl">Especies</div>
       <button class="s-grp" id="grp-cer" onclick="abrirEspecie('cer')" aria-expanded="true">
@@ -556,7 +670,7 @@ thead th.stick{z-index:4;background:var(--g50)}
       <a class="s-home" href="./index.html">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M3 10.5L12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/></svg>
         Inicio · otras plataformas</a>
-      <div class="s-ver">Departamento Técnico · v<span id="ver">5.0</span><br><span id="gen">—</span></div>
+      <div class="s-ver">Departamento Técnico · v<span id="ver">5.1</span><br><span id="gen">—</span></div>
     </div>
   </aside>
 
@@ -684,55 +798,57 @@ thead th.stick{z-index:4;background:var(--g50)}
       <div class="head">
         <div><div class="h-t">Programa de Fertilización</div>
           <div class="h-s" id="ft-sub">Temporada 2026 – 2027</div></div>
-        <div style="display:flex;gap:9px;align-items:center;flex-wrap:wrap">
-          <div class="stamp"><span class="dot"></span>Temporada <b id="ft-temp">2026 – 2027</b></div>
+        <div class="stamp" id="ft-estado"><span class="dot"></span>Temporada <b id="ft-temp">—</b></div>
+      </div>
+
+      <!-- ── las perillas, en una sola barra ── -->
+      <div class="barra" id="ft-barra">
+        <label class="bc bc-w"><span>Programa tipo</span>
+          <select id="ft-prog" onchange="fertCambiarPrograma()"></select></label>
+        <label class="bc"><span>Cuartel</span>
+          <input id="ft-cuartel" type="text" oninput="renFert()" autocomplete="off"></label>
+        <label class="bc"><span>Portainjerto</span>
+          <select id="ft-porta" onchange="renFert()"></select></label>
+        <label class="bc"><span>Índice de vigor</span>
+          <select id="ft-vigor" onchange="renFert()"></select></label>
+        <label class="bc bc-n"><span>Producción (kg/ha)</span>
+          <input id="ft-kg" type="number" min="0" step="500" oninput="renFert()"></label>
+        <label class="bc bc-n"><span>Superficie (ha)</span>
+          <input id="ft-sup" type="number" min="0.1" step="0.1" oninput="renFert()"></label>
+        <label class="bc bc-n"><span>Eficiencia riego (%)</span>
+          <input id="ft-efic" type="number" min="10" max="100" step="1" oninput="renFert()"></label>
+        <button class="bc-r" onclick="fertRestablecer()" title="Volver a los valores del programa tipo">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M21 12a9 9 0 11-3-6.7"/><path d="M21 4v5h-5"/></svg></button>
+      </div>
+      <div class="barra-n" id="ft-aviso"></div>
+
+      <!-- ── etapas, en una línea ── -->
+      <div class="etbar" id="ft-etapas"></div>
+
+      <!-- ── la tabla, que es lo que importa ── -->
+      <div class="tbar">
+        <div class="tbar-t">Dosis de fertilizante <b id="ft-unidad">(kg/ha)</b></div>
+        <div class="tbar-b">
+          <button class="btn-g" onclick="fertImagen()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+            Descargar imagen</button>
           <button class="btn-g" onclick="fertImprimir()">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><polyline points="9 15 12 12 15 15"/></svg>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
             Exportar informe</button>
-          <button class="btn-p" onclick="fertRestablecer()">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a9 9 0 11-3-6.7"/><path d="M21 4v5h-5"/></svg>
-            Volver al estándar</button>
+          <button class="btn-p" onclick="fertAplicar()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M20 6L9 17l-5-5"/></svg>
+            Aplicar programa</button>
         </div>
       </div>
-
-      <!-- ── las perillas ── -->
-      <div class="plbl">Programa tipo</div>
-      <div class="progs" id="ft-progs"></div>
-
-      <div class="ctrls" id="ft-ctrls">
-        <label class="ctrl"><span class="ctrl-l">Cuartel</span>
-          <input id="ft-cuartel" type="text" oninput="renFert()" autocomplete="off"></label>
-        <label class="ctrl"><span class="ctrl-l">Portainjerto</span>
-          <select id="ft-porta" onchange="renFert()"></select></label>
-        <label class="ctrl"><span class="ctrl-l">Índice de vigor</span>
-          <select id="ft-vigor" onchange="renFert()"></select>
-          <span class="ctrl-h" id="ft-vigor-h"></span></label>
-        <label class="ctrl"><span class="ctrl-l">Producción esperada</span>
-          <span class="ctrl-u"><input id="ft-kg" type="number" min="0" step="500" oninput="renFert()"><i>kg/ha</i></span></label>
-        <label class="ctrl"><span class="ctrl-l">Superficie bloque</span>
-          <span class="ctrl-u"><input id="ft-sup" type="number" min="0.1" step="0.1" oninput="renFert()"><i>ha</i></span></label>
-        <label class="ctrl"><span class="ctrl-l">Eficiencia del riego</span>
-          <span class="ctrl-u"><input id="ft-efic" type="number" min="10" max="100" step="1" oninput="renFert()"><i>%</i></span></label>
-      </div>
-      <div class="ctrl-n" id="ft-aviso"></div>
-
-      <!-- ── etapas ── -->
-      <div class="lbl">Etapas fenológicas del programa</div>
-      <div class="etapas" id="ft-etapas"></div>
-
-      <!-- ── requerimiento y aporte ── -->
-      <div class="lbl">Requerimiento del huerto y cómo se cubre</div>
-      <div class="nut" id="ft-nut"></div>
-      <div id="ft-cuadra" style="margin-top:12px"></div>
-
-      <!-- ── dosis ── -->
-      <div class="lbl">Dosis de fertilizante <span class="lbl-u" id="ft-unidad">(kg/ha)</span></div>
-      <div class="tw" id="ft-tabla-w"><table id="ft-tabla"></table></div>
+      <div class="tw ftw"><table id="ft-tabla"></table></div>
       <div class="foot-n" id="ft-pie"></div>
 
-      <!-- ── comentarios ── -->
-      <div class="lbl">Comentarios que acompañan al programa</div>
-      <div class="coment" id="ft-coment"></div>
+      <!-- ── comentarios, plegados ── -->
+      <details class="coment-d" id="ft-coment-d">
+        <summary>Comentarios que acompañan al programa
+          <span id="ft-coment-n"></span></summary>
+        <div class="coment" id="ft-coment"></div>
+      </details>
     </section>
 
     <!-- ══ PROGRAMA FITOSANITARIO ══ -->
@@ -788,6 +904,51 @@ thead th.stick{z-index:4;background:var(--g50)}
   </div>
     </section>
 
+    <!-- ══ PRECIOS DE AGROQUÍMICOS ══ -->
+    <section class="view" id="v-precios">
+      <div class="crumb"><span>Departamento Técnico</span><i>›</i><b>Precios de Agroquímicos</b></div>
+      <div class="head">
+        <div><div class="h-t">Precios de Agroquímicos</div>
+          <div class="h-s" id="pr-sub">Catálogo de productos, proveedores y mejor precio</div></div>
+        <div class="stamp"><span class="dot"></span><b id="pr-n">—</b> productos · <b id="pr-pv">—</b> proveedores</div>
+      </div>
+
+      <div id="pr-aviso"></div>
+
+      <!-- ── categorías ── -->
+      <div class="cats" id="pr-cats"></div>
+
+      <!-- ── búsqueda y filtros ── -->
+      <div class="filt" style="margin-top:14px">
+        <div class="f-g" style="flex:2">
+          <label>Buscar</label>
+          <input id="pr-q" type="search" placeholder="Producto, ingrediente activo o proveedor…"
+                 oninput="renPrecios()" autocomplete="off"></div>
+        <div class="f-g" style="max-width:190px"><label>Proveedor</label>
+          <select id="pr-prov" onchange="renPrecios()"></select></div>
+        <div class="f-g" style="max-width:170px"><label>Ordenar por</label>
+          <select id="pr-ord" onchange="renPrecios()">
+            <option value="nombre">Nombre</option>
+            <option value="barato">Más barato primero</option>
+            <option value="caro">Más caro primero</option>
+            <option value="ahorro">Mayor diferencia entre proveedores</option>
+          </select></div>
+        <div class="vistas">
+          <button class="vbtn on" id="pr-v-fichas" onclick="prVista('fichas')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
+            Fichas</button>
+          <button class="vbtn" id="pr-v-tabla" onclick="prVista('tabla')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 10h18M9 10v10"/></svg>
+            Tabla</button>
+        </div>
+        <button class="f-btn" id="pr-cmp-b" onclick="prAbrirComparar()">Comparar (0)</button>
+      </div>
+
+      <div id="pr-comparar"></div>
+      <div class="lbl" id="pr-lbl">Productos <span class="lbl-u" id="pr-cnt"></span></div>
+      <div id="pr-res"></div>
+    </section>
+
   </main>
 </div>
 
@@ -799,7 +960,7 @@ thead th.stick{z-index:4;background:var(--g50)}
    Lee cosecha.json, que sale del Excel FLUJO_CEREZOS con el script
    scripts/generar_cosecha.py. Esta página solo muestra: no escribe nada.
    ═══════════════════════════════════════════════════════════════════ */
-const APP_VERSION="5.0";
+const APP_VERSION="5.1";
 const LOGO_IMG="data:image/png;base64,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";
 document.getElementById("logo").src=LOGO_IMG;
 
@@ -814,6 +975,9 @@ const mil1=n=>(n==null?'—':Number(n).toLocaleString('es-CL',{maximumFractionDi
 const mil2=n=>n==null?'—':Number(n).toLocaleString('es-CL',
   {minimumFractionDigits:0,maximumFractionDigits:Math.abs(n)>=10?0:1});
 const pc=n=>n==null?'—':(n*100).toLocaleString('es-CL',{maximumFractionDigits:1})+'%';
+/* texto sin tildes y en minúscula, para buscar sin pelear con los acentos */
+const norm=s=>String(s==null?'':s).toLowerCase().normalize('NFD')
+  .replace(/[\u0300-\u036f]/g,'').trim();
 const esc=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const MES=['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
 function fcorta(f){ if(!f)return '—'; const p=f.split('-'); return (+p[2])+' '+MES[(+p[1])-1]; }
@@ -839,6 +1003,7 @@ function ir(v){
   if(v==='kilos')renKilos();
   if(v==='fert')abrirFert();
   if(v==='fito')abrirFito();
+  if(v==='precios')abrirPrecios();
   cerrarMenu();
   window.scrollTo(0,0);
 }
@@ -1580,21 +1745,18 @@ function fertCalcular(){
   return {entradas:e,demanda:dem,aporte:ap,dist:dist};
 }
 
-/* ── colores y símbolos de cada etapa ─────────────────────────────── */
+
+/* Los colores de cada etapa son los mismos del informe que se manda hoy. */
 const ET_COLOR=[
-  {b:'#EDF6F0',l:'#CFE8D8',c:'#2C7A46',h:'#E3F0E8',
-   i:'<path d="M12 2v6M12 22v-6M4.9 4.9l4.2 4.2M19.1 19.1l-4.2-4.2M2 12h6M22 12h-6M4.9 19.1l4.2-4.2M19.1 4.9l-4.2 4.2"/><circle cx="12" cy="12" r="3"/>'},
-  {b:'#EBF3F8',l:'#C3DCEA',c:'#2E6B8F',h:'#E1EDF4',
-   i:'<path d="M12 3c3.5 4 5.5 6.7 5.5 9.5a5.5 5.5 0 11-11 0C6.5 9.7 8.5 7 12 3z"/>'},
-  {b:'#FCF2E6',l:'#F0DCB0',c:'#B8791F',h:'#F8EADA',
-   i:'<circle cx="12" cy="13.5" r="6.5"/><path d="M12 7V3M12 3c1.6-.6 3-2 3.4-3"/>'},
-  {b:'#F4EFF6',l:'#E0D2E8',c:'#7B4B6B',h:'#EDE5F1',
-   i:'<path d="M12 22c0-7 3-11 8-13-1 7-4 10-8 13zM12 22c0-6-2.6-9.6-7-11.5.9 6 3.4 8.8 7 11.5z"/>'}
+  {b:'#DCEBD0',l:'#C6E0B4',c:'#4F7A3A'},
+  {b:'#C5D3EE',l:'#8EA9DB',c:'#2E4E8F'},
+  {b:'#FBDDC6',l:'#F8CBAD',c:'#A8602A'},
+  {b:'#DFC9EF',l:'#C9A6E4',c:'#6B4091'}
 ];
+const ET_PREVIO={b:'#EDE3F7',l:'#DFC9EF',c:'#6B4091'};
 const ROMANO=['I','II','III','IV'];
-const NUT_COLOR={N:'#2C7A46',P:'#2E6B8F',K:'#7B4B6B',Ca:'#B8791F',Mg:'#C0503C'};
-const NUT_NOM={N:'Nitrógeno',P:'Fósforo',K:'Potasio',Ca:'Calcio',Mg:'Magnesio'};
 const NUTRI=['N','P','K','Ca','Mg'];
+const AZUL='#203764';
 
 /* ── lectura de las perillas ──────────────────────────────────────── */
 function fertEntradas(){
@@ -1608,102 +1770,99 @@ function fertEntradas(){
   };
 }
 
-/* ── arranque de la sección ───────────────────────────────────────── */
+/* ── arranque ─────────────────────────────────────────────────────── */
 var FERT_LISTO=false;
 async function abrirFert(){
   if(FERT_LISTO) return;
   if(!FERT){
     try{ const r=await fetch('./fertilizacion.json',{cache:'no-store'}); FERT=await r.json(); }
     catch(e){
-      $('ft-tabla-w').innerHTML='<div class="empty">No se pudo leer <b>fertilizacion.json</b>. '+
-        'Hay que generarlo con <code>python3 scripts/generar_fertilizacion.py</code>.</div>';
+      $('ft-tabla').innerHTML='<tbody><tr><td style="padding:30px;text-align:center">'+
+        'No se pudo leer <b>fertilizacion.json</b>. Hay que generarlo con '+
+        '<code>python3 scripts/generar_fertilizacion.py</code>.</td></tr></tbody>';
       return;
     }
   }
-  pintaProgramas();
+  $('ft-prog').innerHTML=FERT.meta.programas.map(function(k){
+    return '<option value="'+k+'">'+esc(FERT.programas[k].nombre)+'</option>'; }).join('');
   $('ft-porta').innerHTML=FERT.portainjertos.map(function(p){
     return '<option value="'+esc(p)+'">'+esc(p)+'</option>'; }).join('');
   $('ft-vigor').innerHTML=Object.keys(FERT.matrizN).sort(function(a,b){return a-b;})
     .map(function(v){
-      return '<option value="'+v+'">'+Number(v).toLocaleString('es-CL')+'</option>'; }).join('');
+      return '<option value="'+v+'">'+Number(v).toLocaleString('es-CL')+' · '+
+        esc((FERT.calificativo[v]||'').replace('Levemente por debajo del óptimo','Bajo el óptimo'))+
+        '</option>'; }).join('');
   $('ft-temp').textContent=FERT.meta.temporada.replace('-',' – ');
   FERT_LISTO=true;
-  fertCambiarPrograma();
+  const g=fertGuardado();
+  if(g&&FERT.programas[g.prog]) $('ft-prog').value=g.prog;
+  fertCambiarPrograma(null,g);
   pintaComentarios();
 }
 
-/* Cada programa tipo es una receta distinta: cambia el reparto del
-   nitrógeno entre etapas y de dónde sale el potasio. Por eso van los
-   cuatro a la vista y no escondidos en una lista. */
-const PROG_COLOR={lapins_bajo_vigor:'#2C7A46',lapins_vigorosa:'#2E6B8F',
-                  santina_bajo_vigor:'#B8791F',santina_vigorosa:'#7B4B6B'};
-function pintaProgramas(){
-  $('ft-progs').innerHTML=FERT.meta.programas.map(function(k){
-    const p=FERT.programas[k];
-    const n=p.parcializacion.N;
-    const kFuente=(p.receta[3].productos.filter(function(x){return x.nut==='K';})[0]||{}).prod||'—';
-    return '<button class="pg-c'+(k===FPROG?' on':'')+'" id="pgc-'+k+'" '+
-      'style="--pc:'+(PROG_COLOR[k]||'var(--g700)')+'" onclick="fertCambiarPrograma(\''+k+'\')">'+
-      '<div class="pg-t">'+esc(p.nombre)+'</div>'+
-      '<div class="pg-s">'+(p.vigor==='vigorosa'
-        ? 'Todo el nitrógeno a post cosecha'
-        : 'Nitrógeno repartido en la temporada')+'</div>'+
-      '<div class="pg-k">N '+n.map(function(x){return Math.round(x*100);}).join('/')+
-      '  ·  K desde '+esc(kFuente.replace(' de ',' '))+'</div></button>';
-  }).join('');
-}
-
-function fertCambiarPrograma(k){
-  if(k) FPROG=k;
+function fertCambiarPrograma(k,guardado){
+  FPROG=k||$('ft-prog').value;
   FP=FERT.programas[FPROG];
-  document.querySelectorAll('.pg-c').forEach(function(e){ e.classList.remove('on'); });
-  const b=$('pgc-'+FPROG); if(b)b.classList.add('on');
-  fertRestablecer();
+  const d=FP.defecto, di=FP.distribucion, g=guardado&&guardado.prog===FPROG?guardado:null;
+  $('ft-cuartel').value = g?g.cuartel:d.cuartel;
+  $('ft-porta').value   = g?g.portainjerto:d.portainjerto;
+  $('ft-vigor').value   = String(Number(g?g.indiceVigor:d.indiceVigor).toFixed(1));
+  if($('ft-vigor').selectedIndex<0) $('ft-vigor').value=String(d.indiceVigor);
+  $('ft-kg').value      = g?g.kgHa:d.kgHa;
+  $('ft-sup').value     = g?g.superficie:di.superficie;
+  $('ft-efic').value    = Math.round((g?g.eficiencia:di.eficiencia)*100);
+  renFert();
 }
 
-/* Devolver las perillas a como viene el programa estándar. */
-function fertRestablecer(){
-  if(!FP)return;
-  const d=FP.defecto, di=FP.distribucion;
-  $('ft-cuartel').value=d.cuartel;
-  $('ft-porta').value=d.portainjerto;
-  $('ft-vigor').value=String(Number(d.indiceVigor).toFixed(1));
-  if(!$('ft-vigor').value||$('ft-vigor').selectedIndex<0)
-    $('ft-vigor').value=String(d.indiceVigor);
-  $('ft-kg').value=d.kgHa;
-  $('ft-sup').value=di.superficie;
-  $('ft-efic').value=Math.round(di.eficiencia*100);
+/* Volver a los valores con que viene el programa tipo. */
+function fertRestablecer(){ fertCambiarPrograma(FPROG,null); }
+
+/* ── lo que quedó aplicado, recordado en este equipo ──────────────── */
+function fertGuardado(){
+  try{ return JSON.parse(localStorage.getItem('olo_fert_aplicado')||'null'); }
+  catch(e){ return null; }
+}
+function fertAplicar(){
+  const e=fertEntradas();
+  const d=Object.assign({prog:FPROG,fecha:new Date().toISOString().slice(0,10)},e);
+  try{ localStorage.setItem('olo_fert_aplicado',JSON.stringify(d)); }catch(err){}
   renFert();
+  avisoFert('Programa aplicado al cuartel '+(e.cuartel||'sin nombre')+
+            '. Queda guardado en este equipo y se abre así la próxima vez.');
+}
+function avisoFert(txt){
+  var t=$('ft-toast');
+  if(!t){ t=document.createElement('div'); t.id='ft-toast'; t.className='ft-toast';
+          document.body.appendChild(t); }
+  t.textContent=txt; t.classList.add('on');
+  clearTimeout(t._t); t._t=setTimeout(function(){ t.classList.remove('on'); },3600);
 }
 
 /* ── dibujo ───────────────────────────────────────────────────────── */
 function renFert(){
   if(!FP)return;
   const R=fertCalcular();
-  const e=R.entradas, d=FP.distribucion;
+  const e=R.entradas;
 
-  const cal=FERT.calificativo[String(Number(e.indiceVigor).toFixed(1))]||
-            FERT.calificativo[String(e.indiceVigor)]||'';
-  $('ft-vigor-h').textContent=cal;
-  $('ft-sub').textContent=FP.nombre+' · '+esc(e.cuartel||'sin cuartel')+
+  $('ft-sub').textContent=FP.nombre+' · '+(e.cuartel||'sin cuartel')+
     ' · '+mil(e.kgHa)+' kg/ha';
   $('ft-unidad').textContent=e.superficie===1
     ? '(kg/ha)' : '(kg para '+mil1(e.superficie)+' ha)';
 
-  /* aviso: el programa tipo viene con un vigor y un portainjerto */
-  const cambiado=[];
-  if(e.portainjerto!==FP.defecto.portainjerto) cambiado.push('portainjerto');
-  if(Number(e.indiceVigor)!==Number(FP.defecto.indiceVigor)) cambiado.push('índice de vigor');
-  if(e.kgHa!==FP.defecto.kgHa) cambiado.push('producción');
+  const g=fertGuardado();
+  const aplicado=g&&g.prog===FPROG&&g.cuartel===e.cuartel&&g.kgHa===e.kgHa;
+  $('ft-estado').className='stamp'+(aplicado?'':' w');
+  $('ft-estado').innerHTML=aplicado
+    ? '<span class="dot"></span>Aplicado el <b>'+flarga(g.fecha)+'</b>'
+    : '<span class="dot w"></span>Temporada <b>'+FERT.meta.temporada.replace('-',' – ')+'</b>';
+
   $('ft-aviso').innerHTML=
-    'El reparto entre etapas y los productos los fija el <b>'+esc(FP.nombre)+'</b>. '+
     (FP.vigor==='vigorosa'
-      ? 'En un huerto vigoroso todo el nitrógeno va a post cosecha y el potasio entra como sulfato, para no empujar más vigor.'
-      : 'En un huerto de vigor bajo el nitrógeno se reparte durante la temporada y el potasio entra como nitrato.')+
-    (cambiado.length? ' Cambiaste <b>'+cambiado.join(', ')+'</b> respecto del estándar.' : '');
+      ? 'En el programa <b>vigoroso</b> todo el nitrógeno va a post cosecha y el potasio entra como sulfato, para no empujar más vigor.'
+      : 'En el programa de <b>vigor bajo</b> el nitrógeno se reparte durante la temporada y el potasio entra como nitrato.')+
+    ' Mueve los kilos, el portainjerto o el vigor y la tabla se recalcula sola.';
 
   pintaEtapas(R);
-  pintaNutrientes(R);
   pintaTabla(R);
 }
 
@@ -1711,215 +1870,160 @@ function pintaEtapas(R){
   const d=FP.distribucion;
   $('ft-etapas').innerHTML=d.estados.map(function(txt,i){
     const c=ET_COLOR[i];
-    const kg=NUTRI.reduce(function(a,n){ return a+R.demanda.etapas[i][n]; },0);
-    return '<div class="et" style="--etb:'+c.b+';--etl:'+c.l+';--etc:'+c.c+'">'+
-      '<div class="et-h"><div class="et-i"><svg viewBox="0 0 24 24" fill="none" '+
-        'stroke="currentColor" stroke-width="1.9" stroke-linecap="round">'+c.i+'</svg></div>'+
-        '<div class="et-n">'+ROMANO[i]+'</div></div>'+
-      '<div class="et-t">'+esc(txt)+'</div>'+
-      '<div class="et-f">'+
-        '<span class="et-d"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><b>'+
-          d.aplicaciones[i]+'</b> aplicaciones</span>'+
-        '<span class="et-d"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M3 9h18M8 2v4M16 2v4"/></svg><b>'+
-          R.dist.acum[i]+'</b> semanas acumuladas</span>'+
-        '<span class="et-d"><b>'+mil1(kg)+'</b> kg/ha de nutriente</span>'+
-      '</div></div>';
+    return '<div class="etb" style="--etb:'+c.b+';--etc:'+c.c+'">'+
+      '<div class="etb-n">'+ROMANO[i]+'</div><div class="etb-x">'+
+      '<div class="etb-t">'+esc(txt)+'</div>'+
+      '<div class="etb-s">'+d.aplicaciones[i]+' aplic. · semana '+
+        (i?R.dist.acum[i-1]+1:1)+' a '+R.dist.acum[i]+'</div></div></div>';
   }).join('');
-}
-
-function pintaNutrientes(R){
-  const tot=R.demanda.total;
-  const aportado={};
-  NUTRI.forEach(function(n){
-    aportado[n]=R.aporte.reduce(function(a,et){ return a+et.aportado[n]; },0);
-  });
-  const max=Math.max.apply(null,NUTRI.map(function(n){return Math.max(tot[n],aportado[n]);}))||1;
-
-  $('ft-nut').innerHTML=NUTRI.map(function(n){
-    const det=R.demanda.detalle[n];
-    const pct=Math.max(0,Math.min(100,(tot[n]/max)*100));
-    return '<div class="nu" style="--nc:'+NUT_COLOR[n]+'">'+
-      '<div class="nu-h"><span class="nu-s">'+n+'</span>'+
-        '<span class="nu-l">'+NUT_NOM[n]+'</span></div>'+
-      '<div class="nu-v">'+mil1(tot[n])+'<small>kg/ha</small></div>'+
-      '<div class="nu-b"><i style="width:'+pct+'%"></i></div>'+
-      '<div class="nu-f">'+mil1(det.basal)+' kg por tonelada'+
-        (Math.abs(det.correccion)>0.05
-          ? ' · foliar '+(det.correccion>0?'+':'')+mil1(det.correccion)+' kg/ha' : '')+
-        '<br>aportado '+mil1(aportado[n])+' kg/ha</div></div>';
-  }).join('');
-
-  /* ¿lo que se aplica cubre lo que se pide? */
-  const faltan=NUTRI.filter(function(n){
-    return tot[n]>0.5 && aportado[n] < tot[n]*0.95;
-  });
-  const sobran=NUTRI.filter(function(n){ return aportado[n] > tot[n]*1.12+1; });
-  var html='';
-  if(faltan.length)
-    html+='<div class="note note-w"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.3 3.9L1.8 18a2 2 0 001.7 3h17a2 2 0 001.7-3L13.7 3.9a2 2 0 00-3.4 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>'+
-      '<div><b>El programa no alcanza a cubrir '+faltan.join(', ')+'.</b> '+
-      'Pasa cuando una etapa pide un nutriente que ningún producto de esa etapa aporta. '+
-      'Revísalo antes de mandarlo.</div></div>';
-  else if(sobran.length)
-    html+='<div class="note note-i"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>'+
-      '<div>Se aporta más '+sobran.join(', ')+' del que pide el cálculo, porque viene '+
-      'de arrastre en otros productos (el nitrato de potasio trae nitrógeno, por ejemplo).</div></div>';
-  else
-    html+='<div class="note note-g"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M20 6L9 17l-5-5"/></svg>'+
-      '<div>Lo que aportan los productos cubre el requerimiento calculado en los cinco nutrientes.</div></div>';
-  $('ft-cuadra').innerHTML=html;
 }
 
 function pintaTabla(R){
   const d=FP.distribucion, cols=d.columnas;
-  var h='<thead><tr><th class="l">Etapa</th><th>Aplicación</th>'+
+  var h='<thead><tr class="sup"><th class="l" colspan="3"></th>'+
+    '<th colspan="'+cols.length+'">Dosis de fertilizante '+
+    (R.entradas.superficie===1?'(kg/ha)':'(kg para '+mil1(R.entradas.superficie)+' ha)')+
+    '</th></tr><tr><th class="l">Etapa</th><th>Etapa</th><th>Aplicación</th>'+
     cols.map(function(c){ return '<th>'+esc(c)+'</th>'; }).join('')+'</tr></thead><tbody>';
 
-  /* cuántas filas tiene cada etapa, para unir la celda de la izquierda */
-  const porEtapa={};
-  R.dist.filas.forEach(function(f){
-    if(f.previo)return;
-    porEtapa[f.etapa]=(porEtapa[f.etapa]||0)+1;
-  });
-  const yaPuesta={};
+  const porEtapa={}, puesta={};
+  R.dist.filas.forEach(function(f){ if(!f.previo) porEtapa[f.etapa]=(porEtapa[f.etapa]||0)+1; });
 
   R.dist.filas.forEach(function(f){
+    const c=f.previo?ET_PREVIO:ET_COLOR[f.etapa];
+    h+='<tr style="--eb:'+c.b+';--etc:'+c.c+'">';
     if(f.previo){
-      h+='<tr><td class="l et-cell" style="--etc:var(--mut)">—<small>'+esc(f.titulo)+'</small></td>'+
-        '<td class="ap-cell">0</td>'+
-        cols.map(function(c){ return celda(f.dosis[c],false); }).join('')+'</tr>';
-      return;
+      h+='<td class="et" colspan="2">'+esc(f.titulo)+'</td>';
+    }else{
+      if(!puesta[f.etapa]){
+        puesta[f.etapa]=true;
+        h+='<td class="et" rowspan="'+porEtapa[f.etapa]+'">'+esc(d.estados[f.etapa])+'</td>';
+      }
+      h+='<td class="rom">'+ROMANO[f.etapa]+'</td>';
     }
-    const c=ET_COLOR[f.etapa];
-    h+='<tr style="--eb:'+c.b+';--ebh:'+c.h+'">';
-    if(!yaPuesta[f.etapa]){
-      yaPuesta[f.etapa]=true;
-      h+='<td class="l et-cell" rowspan="'+porEtapa[f.etapa]+'" style="--etc:'+c.c+
-         ';background:'+c.b+'">'+ROMANO[f.etapa]+
-         '<small>'+esc(d.estados[f.etapa])+'</small></td>';
-    }
-    h+='<td class="ap-cell">'+f.aplicacion+'</td>'+
+    h+='<td class="ap">'+f.aplicacion+'</td>'+
       cols.map(function(col){
-        const esManual=(d.manual[col]||{})[String(f.aplicacion)]!=null;
-        return celda(f.dosis[col],esManual);
+        const man=(d.manual[col]||{})[String(f.aplicacion)]!=null;
+        const v=f.dosis[col];
+        if(v==null||v<0.004) return '<td><span class="z">—</span></td>';
+        return '<td'+(man?' class="man"':'')+'>'+mil2(v)+'</td>';
       }).join('')+'</tr>';
   });
 
-  h+='</tbody><tfoot><tr><td class="l" colspan="2">Total</td>'+
+  h+='</tbody><tfoot><tr><td class="l" colspan="3">Total</td>'+
     cols.map(function(c){
       const v=R.dist.total[c];
-      return '<td>'+(v>0.004?mil2(v):'—')+'</td>'; }).join('')+'</tr></tfoot>';
+      return '<td>'+(v>0.004?mil2(v):'0')+'</td>'; }).join('')+'</tr></tfoot>';
   $('ft-tabla').innerHTML=h;
 
   const nMan=cols.filter(function(c){ return Object.keys(d.manual[c]||{}).length; }).length;
-  $('ft-pie').innerHTML='Las dosis salen del requerimiento del huerto repartido entre las '+
-    'aplicaciones de cada etapa, corregido por la superficie del bloque y la eficiencia del riego. '+
-    'Las celdas con un punto <span style="display:inline-block;width:5px;height:5px;border-radius:50%;'+
-    'background:var(--warn);vertical-align:1px"></span> son dosis fijas del programa ('+nMan+
-    ' productos), no se calculan.';
-}
-
-function celda(v,manual){
-  if(v==null||v<0.004) return '<td><span class="z">—</span></td>';
-  return '<td'+(manual?' class="man"':'')+'>'+mil2(v)+'</td>';
+  $('ft-pie').innerHTML='Las celdas con un punto <span style="display:inline-block;width:5px;'+
+    'height:5px;border-radius:50%;background:#B8791F;vertical-align:1px"></span> son dosis '+
+    'fijas del programa ('+nMan+' productos); el resto se calcula desde el requerimiento '+
+    'del huerto, repartido entre las aplicaciones de cada etapa y corregido por superficie '+
+    'y eficiencia de riego.';
 }
 
 function pintaComentarios(){
   const c=FERT.comentarios||[];
+  var n=0;
   $('ft-coment').innerHTML=c.map(function(t){
     if(/^Comentarios:?$/i.test(t)) return '';
-    /* los párrafos que no terminan en punto y son cortos son títulos */
+    n++;
     const titulo=/^[A-ZÁÉÍÓÚÑ0-9][^•]*:$/.test(t)||
       (t.length<70 && !/[.;]$/.test(t) && !/^•/.test(t) && !/^\d\./.test(t));
     const vinieta=/^•/.test(t);
-    const clase=titulo?'t':(vinieta?'b':'');
-    return '<p class="'+clase+'">'+esc(t.replace(/^•\s*/,''))+'</p>';
+    return '<p class="'+(titulo?'t':(vinieta?'b':''))+'">'+
+      esc(t.replace(/^•\s*/,''))+'</p>';
   }).join('');
+  $('ft-coment-n').textContent=n+' párrafos · van en el informe';
 }
 
 /* ══════════════════════════════════════════════════════════════════
-   EXPORTAR EL INFORME
+   EL INFORME QUE SE MANDA
    ──────────────────────────────────────────────────────────────────
-   Arma una hoja aparte con el mismo orden que el PDF que se manda
-   hoy: encabezado, etapas, tabla de dosis y los comentarios en la
-   segunda página. Después abre el diálogo de impresión del navegador,
-   donde se elige "Guardar como PDF".
+   Copia exacta del PDF que se entrega hoy: azul #203764, los cuatro
+   colores de etapa, la misma tabla y los mismos comentarios abajo.
 
-   Se hace así a propósito y no con una librería: el navegador pagina
-   solo, respeta las tildes y funciona sin internet. La librería
-   habría que bajarla de afuera y en el campo no siempre hay señal.
+   Del encabezado van solo los cuatro datos que le importan al
+   productor —cuartel, variedad, portainjerto y producción esperada—
+   más la superficie y la eficiencia de riego. El índice de vigor y el
+   requerimiento por nutriente son parte del cálculo interno y no
+   aparecen.
    ══════════════════════════════════════════════════════════════════ */
-function fertImprimir(){
+function fertFilaDato(l,v){
+  return '<tr><td class="ik">'+esc(l)+'</td><td class="iv">'+esc(v)+'</td></tr>';
+}
+
+function fertHojaInforme(){
   const R=fertCalcular(), e=R.entradas, d=FP.distribucion, cols=d.columnas;
-  const hoy=new Date().toLocaleDateString('es-CL',{day:'numeric',month:'long',year:'numeric'});
 
-  var dato=function(l,v){
-    return '<tr><td class="pk">'+esc(l)+'</td><td class="pv">'+esc(v)+'</td></tr>'; };
+  var h='<div class="hoja">'+
+    '<div class="hcab">PROGRAMA FERTILIZACIÓN<br>TEMPORADA '+esc(FERT.meta.temporada)+'</div>'+
 
-  var h='<div class="pg">'+
-    '<div class="ph"><div><div class="ph-t">PROGRAMA DE FERTILIZACIÓN</div>'+
-      '<div class="ph-s">Temporada '+esc(FERT.meta.temporada)+' · '+esc(FP.nombre)+'</div></div>'+
-      '<img class="ph-l" src="'+LOGO_IMG+'" alt=""></div>'+
+    '<div class="hfila">'+
+      '<table class="hdatos">'+
+        fertFilaDato('Cuartel',e.cuartel||'—')+
+        fertFilaDato('Variedad',FP.variedad)+
+        fertFilaDato('Portainjerto',e.portainjerto)+
+        fertFilaDato('Producción esperada (kg/ha)',mil(e.kgHa))+
+      '</table>'+
+      '<table class="hdatos hd2">'+
+        fertFilaDato('Superficie bloque (ha)',mil1(e.superficie))+
+        fertFilaDato('Eficiencia sistema riego',Math.round(e.eficiencia*100)+'%')+
+      '</table>'+
+      '<img class="hlogo" src="'+LOGO_IMG+'" alt="Exportadora Los Olmos">'+
+    '</div>'+
 
-    '<div class="pcols"><table class="pd">'+
-      dato('Cuartel',e.cuartel||'—')+
-      dato('Variedad',FP.variedad)+
-      dato('Portainjerto',e.portainjerto)+
-      dato('Índice de vigor',Number(e.indiceVigor).toLocaleString('es-CL')+
-           ' · '+(FERT.calificativo[String(e.indiceVigor.toFixed(1))]||
-                  FERT.calificativo[String(e.indiceVigor)]||''))+
-      dato('Producción esperada',mil(e.kgHa)+' kg/ha')+
-    '</table><table class="pd">'+
-      dato('Superficie bloque',mil1(e.superficie)+' ha')+
-      dato('Eficiencia sistema riego',Math.round(e.eficiencia*100)+'%')+
-      dato('Requerimiento total',NUTRI.map(function(n){
-        return n+' '+mil1(R.demanda.total[n]); }).join(' · ')+' kg/ha')+
-      dato('Emitido',hoy)+
-    '</table></div>'+
-
-    '<table class="pe"><thead><tr><th>Etapa</th><th>Estado fenológico</th>'+
-      '<th>N° aplicaciones</th><th>Semanas acumuladas</th></tr></thead><tbody>'+
+    '<table class="hetapas"><thead><tr><th>Etapa</th><th>Estado Fenológico</th>'+
+      '<th>N°<br>Aplicaciones</th><th>Semanas<br>Acumuladas</th></tr></thead><tbody>'+
       d.estados.map(function(t,i){
-        return '<tr><td class="pr">'+ROMANO[i]+'</td><td>'+esc(t)+'</td>'+
-          '<td class="pn">'+d.aplicaciones[i]+'</td>'+
-          '<td class="pn">'+R.dist.acum[i]+'</td></tr>'; }).join('')+
+        return '<tr><td class="he e'+i+'">'+ROMANO[i]+'</td>'+
+          '<td class="hf">'+esc(t)+'</td>'+
+          '<td class="hf">'+d.aplicaciones[i]+'</td>'+
+          '<td class="hf">'+R.dist.acum[i]+'</td></tr>'; }).join('')+
     '</tbody></table>'+
 
-    '<div class="pt-t">Dosis de fertilizante '+
-      (e.superficie===1?'(kg/ha)':'(kg para '+mil1(e.superficie)+' ha)')+'</div>'+
-    '<table class="pt"><thead><tr><th class="l">Etapa</th><th>Aplic.</th>'+
-      cols.map(function(c){ return '<th>'+esc(c)+'</th>'; }).join('')+'</tr></thead><tbody>';
+    '<table class="htabla"><thead>'+
+      '<tr><th class="vacio" colspan="3"></th>'+
+        '<th class="banda" colspan="'+cols.length+'">Dosis de fertilizante '+
+        (e.superficie===1?'(kg/ha)':'(kg para '+mil1(e.superficie)+' ha)')+'</th></tr>'+
+      '<tr><th class="l">Etapa</th><th class="r">Etapa</th><th>Aplicación</th>'+
+        cols.map(function(c){ return '<th>'+esc(c)+'</th>'; }).join('')+'</tr>'+
+    '</thead><tbody>';
 
   const porEtapa={}, puesta={};
   R.dist.filas.forEach(function(f){ if(!f.previo) porEtapa[f.etapa]=(porEtapa[f.etapa]||0)+1; });
   R.dist.filas.forEach(function(f){
+    const cl=f.previo?'ep':'e'+f.etapa;
+    h+='<tr class="'+cl+'">';
     if(f.previo){
-      h+='<tr><td class="l">'+esc(f.titulo)+'</td><td class="pn">0</td>'+
-        cols.map(function(c){ return pcelda(f.dosis[c]); }).join('')+'</tr>';
-      return;
+      h+='<td class="l" colspan="2">'+esc(f.titulo)+'</td>';
+    }else{
+      if(!puesta[f.etapa]){
+        puesta[f.etapa]=true;
+        h+='<td class="l" rowspan="'+porEtapa[f.etapa]+'">'+esc(d.estados[f.etapa])+'</td>';
+      }
+      h+='<td class="r">'+ROMANO[f.etapa]+'</td>';
     }
-    h+='<tr class="e'+f.etapa+'">';
-    if(!puesta[f.etapa]){
-      puesta[f.etapa]=true;
-      h+='<td class="l pr" rowspan="'+porEtapa[f.etapa]+'">'+ROMANO[f.etapa]+
-         '<i>'+esc(d.estados[f.etapa])+'</i></td>';
-    }
-    h+='<td class="pn">'+f.aplicacion+'</td>'+
-      cols.map(function(c){ return pcelda(f.dosis[c]); }).join('')+'</tr>';
+    h+='<td>'+f.aplicacion+'</td>'+
+      cols.map(function(c){
+        const v=f.dosis[c];
+        return '<td>'+(v==null||v<0.004?'':mil2(v))+'</td>'; }).join('')+'</tr>';
   });
-  h+='</tbody><tfoot><tr><td class="l" colspan="2">Total</td>'+
-    cols.map(function(c){ return '<td>'+(R.dist.total[c]>0.004?mil2(R.dist.total[c]):'—')+'</td>'; })
-    .join('')+'</tr></tfoot></table></div>';
+  h+='</tbody><tfoot><tr><td class="l" colspan="2"></td><td>Total</td>'+
+    cols.map(function(c){
+      const v=R.dist.total[c];
+      return '<td>'+(v>0.004?mil2(v):'0')+'</td>'; }).join('')+'</tr></tfoot></table>'+
 
-  /* segunda hoja: los comentarios, tal cual se mandan */
-  h+='<div class="pg pg2"><div class="ph"><div><div class="ph-t">COMENTARIOS Y RECOMENDACIONES</div>'+
-    '<div class="ph-s">'+esc(FP.nombre)+' · '+esc(e.cuartel||'')+'</div></div>'+
-    '<img class="ph-l" src="'+LOGO_IMG+'" alt=""></div><div class="pc">'+
-    $('ft-coment').innerHTML+'</div>'+
-    '<div class="pf">Exportadora Los Olmos · Departamento Técnico · '+esc(hoy)+'</div></div>';
+    '<div class="hcom"><p class="t">Comentarios:</p>'+$('ft-coment').innerHTML+'</div>'+
+  '</div>';
+  return h;
+}
 
-  const caja=document.getElementById('ft-print');
-  caja.innerHTML=h;
+function fertImprimir(){
+  const caja=$('ft-print');
+  caja.innerHTML=fertHojaInforme();
   document.body.classList.add('imprimiendo');
   window.print();
   setTimeout(function(){
@@ -1928,10 +2032,139 @@ function fertImprimir(){
   },400);
 }
 
-function pcelda(v){
-  return '<td>'+(v==null||v<0.004?'':mil2(v))+'</td>';
+/* ══════════════════════════════════════════════════════════════════
+   DESCARGAR LA TABLA COMO IMAGEN
+   ──────────────────────────────────────────────────────────────────
+   Se dibuja a mano sobre un lienzo en vez de usar una librería: así
+   funciona sin internet, sale siempre igual y se puede pegar directo
+   en un WhatsApp o un correo.
+   ══════════════════════════════════════════════════════════════════ */
+/* Partir un texto en líneas que quepan en el ancho dado. */
+function cortar(g,txt,ancho,px,bold,maxLineas){
+  g.font=(bold?'700 ':'')+px+'px Inter, system-ui, sans-serif';
+  const palabras=String(txt).split(/\s+/);
+  var lineas=[], act='';
+  palabras.forEach(function(p){
+    const tent=act?act+' '+p:p;
+    if(g.measureText(tent).width>ancho && act){ lineas.push(act); act=p; }
+    else act=tent;
+  });
+  if(act)lineas.push(act);
+  if(lineas.length>maxLineas){
+    lineas=lineas.slice(0,maxLineas);
+    lineas[maxLineas-1]=lineas[maxLineas-1].replace(/\s*\S*$/,'…');
+  }
+  return lineas;
 }
 
+function fertImagen(){
+  const R=fertCalcular(), e=R.entradas, d=FP.distribucion, cols=d.columnas;
+  const E=2;                                   // el doble de puntos, para que no se vea pixelado
+  const anchoEtapa=200, anchoRom=38, anchoAp=62, anchoCol=78;
+  const W=anchoEtapa+anchoRom+anchoAp+anchoCol*cols.length+40;
+  const hCab=92, hEnc=52, hFila=25, hTot=30;
+  const H=hCab+hEnc+hFila*R.dist.filas.length+hTot+58;
+
+  const cv=document.createElement('canvas');
+  cv.width=W*E; cv.height=H*E;
+  const g=cv.getContext('2d');
+  g.scale(E,E);
+  g.textBaseline='middle';
+  const F=function(p,b){ return (b?'700 ':'')+p+'px Inter, system-ui, sans-serif'; };
+  const caja=function(x,y,w,hh,relleno,borde){
+    if(relleno){ g.fillStyle=relleno; g.fillRect(x,y,w,hh); }
+    if(borde!==false){ g.strokeStyle='#D8DEE6'; g.lineWidth=.6; g.strokeRect(x,y,w,hh); }
+  };
+  const texto=function(t,x,y,col,px,bold,alin,maxA){
+    g.fillStyle=col; g.font=F(px,bold); g.textAlign=alin||'center';
+    if(maxA){
+      var s=String(t);
+      while(g.measureText(s).width>maxA && s.length>4) s=s.slice(0,-2);
+      if(s!==String(t)) s=s.slice(0,-1)+'…';
+      g.fillText(s,x,y);
+    } else g.fillText(String(t),x,y);
+  };
+
+  g.fillStyle='#fff'; g.fillRect(0,0,W,H);
+
+  /* cabecera */
+  g.fillStyle=AZUL; g.fillRect(20,16,W-40,hCab-28);
+  texto('PROGRAMA DE FERTILIZACIÓN · TEMPORADA '+FERT.meta.temporada,W/2,36,'#fff',14,true);
+  texto(FP.nombre+'   ·   Cuartel '+(e.cuartel||'—')+'   ·   Portainjerto '+e.portainjerto+
+        '   ·   '+mil(e.kgHa)+' kg/ha   ·   '+mil1(e.superficie)+' ha   ·   riego '+
+        Math.round(e.eficiencia*100)+'%', W/2,58,'#C9D6EA',10.5,false);
+
+  /* encabezado de la tabla */
+  var y=hCab, x=20;
+  const anchos=[anchoEtapa,anchoRom,anchoAp].concat(cols.map(function(){return anchoCol;}));
+  const titulos=['Etapa','Etapa','Aplicación'].concat(cols);
+  g.fillStyle=AZUL; g.fillRect(20,y,W-40,hEnc);
+  titulos.forEach(function(t,i){
+    const w=anchos[i];
+    const lineas=cortar(g,t,w-8,9,true,3);
+    const y0=y+hEnc/2-(lineas.length-1)*5.5;
+    lineas.forEach(function(l,k){ texto(l,x+w/2,y0+k*11,'#fff',9,true,'center',w-6); });
+    x+=w;
+  });
+
+  /* filas */
+  y+=hEnc;
+  const porEtapa={}, puesta={};
+  R.dist.filas.forEach(function(f){ if(!f.previo) porEtapa[f.etapa]=(porEtapa[f.etapa]||0)+1; });
+  R.dist.filas.forEach(function(f){
+    const c=f.previo?ET_PREVIO:ET_COLOR[f.etapa];
+    /* la columna del nombre se pinta aparte: va unida entre las filas de
+       la etapa y si se repinta por fila se borra el texto */
+    x=20+anchoEtapa;
+    anchos.slice(1).forEach(function(w){ caja(x,y,w,hFila,c.b); x+=w; });
+    if(f.previo){
+      caja(20,y,anchoEtapa,hFila,c.b);
+      texto(f.titulo,28,y+hFila/2,'#16211A',9.5,true,'left',anchoEtapa-16);
+    }else{
+      if(!puesta[f.etapa]){
+        puesta[f.etapa]=true;
+        const alto=hFila*porEtapa[f.etapa];
+        caja(20,y,anchoEtapa,alto,c.b);
+        const lineas=cortar(g,d.estados[f.etapa],anchoEtapa-18,9.5,true,3);
+        const y0=y+alto/2-(lineas.length-1)*6;
+        lineas.forEach(function(l,k){
+          texto(l,28,y0+k*12,'#16211A',9.5,true,'left'); });
+      }
+      texto(ROMANO[f.etapa],20+anchoEtapa+anchoRom/2,y+hFila/2,c.c,10,true);
+    }
+    texto(f.aplicacion,20+anchoEtapa+anchoRom+anchoAp/2,y+hFila/2,'#374238',10,true);
+    x=20+anchoEtapa+anchoRom+anchoAp;
+    cols.forEach(function(col){
+      const v=f.dosis[col];
+      if(v!=null&&v>=0.004) texto(mil2(v),x+anchoCol/2,y+hFila/2,'#16211A',10,false);
+      x+=anchoCol;
+    });
+    y+=hFila;
+  });
+
+  /* total */
+  g.fillStyle=AZUL; g.fillRect(20,y,W-40,hTot);
+  texto('Total',20+anchoEtapa+anchoRom+anchoAp/2,y+hTot/2,'#fff',10.5,true);
+  x=20+anchoEtapa+anchoRom+anchoAp;
+  cols.forEach(function(col){
+    const v=R.dist.total[col];
+    texto(v>0.004?mil2(v):'0',x+anchoCol/2,y+hTot/2,'#fff',10.5,true);
+    x+=anchoCol;
+  });
+
+  texto('Exportadora Los Olmos · Departamento Técnico · '+
+        new Date().toLocaleDateString('es-CL',{day:'numeric',month:'long',year:'numeric'}),
+        20,y+hTot+22,'#9AA79C',9,false,'left');
+
+  const nombre='Programa_fertilizacion_'+FPROG+'_'+(e.cuartel||'cuartel').replace(/\s+/g,'_')+
+               '_'+mil(e.kgHa).replace(/\./g,'')+'kg.png';
+  cv.toBlob(function(b){
+    const a=document.createElement('a');
+    a.href=URL.createObjectURL(b); a.download=nombre; a.click();
+    setTimeout(function(){ URL.revokeObjectURL(a.href); },4000);
+    avisoFert('Imagen descargada: '+nombre);
+  },'image/png');
+}
 
 /* ── Programa Fitosanitario: navegación entre sus cuatro partes ── */
 const FTABS=[['hub','Inicio'],['programa','Programa Cerezos 2026-27'],
@@ -2075,6 +2308,284 @@ function renderFitoPrograma(){
 }
 
 
+
+
+/* ══════════════════════════════════════════════════════════════════
+   PRECIOS DE AGROQUÍMICOS
+   ──────────────────────────────────────────────────────────────────
+   El mejor precio y el proveedor óptimo NO se copian de la planilla:
+   se vuelven a calcular acá. En la planilla esas dos columnas están
+   rotas —hay celdas con #REF! y 74 filas donde el "mejor precio" no es
+   el menor de la fila— y de ahí salen las compras.
+
+   La regla es la del propio documento: se toman los precios de los
+   proveedores, se descartan los vacíos y los ceros, y el menor que
+   quede es el mejor precio. Si no queda ninguno, el producto aparece
+   sin precio en vez de aparecer en cero.
+   ══════════════════════════════════════════════════════════════════ */
+var PRECIOS=null, PR_CAT='', PR_VISTA='fichas', PR_SEL=[];
+
+const PR_COLOR={
+  'Fungicida':      {c:'#C0503C', b:'#FBEDEA'},
+  'Acaricida':      {c:'#C97A3A', b:'#FAEEE2'},
+  'Insecticida':    {c:'#2E6B8F', b:'#E4EFF6'},
+  'Herbicida':      {c:'#6B7A3A', b:'#F0F3E4'},
+  'Regulador':      {c:'#7B4B6B', b:'#F4EAF1'},
+  'Bioestimulante': {c:'#A8871F', b:'#FAF3DE'},
+  'Nutriente':      {c:'#2C7A46', b:'#E8F2EA'},
+  'Coadyuvante':    {c:'#3F7A7A', b:'#E4F1F1'},
+  'Otros':          {c:'#6B7A6E', b:'#F0F3EF'}
+};
+const PR_ICONO={
+  'Fungicida':'<path d="M12 2a9 9 0 00-9 9h18a9 9 0 00-9-9z"/><path d="M12 11v9M9 20h6"/>',
+  'Acaricida':'<circle cx="12" cy="12" r="4"/><path d="M12 8V3M12 16v5M8 12H3M16 12h5M9 9L5.5 5.5M15 9l3.5-3.5M9 15l-3.5 3.5M15 15l3.5 3.5"/>',
+  'Insecticida':'<ellipse cx="12" cy="13" rx="3.4" ry="5"/><path d="M8.6 10C6 7.6 3.5 8 3 10s2 3 5 2M15.4 10c2.6-2.4 5.1-2 5.6 0s-2 3-5 2M12 8V5M10.5 3.5L12 5l1.5-1.5"/>',
+  'Herbicida':'<path d="M12 21V9M12 9c0-4 3-6 7-6 0 4-3 6-7 6zM12 13c0-3-2.5-5-6-5 0 3 2.5 5 6 5z"/>',
+  'Regulador':'<path d="M12 21V8"/><path d="M8.5 8a3.5 3.5 0 017 0c0 2.4-3.5 5-3.5 5S8.5 10.4 8.5 8z"/><path d="M6 21h12"/>',
+  'Bioestimulante':'<path d="M12 22c5-3 8-7 8-12a8 8 0 00-16 0c0 5 3 9 8 12z"/><path d="M12 22V8"/>',
+  'Nutriente':'<path d="M12 3c3.5 4 5.5 6.7 5.5 9.5a5.5 5.5 0 11-11 0C6.5 9.7 8.5 7 12 3z"/>',
+  'Coadyuvante':'<path d="M9 3h6l-1 4h-4L9 3z"/><path d="M10 7v3.5L6.5 18a3 3 0 002.7 4h5.6a3 3 0 002.7-4L14 10.5V7"/>',
+  'Otros':'<circle cx="12" cy="12" r="9"/><path d="M12 16v.01M12 13a2.5 2.5 0 10-2.5-2.5"/>'
+};
+const PR_TODOS='<path d="M3 7h18M3 12h18M3 17h18"/>';
+
+/* la formulación va dentro del nombre: "Captan 83 WP" → WP */
+function prFormulacion(n){
+  const m=String(n).match(/\b(WP|WG|SC|EC|EW|SL|SP|SE|CS|OD|FS|ME|DF|DC|SG|AD|WST)\b/i);
+  return m?m[1].toUpperCase():'';
+}
+const usd=v=>v==null?'—':'USD '+Number(v).toLocaleString('es-CL',
+  {minimumFractionDigits:2,maximumFractionDigits:2});
+
+/* Reclasificar un producto. Lo que se corrige acá queda en este equipo;
+   para que valga para todos hay que anotarlo en la planilla. */
+function prCatGuardadas(){
+  try{ return JSON.parse(localStorage.getItem('olo_precios_cat')||'{}'); }
+  catch(e){ return {}; }
+}
+function prCambiarCat(nombre,cat){
+  const g=prCatGuardadas(); g[nombre]=cat;
+  try{ localStorage.setItem('olo_precios_cat',JSON.stringify(g)); }catch(e){}
+  const p=PRECIOS.productos.filter(function(x){return x.nombre===nombre;})[0];
+  if(p) p.cat=cat;
+  prContar(); renPrecios();
+}
+
+var PR_LISTO=false;
+async function abrirPrecios(){
+  if(PR_LISTO) return;
+  if(!PRECIOS){
+    try{ const r=await fetch('./precios.json',{cache:'no-store'}); PRECIOS=await r.json(); }
+    catch(e){
+      $('pr-res').innerHTML='<div class="empty">No se pudo leer <b>precios.json</b>. '+
+        'Hay que generarlo con <code>python3 scripts/generar_precios.py</code>.</div>';
+      return;
+    }
+  }
+  /* aplicar las reclasificaciones hechas en este equipo */
+  const g=prCatGuardadas();
+  PRECIOS.productos.forEach(function(p){ if(g[p.nombre]) p.cat=g[p.nombre]; });
+
+  $('pr-n').textContent=mil(PRECIOS.meta.productos);
+  $('pr-pv').textContent=PRECIOS.proveedores.length;
+  $('pr-prov').innerHTML='<option value="">Todos los proveedores</option>'+
+    PRECIOS.proveedores.map(function(p){
+      return '<option value="'+esc(p)+'">'+esc(p)+'</option>'; }).join('');
+  $('pr-aviso').innerHTML=PRECIOS.meta.corregidos
+    ? '<div class="note note-w" style="margin-bottom:16px">'+
+      '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.3 3.9L1.8 18a2 2 0 001.7 3h17a2 2 0 001.7-3L13.7 3.9a2 2 0 00-3.4 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>'+
+      '<div><b>En '+PRECIOS.meta.corregidos+' productos la planilla tenía un '+
+      '«mejor precio» que no era el menor de la fila,</b> además de celdas con '+
+      '#REF!. Acá los precios se recalculan solos, así que lo que ves es correcto; '+
+      'conviene arreglar también la planilla antes de comprar con ella.</div></div>'
+    : '';
+  PR_LISTO=true;
+  prContar();
+  renPrecios();
+}
+
+function prContar(){
+  const n={};
+  PRECIOS.productos.forEach(function(p){ n[p.cat]=(n[p.cat]||0)+1; });
+  PRECIOS.conteo=n;
+  const cats=Object.keys(PR_COLOR).filter(function(c){ return n[c]; });
+  $('pr-cats').innerHTML=
+    prCatCard('','Todos',PRECIOS.productos.length,PR_TODOS,'#2C7A46','#E8F2EA')+
+    cats.map(function(c){
+      return prCatCard(c,c==='Regulador'?'Reguladores':
+                         (c==='Otros'?'Otros':c+'s'),n[c],
+                       PR_ICONO[c],PR_COLOR[c].c,PR_COLOR[c].b); }).join('');
+}
+function prCatCard(k,t,n,ic,c,b){
+  return '<button class="cat'+(PR_CAT===k?' on':'')+'" style="--cc:'+c+';--cb:'+b+'" '+
+    'onclick="prFiltrarCat(\''+k+'\')">'+
+    '<div class="cat-i"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" '+
+    'stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">'+ic+'</svg></div>'+
+    '<div class="cat-t">'+esc(t)+'</div>'+
+    '<div class="cat-n">'+n+' producto'+(n===1?'':'s')+'</div></button>';
+}
+function prFiltrarCat(k){ PR_CAT=(PR_CAT===k?'':k); prContar(); renPrecios(); }
+function prVista(v){
+  PR_VISTA=v;
+  $('pr-v-fichas').classList.toggle('on',v==='fichas');
+  $('pr-v-tabla').classList.toggle('on',v==='tabla');
+  renPrecios();
+}
+
+function prFiltrar(){
+  const q=norm($('pr-q').value), prov=$('pr-prov').value, ord=$('pr-ord').value;
+  var l=PRECIOS.productos.filter(function(p){
+    if(PR_CAT && p.cat!==PR_CAT) return false;
+    if(prov && p.precios[prov]==null) return false;
+    if(q){
+      const h=norm(p.nombre+' '+p.ing+' '+p.obj.join(' ')+' '+
+                   Object.keys(p.precios).join(' ')+' '+p.cat);
+      if(h.indexOf(q)<0) return false;
+    }
+    return true;
+  });
+  const dif=function(p){
+    const v=Object.keys(p.precios).map(function(k){return p.precios[k];});
+    return v.length>1? Math.max.apply(null,v)-Math.min.apply(null,v) : 0;
+  };
+  if(ord==='barato') l.sort(function(a,b){ return (a.mejor==null?1e9:a.mejor)-(b.mejor==null?1e9:b.mejor); });
+  else if(ord==='caro') l.sort(function(a,b){ return (b.mejor==null?-1:b.mejor)-(a.mejor==null?-1:a.mejor); });
+  else if(ord==='ahorro') l.sort(function(a,b){ return dif(b)-dif(a); });
+  else l.sort(function(a,b){ return a.nombre.localeCompare(b.nombre,'es'); });
+  return l;
+}
+
+function renPrecios(){
+  if(!PRECIOS) return;
+  const l=prFiltrar();
+  $('pr-cnt').textContent='('+l.length+' de '+PRECIOS.productos.length+')';
+  $('pr-cmp-b').textContent='Comparar ('+PR_SEL.length+')';
+  $('pr-cmp-b').className='f-btn'+(PR_SEL.length?' pri':'');
+  if(!l.length){
+    $('pr-res').innerHTML='<div class="empty">Ningún producto con esos filtros.</div>';
+    return;
+  }
+  $('pr-res').innerHTML = PR_VISTA==='fichas' ? prFichas(l) : prTabla(l);
+  if($('pr-comparar').innerHTML.trim()) prAbrirComparar(true);
+}
+
+function prFichas(l){
+  return '<div class="prods">'+l.map(function(p){
+    const c=PR_COLOR[p.cat]||PR_COLOR.Otros;
+    const provs=Object.keys(p.precios).sort(function(a,b){ return p.precios[a]-p.precios[b]; });
+    const f=prFormulacion(p.nombre);
+    const vals=provs.map(function(k){return p.precios[k];});
+    const dif=vals.length>1? vals[vals.length-1]-vals[0] : 0;
+    const sel=PR_SEL.indexOf(p.nombre)>=0;
+    return '<div class="pr-c'+(sel?' sel':'')+'" style="--cc:'+c.c+';--cb:'+c.b+'">'+
+      '<div class="pr-h">'+
+        '<button class="pr-chk'+(sel?' on':'')+'" onclick="prSeleccionar('+
+          JSON.stringify(p.nombre).replace(/"/g,'&quot;')+')" title="Comparar">'+
+          '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round"><path d="M20 6L9 17l-5-5"/></svg></button>'+
+        '<div class="pr-t">'+esc(p.nombre)+'</div>'+
+        (p.ing?'<div class="pr-ing">'+esc(p.ing)+'</div>':'')+
+        '<div class="pr-tags">'+prSelectCat(p)+
+          (f?'<span class="pr-tag f">'+f+'</span>':'')+
+          (p.repetido?'<span class="pr-tag f" title="La planilla lo traía en '+
+            p.repetido+' filas">×'+p.repetido+' en la planilla</span>':'')+'</div>'+
+      '</div>'+
+      (provs.length
+        ? '<div class="pr-p">'+provs.map(function(k,i){
+            return '<div class="pr-row'+(i===0?' best':'')+'"><span>'+esc(k)+'</span>'+
+              '<b>'+usd(p.precios[k])+'</b></div>'; }).join('')+'</div>'+
+          '<div class="pr-best"><div><div class="pr-best-l">Mejor precio</div>'+
+            '<div class="pr-best-p">'+esc(p.prov)+'</div></div>'+
+            '<div class="pr-best-v"><small>USD</small>'+
+            Number(p.mejor).toLocaleString('es-CL',{minimumFractionDigits:2,maximumFractionDigits:2})+
+            '</div></div>'+
+          (p.sospechoso
+            ? '<div class="pr-dif susp">Un proveedor cobra más de 20 veces lo que el '+
+              'más barato (<b>'+usd(vals[0])+'</b> contra <b>'+usd(vals[vals.length-1])+
+              '</b>). Revisa la unidad en la planilla antes de usarlo.</div>'
+            : (dif>0.01?'<div class="pr-dif">Entre el más caro y el más barato hay '+
+              '<b>'+usd(dif)+'</b> por '+esc(PRECIOS.meta.unidad)+'</div>':''))
+        : '<div class="pr-nop">Sin precio en ningún proveedor</div>')+
+    '</div>';
+  }).join('')+'</div>';
+}
+
+/* El selector de categoría va en la ficha misma: los productos que la
+   planilla no permite clasificar quedan en "Otros" y se corrigen acá. */
+function prSelectCat(p){
+  return '<span class="pr-cat" style="--cc:'+(PR_COLOR[p.cat]||PR_COLOR.Otros).c+
+    ';--cb:'+(PR_COLOR[p.cat]||PR_COLOR.Otros).b+'">'+
+    '<select onchange="prCambiarCat('+JSON.stringify(p.nombre).replace(/"/g,'&quot;')+
+    ',this.value)" title="Cambiar la categoría de este producto">'+
+    Object.keys(PR_COLOR).map(function(c){
+      return '<option value="'+c+'"'+(c===p.cat?' selected':'')+'>'+c+'</option>'; }).join('')+
+    '</select></span>';
+}
+
+function prTabla(l){
+  const pv=PRECIOS.proveedores;
+  return '<div class="prtw"><table id="pr-tabla"><thead><tr>'+
+    '<th class="l">Producto</th><th class="l">Categoría</th>'+
+    pv.map(function(p){ return '<th>'+esc(p)+'</th>'; }).join('')+
+    '<th>Mejor precio</th><th class="l">Proveedor óptimo</th></tr></thead><tbody>'+
+    l.map(function(p){
+      return '<tr><td class="l"><div class="pr-nm">'+esc(p.nombre)+'</div>'+
+        (p.ing?'<div class="pr-sb">'+esc(p.ing)+'</div>':'')+'</td>'+
+        '<td class="l"><span class="pill" style="background:'+
+          (PR_COLOR[p.cat]||PR_COLOR.Otros).b+';color:'+(PR_COLOR[p.cat]||PR_COLOR.Otros).c+
+          ';border-color:'+(PR_COLOR[p.cat]||PR_COLOR.Otros).b+'">'+esc(p.cat)+'</span></td>'+
+        pv.map(function(q){
+          const v=p.precios[q];
+          if(v==null) return '<td><span class="vacio">—</span></td>';
+          return '<td'+(q===p.prov?' class="mejor"':'')+'>'+
+            Number(v).toLocaleString('es-CL',{minimumFractionDigits:2,maximumFractionDigits:2})+
+            '</td>'; }).join('')+
+        '<td class="mejor">'+(p.mejor==null?'<span class="vacio">sin precio</span>'
+          :Number(p.mejor).toLocaleString('es-CL',{minimumFractionDigits:2,maximumFractionDigits:2}))+'</td>'+
+        '<td class="l">'+(p.prov?esc(p.prov):'<span class="vacio">—</span>')+'</td></tr>';
+    }).join('')+'</tbody></table></div>'+
+    '<div class="foot-n">Precios en '+esc(PRECIOS.meta.moneda)+' por '+
+    esc(PRECIOS.meta.unidad)+'. La celda verde es el proveedor más barato de cada fila; '+
+    'las vacías no cuentan como cero.</div>';
+}
+
+/* ── comparador ── */
+function prSeleccionar(n){
+  const i=PR_SEL.indexOf(n);
+  if(i>=0) PR_SEL.splice(i,1); else PR_SEL.push(n);
+  renPrecios();
+}
+function prAbrirComparar(silencioso){
+  if(!PR_SEL.length){
+    $('pr-comparar').innerHTML='';
+    if(!silencioso) avisoFert('Marca el cuadradito de dos o más fichas para compararlas.');
+    return;
+  }
+  const pv=PRECIOS.proveedores;
+  const l=PR_SEL.map(function(n){
+    return PRECIOS.productos.filter(function(p){return p.nombre===n;})[0]; }).filter(Boolean);
+  /* solo los proveedores que tienen precio en alguno de los elegidos */
+  const cols=pv.filter(function(q){
+    return l.some(function(p){ return p.precios[q]!=null; }); });
+  $('pr-comparar').innerHTML='<div class="cmp">'+
+    '<div class="cmp-h"><div class="cmp-t">Comparación de '+l.length+' producto'+
+      (l.length===1?'':'s')+'</div>'+
+      '<button class="f-btn" onclick="PR_SEL=[];renPrecios();">Limpiar</button></div>'+
+    '<table><thead><tr><th class="l">Producto</th>'+
+      cols.map(function(q){ return '<th>'+esc(q)+'</th>'; }).join('')+
+      '<th>Mejor</th><th class="l">Proveedor</th></tr></thead><tbody>'+
+    l.map(function(p){
+      return '<tr><td class="l"><b>'+esc(p.nombre)+'</b></td>'+
+        cols.map(function(q){
+          const v=p.precios[q];
+          if(v==null) return '<td><span class="vacio">—</span></td>';
+          return '<td'+(q===p.prov?' class="mejor"':'')+'>'+
+            Number(v).toLocaleString('es-CL',{minimumFractionDigits:2,maximumFractionDigits:2})+'</td>';
+        }).join('')+
+        '<td class="mejor">'+(p.mejor==null?'—':usd(p.mejor).replace('USD ',''))+'</td>'+
+        '<td class="l">'+esc(p.prov||'—')+'</td></tr>';
+    }).join('')+'</tbody></table></div>';
+  if(!silencioso) $('pr-comparar').scrollIntoView({behavior:'smooth',block:'nearest'});
+}
 
 /* ── arranque ── */
 window.addEventListener('resize',()=>{

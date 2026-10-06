@@ -1,6 +1,6 @@
 PLATAFORMA EXPORTADORA LOS OLMOS
 ================================
-Versión 5.0 · Programa de Fertilización
+Versión 5.1 · Precios de Agroquímicos
 
 
 QUÉ HAY EN LA CARPETA (todo junto, sin subcarpetas)
@@ -25,6 +25,8 @@ QUÉ HAY EN LA CARPETA (todo junto, sin subcarpetas)
                         estás mirando, no las ocho.
   fertilizacion.json    Los 4 programas tipo de fertilización: matriz de vigor,
                         reparto por etapa, productos y comentarios.
+  precios.json          Catálogo de agroquímicos con el precio de cada
+                        proveedor y el mejor precio recalculado.
 
   manifest.webmanifest  Datos de la app instalable.
   sw.js                 Permite usarla sin internet y avisa de versiones nuevas.
@@ -310,12 +312,22 @@ PROGRAMA DE FERTILIZACIÓN (desde la versión 5.0)
   índice de vigor, igual que en la planilla: un Colt en vigor 3 pide
   4 kg por tonelada; un Gisela 5 en el mismo vigor pide 12.
 
-  EXPORTAR EL INFORME
+  LOS TRES BOTONES DE LA TABLA
 
-  El botón "Exportar informe" arma las dos páginas del formato que se
-  manda hoy —encabezado, etapas, tabla de dosis y los comentarios— y abre
-  el diálogo de impresión, donde se elige "Guardar como PDF". Se hace con
-  el navegador y no con una librería para que funcione sin internet.
+    Descargar imagen   Baja la tabla como PNG, lista para pegar en un
+                       WhatsApp o un correo. Se dibuja acá mismo, sin
+                       librerías, así que funciona sin internet.
+    Exportar informe   Arma la hoja igual al PDF que se manda hoy
+                       —cabecera azul, etapas de colores, tabla y
+                       comentarios— y abre el diálogo de impresión,
+                       donde se elige "Guardar como PDF". Del encabezado
+                       van solo cuartel, variedad, portainjerto y
+                       producción esperada, más superficie y eficiencia
+                       de riego: el índice de vigor y el requerimiento
+                       por nutriente son cálculo interno y no aparecen.
+    Aplicar programa   Deja ese programa como el del cuartel. Queda
+                       guardado en ese computador y la página se abre
+                       así la próxima vez.
 
   QUÉ SE CALCULA Y QUÉ NO
 
@@ -340,13 +352,55 @@ PROGRAMA FITOSANITARIO (se mudó en la versión 5.0)
   los productos alternativos. Sigue marcado como en construcción.
 
 
+PRECIOS DE AGROQUÍMICOS (desde la versión 5.1)
+
+  Está en Departamento Técnico → Precios de Agroquímicos y reemplaza a la
+  planilla PRECIOS_PROVEEDORES.
+
+  LO QUE SE ARREGLÓ AL LEERLA
+
+  La planilla traía dos columnas calculadas, "MEJOR PRECIO" y "PROVEEDOR
+  ÓPTIMO", que estaban malas:
+
+    · en 74 filas el mejor precio NO era el menor de la fila
+    · había 7 celdas con #REF!
+    · 58 filas repetían un producto ya listado
+
+  Acá esas columnas se ignoran y se vuelven a calcular: se toman los
+  precios de los proveedores, se descartan los vacíos y los ceros, y el
+  menor que queda es el mejor precio. Las filas repetidas se juntan en
+  una, dejando el precio más bajo de cada proveedor. Todo eso se avisa
+  arriba de la página.
+
+  También quedan marcados los productos donde un proveedor cobra más de
+  20 veces lo que el más barato: suele ser un error de unidad en la
+  planilla, no una oferta.
+
+  LAS CATEGORÍAS
+
+  La planilla no tiene columna de categoría, así que se deduce de datos
+  que ya están en la plataforma: el objetivo y el ingrediente activo que
+  trae el programa fitosanitario, y la lista de fertilizantes del
+  programa de fertilización. Lo que no se puede determinar queda en
+  "Otros" y se corrige desde la ficha misma, con el selector que está
+  bajo el nombre. Esa corrección queda en ese computador; para que valga
+  para todos hay que anotarla en la planilla.
+
+  ACTUALIZAR LOS PRECIOS
+
+      python3 scripts/generar_precios.py PRECIOS_PROVEEDORES.xlsx
+
+  Al terminar imprime cuántas filas venían mal, para arreglarlas también
+  en la planilla.
+
+
 ANTES DE PUBLICAR: CORRER LAS PRUEBAS
 
   En la carpeta del repositorio:
 
       python3 pruebas/verificar.py
 
-  Tarda segundos y revisa 16 cosas. Si sale algún ERROR, no publiques.
+  Tarda segundos y revisa 17 cosas. Si sale algún ERROR, no publiques.
   Los detalles están en pruebas/LEEME.txt.
 
   Además, GitHub las corre solo con cada cambio que subas y te avisa
