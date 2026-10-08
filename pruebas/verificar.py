@@ -545,6 +545,188 @@ def r_precios():
               "más barato: revisar la unidad en la planilla" % d["meta"]["sospechosos"])
 
 
+def r_fertbeta():
+    """El libro del formato unificado, convertido en fertbeta.json.
+
+    Revisa que estén las seis piezas que la página necesita y que no se
+    contradigan entre sí: cada combinación de especie + grupo variedad
+    que ofrecen las listas tiene que tener fenología y fecha de inicio,
+    y cada producto de las listas tiene que estar en el catálogo (o
+    quedar anotado como aviso, que es lo que pasa con «Humus casa»).
+    """
+    ruta = os.path.join(RAIZ, "fertbeta.json")
+    if not os.path.exists(ruta):
+        error("fertbeta", "falta fertbeta.json")
+        return
+    try:
+        d = json.load(open(ruta, encoding="utf-8"))
+    except Exception as e:
+        error("fertbeta", "fertbeta.json no se puede leer: %s" % e)
+        return
+
+    for k in ("catalogo", "listas", "fenologia", "inicios", "requerimientos",
+              "ejemplos", "leeme"):
+        if not d.get(k):
+            error("fertbeta", "fertbeta.json no trae «%s»" % k)
+    if not d.get("anoTemporada"):
+        error("fertbeta", "fertbeta.json no trae el año de temporada")
+
+    cat = d.get("catalogo") or []
+    nombres = {p["nombre"] for p in cat}
+    if len(nombres) != len(cat):
+        error("fertbeta", "hay productos repetidos en el catálogo")
+    for p in cat:
+        if p.get("tipo") not in ("Base", "Complementario"):
+            error("fertbeta", "«%s» no es ni base ni complementario" % p.get("nombre"))
+        for n in ("N", "P2O5", "K2O", "CaO", "MgO", "S"):
+            v = p.get(n)
+            if not isinstance(v, (int, float)) or v < 0 or v > 100:
+                error("fertbeta", "la ley %s de «%s» no es un porcentaje válido: %r"
+                      % (n, p.get("nombre"), v))
+        if p.get("unidad") not in ("kg", "L"):
+            error("fertbeta", "«%s» tiene una unidad rara: %r"
+                  % (p.get("nombre"), p.get("unidad")))
+
+    L = d.get("listas") or {}
+    fen = d.get("fenologia") or {}
+    ini = d.get("inicios") or {}
+    for esp in L.get("especies", []):
+        grupos = (L.get("grupos") or {}).get(esp) or []
+        if not grupos:
+            error("fertbeta", "%s no tiene grupos variedad" % esp)
+        if not (L.get("portainjertos") or {}).get(esp):
+            error("fertbeta", "%s no tiene portainjertos" % esp)
+        for g in grupos:
+            k = esp + "|" + g
+            if k not in fen:
+                error("fertbeta", "%s no tiene estados fenológicos" % k)
+            if k not in ini:
+                error("fertbeta", "%s no tiene fecha de inicio" % k)
+
+    for k, estados in fen.items():
+        ordenes = [e["orden"] for e in estados]
+        if ordenes != sorted(ordenes) or len(set(ordenes)) != len(ordenes):
+            error("fertbeta", "%s tiene los estados desordenados o repetidos" % k)
+        dias = [e["dias"] for e in estados]
+        if dias != sorted(dias):
+            error("fertbeta", "%s tiene los días fuera de orden: %s" % (k, dias))
+        if dias and dias[0] != 0:
+            error("fertbeta", "%s no arranca en el día 0" % k)
+
+    for k, v in ini.items():
+        if not (1 <= v.get("mes", 0) <= 12) or not (1 <= v.get("dia", 0) <= 31):
+            error("fertbeta", "la fecha de inicio de %s no es válida: %r" % (k, v))
+
+    req = d.get("requerimientos") or {}
+    for e in ("N", "P", "K", "Ca", "Mg"):
+        if e not in (req.get("oxido") or {}):
+            error("fertbeta", "falta el factor a óxido de %s" % e)
+        for c in ("Cerezo", "Kiwi", "Otras"):
+            if (req.get("absorcion") or {}).get(e, {}).get(c) is None:
+                error("fertbeta", "falta el factor de absorción de %s en %s" % (e, c))
+
+    # Los productos de las listas que no están en el catálogo entran con
+    # ley cero; el extractor lo anota, así que tiene que estar avisado.
+    sueltos = [n for n in (L.get("base", []) + L.get("complementarios", []))
+               if n not in nombres]
+    if sueltos and not d.get("avisos"):
+        error("fertbeta", "hay productos fuera del catálogo (%s) sin aviso"
+              % ", ".join(sueltos))
+    elif sueltos:
+        aviso("fertbeta", "%d producto(s) de las listas no están en el catálogo "
+              "y entran con ley cero: %s" % (len(sueltos), ", ".join(sueltos)))
+
+    for p in d.get("ejemplos") or []:
+        if len(p.get("base") or []) > 7:
+            error("fertbeta", "«%s» trae más de 7 fertilizantes base" % p.get("nombre"))
+        if len(p.get("comp") or []) > 3:
+            error("fertbeta", "«%s» trae más de 3 complementarios" % p.get("nombre"))
+        for clave in list(p.get("dosis") or {}) + list(p.get("dosisComp") or {}):
+            i, j = (int(x) for x in clave.split(","))
+            if not (0 <= i < 41):
+                error("fertbeta", "«%s» tiene una dosis en la semana %d" % (p.get("nombre"), i))
+
+
+def r_clases_informe():
+    """Que los informes impresos no usen clases que ya existen en la página.
+
+    Pasó una vez: el informe del programa beta llamaba «bc» a la columna
+    de complementarios, y «bc» ya era la perilla del encabezado del
+    programa estándar, con display:flex. Las tres columnas se apilaban
+    una sobre otra y el encabezado quedaba corrido respecto del cuerpo.
+
+    La revisión saca del CSS los dos bloques propios de los informes y
+    busca las clases del informe en lo que queda. Si aparece alguna, es
+    que una regla de la página la va a pisar al imprimir.
+    """
+    ruta = os.path.join(RAIZ, "tecnico.html")
+    if not os.path.exists(ruta):
+        return
+    t = open(ruta, encoding="utf-8").read()
+    try:
+        estilo = t[t.index("<style>"):t.index("</style>")]
+    except ValueError:
+        return
+
+    # Los dos bloques de impresión, que son los dueños de esas clases.
+    propios = [("/* ══ HOJA DEL INFORME ══", "\n/* aviso corto al aplicar o descargar */"),
+               ("/* ══ HOJA DEL INFORME DEL PROGRAMA BETA ══",
+                "\n@media (prefers-reduced-motion:reduce)")]
+    resto = estilo
+    quitados = 0
+    for ini, fin in propios:
+        if ini in resto:
+            i = resto.index(ini)
+            j = resto.index(fin, i) if fin in resto[i:] else len(resto)
+            resto = resto[:i] + resto[j:]
+            quitados += 1
+    if quitados < 2:
+        aviso("informes", "no encontré los dos bloques de CSS de impresión; "
+              "la revisión de clases quedó incompleta")
+
+    for abre, cierra, etiqueta in (
+            ("function fbHojaInforme()", "\nfunction fbImprimir()", "informe beta"),
+            ("function fertHojaInforme()", "\nfunction fertImprimir()", "informe estándar")):
+        if abre not in t or cierra not in t:
+            continue
+        i = t.index(abre)
+        bloque = t[i:t.index(cierra, i)]
+        clases = set()
+        for m in re.finditer(r'class="([^"${}]+)"', bloque):
+            clases.update(m.group(1).split())
+        for c in sorted(clases):
+            for sel in _selectores_sueltos(resto, c):
+                error("informes", "el %s usa la clase «%s», y la página ya la define "
+                      "sin acotar (%s). Cambiale el nombre."
+                      % (etiqueta, c, sel[:70]))
+
+
+def _selectores_sueltos(css, clase):
+    """Reglas de `css` que alcanzan a `.clase` desde cualquier parte.
+
+    Una regla como `.cmp .vacio{…}` solo pinta dentro de `.cmp`, así que
+    nunca va a tocar la hoja del informe. La que preocupa es la suelta,
+    tipo `.bc{…}`, que alcanza a cualquier elemento con esa clase.
+    """
+    fuera = []
+    for regla in re.finditer(r"([^{}]+)\{", css):
+        for sel in regla.group(1).split(","):
+            sel = sel.strip()
+            if not sel or sel.startswith("@"):
+                continue
+            # El último combinador: lo que confina la regla es lo que viene antes.
+            partes = re.split(r"[\s>+~]+", sel)
+            ult = partes[-1]
+            if not re.search(r"\.%s(?![\w-])" % re.escape(clase), ult):
+                continue
+            ancestros = " ".join(partes[:-1])
+            if "#" in ancestros or "." in ancestros:
+                continue          # está acotada a otra parte de la página
+            fuera.append(sel)
+    return fuera
+
+
+
 # ─────────────────────────────────────────────────────────────
 REVISIONES = [
     ("archivos del sitio", r_archivos),
@@ -564,6 +746,8 @@ REVISIONES = [
     ("agenda de pesticidas", r_pesticidas),
     ("programas de fertilización", r_fertilizacion),
     ("precios de agroquímicos", r_precios),
+    ("libro de fertilización beta", r_fertbeta),
+    ("clases de los informes", r_clases_informe),
 ]
 
 

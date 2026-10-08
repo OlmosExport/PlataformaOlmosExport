@@ -1,0 +1,2654 @@
+{
+ "fuente": "antumapu.xlsx",
+ "formato": "Abud & Cia. - formato unificado v6.0",
+ "temporada": "2026-2027",
+ "anoTemporada": 2026,
+ "catalogo": [
+  {
+   "codigo": "F01",
+   "nombre": "Nitrato de Amonio",
+   "tipo": "Base",
+   "categoria": "Nitrogenado",
+   "N": 34.0,
+   "P2O5": 0,
+   "K2O": 0,
+   "CaO": 0,
+   "MgO": 0,
+   "S": 0,
+   "unidad": "kg",
+   "obs": "Ley 34% N."
+  },
+  {
+   "codigo": "F02",
+   "nombre": "Sulfato de Amonio",
+   "tipo": "Base",
+   "categoria": "Nitrogenado",
+   "N": 21.0,
+   "P2O5": 0,
+   "K2O": 0,
+   "CaO": 0,
+   "MgO": 0,
+   "S": 23.0,
+   "unidad": "kg",
+   "obs": "Acidificante. Aporta 23% S."
+  },
+  {
+   "codigo": "F03",
+   "nombre": "Sulfato de Amonio (Entec)",
+   "tipo": "Base",
+   "categoria": "Nitrogenado",
+   "N": 26.0,
+   "P2O5": 0,
+   "K2O": 0,
+   "CaO": 0,
+   "MgO": 0,
+   "S": 13.0,
+   "unidad": "kg",
+   "obs": "Con inhibidor de nitrificacion (DMPP)."
+  },
+  {
+   "codigo": "F04",
+   "nombre": "Urea",
+   "tipo": "Base",
+   "categoria": "Nitrogenado",
+   "N": 46.0,
+   "P2O5": 0,
+   "K2O": 0,
+   "CaO": 0,
+   "MgO": 0,
+   "S": 0,
+   "unidad": "kg",
+   "obs": "No recomendada con aguas duras."
+  },
+  {
+   "codigo": "F05",
+   "nombre": "Nitrato de Calcio",
+   "tipo": "Base",
+   "categoria": "Calcico",
+   "N": 15.5,
+   "P2O5": 0,
+   "K2O": 0,
+   "CaO": 25.0,
+   "MgO": 0,
+   "S": 0,
+   "unidad": "kg",
+   "obs": "Ley 15,5% N - 25% CaO."
+  },
+  {
+   "codigo": "F06",
+   "nombre": "Ibisoil Ca Flow",
+   "tipo": "Base",
+   "categoria": "Calcico",
+   "N": 0,
+   "P2O5": 0,
+   "K2O": 0,
+   "CaO": 25.0,
+   "MgO": 0,
+   "S": 0,
+   "unidad": "kg",
+   "obs": "Suspension de Ca. Verificar ley del lote."
+  },
+  {
+   "codigo": "F07",
+   "nombre": "Fosfato Monoamonico (MAP)",
+   "tipo": "Base",
+   "categoria": "Fosforado",
+   "N": 12.0,
+   "P2O5": 61.0,
+   "K2O": 0,
+   "CaO": 0,
+   "MgO": 0,
+   "S": 0,
+   "unidad": "kg",
+   "obs": "Ley 12-61-0."
+  },
+  {
+   "codigo": "F08",
+   "nombre": "Acido Fosforico 85%",
+   "tipo": "Base",
+   "categoria": "Fosforado",
+   "N": 0,
+   "P2O5": 61.0,
+   "K2O": 0,
+   "CaO": 0,
+   "MgO": 0,
+   "S": 0,
+   "unidad": "kg",
+   "obs": "Tambien limpia goteros. Usar EPP."
+  },
+  {
+   "codigo": "F09",
+   "nombre": "Nitrato de Potasio",
+   "tipo": "Base",
+   "categoria": "Potasico",
+   "N": 13.0,
+   "P2O5": 0,
+   "K2O": 46.0,
+   "CaO": 0,
+   "MgO": 0,
+   "S": 0,
+   "unidad": "kg",
+   "obs": "Ley 13-0-46."
+  },
+  {
+   "codigo": "F10",
+   "nombre": "Sulfato de Potasio",
+   "tipo": "Base",
+   "categoria": "Potasico",
+   "N": 0,
+   "P2O5": 0,
+   "K2O": 50.0,
+   "CaO": 0,
+   "MgO": 0,
+   "S": 18.0,
+   "unidad": "kg",
+   "obs": "Bajo indice salino. Aporta S."
+  },
+  {
+   "codigo": "F11",
+   "nombre": "Muriato de Potasio (KCl)",
+   "tipo": "Base",
+   "categoria": "Potasico",
+   "N": 0,
+   "P2O5": 0,
+   "K2O": 60.0,
+   "CaO": 0,
+   "MgO": 0,
+   "S": 0,
+   "unidad": "kg",
+   "obs": "Alto indice salino."
+  },
+  {
+   "codigo": "F16",
+   "nombre": "Biostim K",
+   "tipo": "Base",
+   "categoria": "Potasico",
+   "N": 0,
+   "P2O5": 0,
+   "K2O": 30.0,
+   "CaO": 0,
+   "MgO": 0,
+   "S": 0,
+   "unidad": "L",
+   "obs": "Bioestimulante potasico. Ley declarada 30% K2O - verificar etiqueta."
+  },
+  {
+   "codigo": "F12",
+   "nombre": "Sulfato de Magnesio",
+   "tipo": "Base",
+   "categoria": "Magnesico",
+   "N": 0,
+   "P2O5": 0,
+   "K2O": 0,
+   "CaO": 0,
+   "MgO": 18.0,
+   "S": 14.0,
+   "unidad": "kg",
+   "obs": "Heptahidratado / kieserita."
+  },
+  {
+   "codigo": "F13",
+   "nombre": "Nitrato de Magnesio",
+   "tipo": "Base",
+   "categoria": "Magnesico",
+   "N": 11.0,
+   "P2O5": 0,
+   "K2O": 0,
+   "CaO": 0,
+   "MgO": 15.0,
+   "S": 0,
+   "unidad": "kg",
+   "obs": "Alternativa soluble de Mg."
+  },
+  {
+   "codigo": "F14",
+   "nombre": "Acido Nitrico 55%",
+   "tipo": "Base",
+   "categoria": "Corrector",
+   "N": 12.0,
+   "P2O5": 0,
+   "K2O": 0,
+   "CaO": 0,
+   "MgO": 0,
+   "S": 0,
+   "unidad": "kg",
+   "obs": "Correccion de pH y limpieza de lineas."
+  },
+  {
+   "codigo": "F15",
+   "nombre": "Acido Sulfurico 98%",
+   "tipo": "Base",
+   "categoria": "Corrector",
+   "N": 0,
+   "P2O5": 0,
+   "K2O": 0,
+   "CaO": 0,
+   "MgO": 0,
+   "S": 32.0,
+   "unidad": "kg",
+   "obs": "Correccion de pH / bicarbonatos."
+  },
+  {
+   "codigo": "F17",
+   "nombre": "Ibicarbox Potasio",
+   "tipo": "Base",
+   "categoria": "Acido carboxilico",
+   "N": 0,
+   "P2O5": 0,
+   "K2O": 25.0,
+   "CaO": 0,
+   "MgO": 0,
+   "S": 0,
+   "unidad": "kg",
+   "obs": "Ac. carboxilicos + K. No se contabiliza en el balance."
+  },
+  {
+   "codigo": "F18",
+   "nombre": "Ibicarbox Calcio",
+   "tipo": "Base",
+   "categoria": "Acido carboxilico",
+   "N": 0,
+   "P2O5": 0,
+   "K2O": 0,
+   "CaO": 15.0,
+   "MgO": 0,
+   "S": 0,
+   "unidad": "kg",
+   "obs": "Ac. carboxilicos + Ca. Verificar ley en etiqueta. No entra al balance."
+  },
+  {
+   "codigo": "C03",
+   "nombre": "Vita Fulvic",
+   "tipo": "Complementario",
+   "categoria": "Acido fulvico",
+   "N": 0,
+   "P2O5": 0,
+   "K2O": 0,
+   "CaO": 0,
+   "MgO": 0,
+   "S": 0,
+   "unidad": "kg",
+   "obs": "Acidos fulvicos."
+  },
+  {
+   "codigo": "C04",
+   "nombre": "Vita Mater",
+   "tipo": "Complementario",
+   "categoria": "Acido fulvico",
+   "N": 0,
+   "P2O5": 0,
+   "K2O": 0,
+   "CaO": 0,
+   "MgO": 0,
+   "S": 0,
+   "unidad": "kg",
+   "obs": "Acidos fulvicos + materia organica."
+  },
+  {
+   "codigo": "C05",
+   "nombre": "Acido Humico Rymsa",
+   "tipo": "Complementario",
+   "categoria": "Acido humico",
+   "N": 0,
+   "P2O5": 0,
+   "K2O": 0,
+   "CaO": 0,
+   "MgO": 0,
+   "S": 0,
+   "unidad": "kg",
+   "obs": "Acidos humicos. Estructura y CIC."
+  },
+  {
+   "codigo": "C06",
+   "nombre": "Fort Soil",
+   "tipo": "Complementario",
+   "categoria": "Bioestimulante suelo/raiz",
+   "N": 0,
+   "P2O5": 0,
+   "K2O": 0,
+   "CaO": 0,
+   "MgO": 0,
+   "S": 0,
+   "unidad": "L",
+   "obs": "Bioestimulante de suelo y raiz."
+  },
+  {
+   "codigo": "C07",
+   "nombre": "B-Soil",
+   "tipo": "Complementario",
+   "categoria": "Bioestimulante suelo/raiz",
+   "N": 0,
+   "P2O5": 0,
+   "K2O": 0,
+   "CaO": 0,
+   "MgO": 0,
+   "S": 0,
+   "unidad": "L",
+   "obs": "Bioestimulante de suelo. Sectores debiles."
+  },
+  {
+   "codigo": "C08",
+   "nombre": "VIVA",
+   "tipo": "Complementario",
+   "categoria": "Bioestimulante suelo/raiz",
+   "N": 0,
+   "P2O5": 0,
+   "K2O": 0,
+   "CaO": 0,
+   "MgO": 0,
+   "S": 0,
+   "unidad": "L",
+   "obs": "Bioestimulante radicular."
+  },
+  {
+   "codigo": "C10",
+   "nombre": "Bioamino L",
+   "tipo": "Complementario",
+   "categoria": "Aminoacidos",
+   "N": 0,
+   "P2O5": 0,
+   "K2O": 0,
+   "CaO": 0,
+   "MgO": 0,
+   "S": 0,
+   "unidad": "L",
+   "obs": "Aminoacidos libres. Apoyo en estres."
+  },
+  {
+   "codigo": "C11",
+   "nombre": "Micorrizas MycoApply",
+   "tipo": "Complementario",
+   "categoria": "Microorganismos",
+   "N": 0,
+   "P2O5": 0,
+   "K2O": 0,
+   "CaO": 0,
+   "MgO": 0,
+   "S": 0,
+   "unidad": "kg",
+   "obs": "Suelo humedo, sin fungicidas sistemicos."
+  },
+  {
+   "codigo": "C12",
+   "nombre": "Penergetic P",
+   "tipo": "Complementario",
+   "categoria": "Acondicionador suelo",
+   "N": 0,
+   "P2O5": 0,
+   "K2O": 0,
+   "CaO": 0,
+   "MgO": 0,
+   "S": 0,
+   "unidad": "kg",
+   "obs": "Dosis segun producto."
+  },
+  {
+   "codigo": "C13",
+   "nombre": "Penergetic B",
+   "tipo": "Complementario",
+   "categoria": "Acondicionador suelo",
+   "N": 0,
+   "P2O5": 0,
+   "K2O": 0,
+   "CaO": 0,
+   "MgO": 0,
+   "S": 0,
+   "unidad": "kg",
+   "obs": "Dosis segun producto."
+  },
+  {
+   "codigo": "C14",
+   "nombre": "Solubor (Boro)",
+   "tipo": "Complementario",
+   "categoria": "Micronutriente",
+   "N": 0,
+   "P2O5": 0,
+   "K2O": 0,
+   "CaO": 0,
+   "MgO": 0,
+   "S": 0,
+   "unidad": "kg",
+   "obs": "20,5% B. No entra al balance NPK."
+  },
+  {
+   "codigo": "C15",
+   "nombre": "Saltkontrol",
+   "tipo": "Complementario",
+   "categoria": "Corrector salinidad",
+   "N": 0,
+   "P2O5": 0,
+   "K2O": 0,
+   "CaO": 0,
+   "MgO": 0,
+   "S": 0,
+   "unidad": "L",
+   "obs": "Manejo de salinidad y sodio."
+  },
+  {
+   "codigo": "C16",
+   "nombre": "Retrosal",
+   "tipo": "Complementario",
+   "categoria": "Corrector salinidad",
+   "N": 0,
+   "P2O5": 0,
+   "K2O": 0,
+   "CaO": 0,
+   "MgO": 0,
+   "S": 0,
+   "unidad": "L",
+   "obs": "Manejo de sodio y salinidad."
+  }
+ ],
+ "listas": {
+  "especies": [
+   "Cerezo",
+   "Kiwi",
+   "Ciruelo",
+   "Manzano",
+   "Peral"
+  ],
+  "etapas": [
+   "Plantacion",
+   "Formacion (1-3 anos)",
+   "Entrada en produccion (4-5 anos)",
+   "Produccion",
+   "Produccion adulta / recambio"
+  ],
+  "vigor": [
+   "Debil",
+   "Normal",
+   "Vigoroso"
+  ],
+  "grupos": {
+   "Cerezo": [
+    "Muy temprana 1",
+    "Muy temprana 2",
+    "Muy temprana 3",
+    "Temprana 1",
+    "Temprana 2",
+    "Temprana 3",
+    "Media 1",
+    "Media 2",
+    "Media 3",
+    "Tardia 1",
+    "Tardia 2",
+    "Tardia 3",
+    "Muy tardia 1",
+    "Muy tardia 2",
+    "Muy tardia 3"
+   ],
+   "Kiwi": [
+    "Muy temprana",
+    "Temprana",
+    "Media",
+    "Tardia",
+    "Muy tardia"
+   ],
+   "Ciruelo": [
+    "Japones",
+    "Europeo"
+   ],
+   "Manzano": [
+    "Media"
+   ],
+   "Peral": [
+    "Media"
+   ]
+  },
+  "portainjertos": {
+   "Cerezo": [
+    "Colt",
+    "Gisela 5",
+    "Gisela 6",
+    "Gisela 12",
+    "Gisela 13",
+    "Maxma 14",
+    "Maxma 60",
+    "MaxMa Delbard 60",
+    "Merisier / Franco",
+    "Santa Lucia 64",
+    "Guindo acido",
+    "CAB 6P",
+    "Krymsk 5",
+    "Krymsk 6",
+    "Pie franco",
+    "Otro"
+   ],
+   "Kiwi": [
+    "Hayward (franco)",
+    "Bounty 71",
+    "Pie franco (semilla)",
+    "Otro"
+   ],
+   "Ciruelo": [
+    "Marianna 2624",
+    "Mirobolan 29C",
+    "Nemaguard",
+    "Mariana GF 8-1",
+    "Pie franco",
+    "Otro"
+   ],
+   "Manzano": [
+    "M9",
+    "M9 T337",
+    "M26",
+    "M7",
+    "MM106",
+    "MM111",
+    "Geneva 41",
+    "Pie franco",
+    "Otro"
+   ],
+   "Peral": [
+    "OHF 87",
+    "OHF 97",
+    "Membrillo BA29",
+    "Membrillo MA",
+    "Pyrus communis (franco)",
+    "Otro"
+   ]
+  },
+  "base": [
+   "Nitrato de Amonio",
+   "Sulfato de Amonio",
+   "Sulfato de Amonio (Entec)",
+   "Urea",
+   "Nitrato de Calcio",
+   "Ibisoil Ca Flow",
+   "Fosfato Monoamonico (MAP)",
+   "Acido Fosforico 85%",
+   "Nitrato de Potasio",
+   "Sulfato de Potasio",
+   "Muriato de Potasio (KCl)",
+   "Biostim K",
+   "Sulfato de Magnesio",
+   "Nitrato de Magnesio",
+   "Acido Nitrico 55%",
+   "Acido Sulfurico 98%",
+   "Ibicarbox Potasio",
+   "Ibicarbox Calcio"
+  ],
+  "complementarios": [
+   "Vita Fulvic",
+   "Vita Mater",
+   "Acido Humico Rymsa",
+   "Fort Soil",
+   "B-Soil",
+   "VIVA",
+   "Bioamino L",
+   "Micorrizas MycoApply",
+   "Penergetic P",
+   "Penergetic B",
+   "Solubor (Boro)",
+   "Saltkontrol",
+   "Retrosal",
+   "Humus casa"
+  ]
+ },
+ "fenologia": {
+  "Cerezo|Muy temprana 1": [
+   {
+    "orden": 1,
+    "estado": "Boton blanco",
+    "dias": 0
+   },
+   {
+    "orden": 2,
+    "estado": "Plena flor",
+    "dias": 10
+   },
+   {
+    "orden": 3,
+    "estado": "Caida de petalos",
+    "dias": 17
+   },
+   {
+    "orden": 4,
+    "estado": "Caida de chaquetas",
+    "dias": 24
+   },
+   {
+    "orden": 5,
+    "estado": "Crecimiento de frutos",
+    "dias": 28
+   },
+   {
+    "orden": 6,
+    "estado": "Endurecimiento de carozo",
+    "dias": 31
+   },
+   {
+    "orden": 7,
+    "estado": "Color pajizo",
+    "dias": 38
+   },
+   {
+    "orden": 8,
+    "estado": "Inicio viraje de color",
+    "dias": 42
+   },
+   {
+    "orden": 9,
+    "estado": "Pinta",
+    "dias": 45
+   },
+   {
+    "orden": 10,
+    "estado": "Pre cosecha",
+    "dias": 50
+   },
+   {
+    "orden": 11,
+    "estado": "Cosecha",
+    "dias": 55
+   },
+   {
+    "orden": 12,
+    "estado": "Post-cosecha temprana",
+    "dias": 69
+   },
+   {
+    "orden": 13,
+    "estado": "Post-cosecha tardia",
+    "dias": 111
+   }
+  ],
+  "Cerezo|Muy temprana 2": [
+   {
+    "orden": 1,
+    "estado": "Boton blanco",
+    "dias": 0
+   },
+   {
+    "orden": 2,
+    "estado": "Plena flor",
+    "dias": 10
+   },
+   {
+    "orden": 3,
+    "estado": "Caida de petalos",
+    "dias": 17
+   },
+   {
+    "orden": 4,
+    "estado": "Caida de chaquetas",
+    "dias": 24
+   },
+   {
+    "orden": 5,
+    "estado": "Crecimiento de frutos",
+    "dias": 30
+   },
+   {
+    "orden": 6,
+    "estado": "Endurecimiento de carozo",
+    "dias": 34
+   },
+   {
+    "orden": 7,
+    "estado": "Color pajizo",
+    "dias": 41
+   },
+   {
+    "orden": 8,
+    "estado": "Inicio viraje de color",
+    "dias": 45
+   },
+   {
+    "orden": 9,
+    "estado": "Pinta",
+    "dias": 49
+   },
+   {
+    "orden": 10,
+    "estado": "Pre cosecha",
+    "dias": 55
+   },
+   {
+    "orden": 11,
+    "estado": "Cosecha",
+    "dias": 60
+   },
+   {
+    "orden": 12,
+    "estado": "Post-cosecha temprana",
+    "dias": 74
+   },
+   {
+    "orden": 13,
+    "estado": "Post-cosecha tardia",
+    "dias": 116
+   }
+  ],
+  "Cerezo|Muy temprana 3": [
+   {
+    "orden": 1,
+    "estado": "Boton blanco",
+    "dias": 0
+   },
+   {
+    "orden": 2,
+    "estado": "Plena flor",
+    "dias": 10
+   },
+   {
+    "orden": 3,
+    "estado": "Caida de petalos",
+    "dias": 17
+   },
+   {
+    "orden": 4,
+    "estado": "Caida de chaquetas",
+    "dias": 24
+   },
+   {
+    "orden": 5,
+    "estado": "Crecimiento de frutos",
+    "dias": 31
+   },
+   {
+    "orden": 6,
+    "estado": "Endurecimiento de carozo",
+    "dias": 35
+   },
+   {
+    "orden": 7,
+    "estado": "Color pajizo",
+    "dias": 44
+   },
+   {
+    "orden": 8,
+    "estado": "Inicio viraje de color",
+    "dias": 48
+   },
+   {
+    "orden": 9,
+    "estado": "Pinta",
+    "dias": 53
+   },
+   {
+    "orden": 10,
+    "estado": "Pre cosecha",
+    "dias": 60
+   },
+   {
+    "orden": 11,
+    "estado": "Cosecha",
+    "dias": 65
+   },
+   {
+    "orden": 12,
+    "estado": "Post-cosecha temprana",
+    "dias": 79
+   },
+   {
+    "orden": 13,
+    "estado": "Post-cosecha tardia",
+    "dias": 121
+   }
+  ],
+  "Cerezo|Temprana 1": [
+   {
+    "orden": 1,
+    "estado": "Boton blanco",
+    "dias": 0
+   },
+   {
+    "orden": 2,
+    "estado": "Plena flor",
+    "dias": 10
+   },
+   {
+    "orden": 3,
+    "estado": "Caida de petalos",
+    "dias": 17
+   },
+   {
+    "orden": 4,
+    "estado": "Caida de chaquetas",
+    "dias": 24
+   },
+   {
+    "orden": 5,
+    "estado": "Crecimiento de frutos",
+    "dias": 31
+   },
+   {
+    "orden": 6,
+    "estado": "Endurecimiento de carozo",
+    "dias": 35
+   },
+   {
+    "orden": 7,
+    "estado": "Color pajizo",
+    "dias": 44
+   },
+   {
+    "orden": 8,
+    "estado": "Inicio viraje de color",
+    "dias": 48
+   },
+   {
+    "orden": 9,
+    "estado": "Pinta",
+    "dias": 53
+   },
+   {
+    "orden": 10,
+    "estado": "Pre cosecha",
+    "dias": 60
+   },
+   {
+    "orden": 11,
+    "estado": "Cosecha",
+    "dias": 65
+   },
+   {
+    "orden": 12,
+    "estado": "Post-cosecha temprana",
+    "dias": 79
+   },
+   {
+    "orden": 13,
+    "estado": "Post-cosecha tardia",
+    "dias": 121
+   }
+  ],
+  "Cerezo|Temprana 2": [
+   {
+    "orden": 1,
+    "estado": "Boton blanco",
+    "dias": 0
+   },
+   {
+    "orden": 2,
+    "estado": "Plena flor",
+    "dias": 10
+   },
+   {
+    "orden": 3,
+    "estado": "Caida de petalos",
+    "dias": 17
+   },
+   {
+    "orden": 4,
+    "estado": "Caida de chaquetas",
+    "dias": 24
+   },
+   {
+    "orden": 5,
+    "estado": "Crecimiento de frutos",
+    "dias": 31
+   },
+   {
+    "orden": 6,
+    "estado": "Endurecimiento de carozo",
+    "dias": 36
+   },
+   {
+    "orden": 7,
+    "estado": "Color pajizo",
+    "dias": 46
+   },
+   {
+    "orden": 8,
+    "estado": "Inicio viraje de color",
+    "dias": 52
+   },
+   {
+    "orden": 9,
+    "estado": "Pinta",
+    "dias": 57
+   },
+   {
+    "orden": 10,
+    "estado": "Pre cosecha",
+    "dias": 64
+   },
+   {
+    "orden": 11,
+    "estado": "Cosecha",
+    "dias": 70
+   },
+   {
+    "orden": 12,
+    "estado": "Post-cosecha temprana",
+    "dias": 84
+   },
+   {
+    "orden": 13,
+    "estado": "Post-cosecha tardia",
+    "dias": 126
+   }
+  ],
+  "Cerezo|Temprana 3": [
+   {
+    "orden": 1,
+    "estado": "Boton blanco",
+    "dias": 0
+   },
+   {
+    "orden": 2,
+    "estado": "Plena flor",
+    "dias": 10
+   },
+   {
+    "orden": 3,
+    "estado": "Caida de petalos",
+    "dias": 17
+   },
+   {
+    "orden": 4,
+    "estado": "Caida de chaquetas",
+    "dias": 24
+   },
+   {
+    "orden": 5,
+    "estado": "Crecimiento de frutos",
+    "dias": 31
+   },
+   {
+    "orden": 6,
+    "estado": "Endurecimiento de carozo",
+    "dias": 37
+   },
+   {
+    "orden": 7,
+    "estado": "Color pajizo",
+    "dias": 48
+   },
+   {
+    "orden": 8,
+    "estado": "Inicio viraje de color",
+    "dias": 54
+   },
+   {
+    "orden": 9,
+    "estado": "Pinta",
+    "dias": 61
+   },
+   {
+    "orden": 10,
+    "estado": "Pre cosecha",
+    "dias": 68
+   },
+   {
+    "orden": 11,
+    "estado": "Cosecha",
+    "dias": 75
+   },
+   {
+    "orden": 12,
+    "estado": "Post-cosecha temprana",
+    "dias": 89
+   },
+   {
+    "orden": 13,
+    "estado": "Post-cosecha tardia",
+    "dias": 131
+   }
+  ],
+  "Cerezo|Media 1": [
+   {
+    "orden": 1,
+    "estado": "Boton blanco",
+    "dias": 0
+   },
+   {
+    "orden": 2,
+    "estado": "Plena flor",
+    "dias": 10
+   },
+   {
+    "orden": 3,
+    "estado": "Caida de petalos",
+    "dias": 17
+   },
+   {
+    "orden": 4,
+    "estado": "Caida de chaquetas",
+    "dias": 24
+   },
+   {
+    "orden": 5,
+    "estado": "Crecimiento de frutos",
+    "dias": 31
+   },
+   {
+    "orden": 6,
+    "estado": "Endurecimiento de carozo",
+    "dias": 37
+   },
+   {
+    "orden": 7,
+    "estado": "Color pajizo",
+    "dias": 50
+   },
+   {
+    "orden": 8,
+    "estado": "Inicio viraje de color",
+    "dias": 58
+   },
+   {
+    "orden": 9,
+    "estado": "Pinta",
+    "dias": 65
+   },
+   {
+    "orden": 10,
+    "estado": "Pre cosecha",
+    "dias": 73
+   },
+   {
+    "orden": 11,
+    "estado": "Cosecha",
+    "dias": 80
+   },
+   {
+    "orden": 12,
+    "estado": "Post-cosecha temprana",
+    "dias": 94
+   },
+   {
+    "orden": 13,
+    "estado": "Post-cosecha tardia",
+    "dias": 136
+   }
+  ],
+  "Cerezo|Media 2": [
+   {
+    "orden": 1,
+    "estado": "Boton blanco",
+    "dias": 0
+   },
+   {
+    "orden": 2,
+    "estado": "Plena flor",
+    "dias": 10
+   },
+   {
+    "orden": 3,
+    "estado": "Caida de petalos",
+    "dias": 17
+   },
+   {
+    "orden": 4,
+    "estado": "Caida de chaquetas",
+    "dias": 24
+   },
+   {
+    "orden": 5,
+    "estado": "Crecimiento de frutos",
+    "dias": 31
+   },
+   {
+    "orden": 6,
+    "estado": "Endurecimiento de carozo",
+    "dias": 38
+   },
+   {
+    "orden": 7,
+    "estado": "Color pajizo",
+    "dias": 52
+   },
+   {
+    "orden": 8,
+    "estado": "Inicio viraje de color",
+    "dias": 60
+   },
+   {
+    "orden": 9,
+    "estado": "Pinta",
+    "dias": 68
+   },
+   {
+    "orden": 10,
+    "estado": "Pre cosecha",
+    "dias": 78
+   },
+   {
+    "orden": 11,
+    "estado": "Cosecha",
+    "dias": 85
+   },
+   {
+    "orden": 12,
+    "estado": "Post-cosecha temprana",
+    "dias": 99
+   },
+   {
+    "orden": 13,
+    "estado": "Post-cosecha tardia",
+    "dias": 141
+   }
+  ],
+  "Cerezo|Media 3": [
+   {
+    "orden": 1,
+    "estado": "Boton blanco",
+    "dias": 0
+   },
+   {
+    "orden": 2,
+    "estado": "Plena flor",
+    "dias": 10
+   },
+   {
+    "orden": 3,
+    "estado": "Caida de petalos",
+    "dias": 17
+   },
+   {
+    "orden": 4,
+    "estado": "Caida de chaquetas",
+    "dias": 24
+   },
+   {
+    "orden": 5,
+    "estado": "Crecimiento de frutos",
+    "dias": 31
+   },
+   {
+    "orden": 6,
+    "estado": "Endurecimiento de carozo",
+    "dias": 39
+   },
+   {
+    "orden": 7,
+    "estado": "Color pajizo",
+    "dias": 54
+   },
+   {
+    "orden": 8,
+    "estado": "Inicio viraje de color",
+    "dias": 63
+   },
+   {
+    "orden": 9,
+    "estado": "Pinta",
+    "dias": 72
+   },
+   {
+    "orden": 10,
+    "estado": "Pre cosecha",
+    "dias": 82
+   },
+   {
+    "orden": 11,
+    "estado": "Cosecha",
+    "dias": 90
+   },
+   {
+    "orden": 12,
+    "estado": "Post-cosecha temprana",
+    "dias": 104
+   },
+   {
+    "orden": 13,
+    "estado": "Post-cosecha tardia",
+    "dias": 146
+   }
+  ],
+  "Cerezo|Tardia 1": [
+   {
+    "orden": 1,
+    "estado": "Boton blanco",
+    "dias": 0
+   },
+   {
+    "orden": 2,
+    "estado": "Plena flor",
+    "dias": 10
+   },
+   {
+    "orden": 3,
+    "estado": "Caida de petalos",
+    "dias": 17
+   },
+   {
+    "orden": 4,
+    "estado": "Caida de chaquetas",
+    "dias": 24
+   },
+   {
+    "orden": 5,
+    "estado": "Crecimiento de frutos",
+    "dias": 31
+   },
+   {
+    "orden": 6,
+    "estado": "Endurecimiento de carozo",
+    "dias": 39
+   },
+   {
+    "orden": 7,
+    "estado": "Color pajizo",
+    "dias": 54
+   },
+   {
+    "orden": 8,
+    "estado": "Inicio viraje de color",
+    "dias": 63
+   },
+   {
+    "orden": 9,
+    "estado": "Pinta",
+    "dias": 72
+   },
+   {
+    "orden": 10,
+    "estado": "Pre cosecha",
+    "dias": 82
+   },
+   {
+    "orden": 11,
+    "estado": "Cosecha",
+    "dias": 90
+   },
+   {
+    "orden": 12,
+    "estado": "Post-cosecha temprana",
+    "dias": 104
+   },
+   {
+    "orden": 13,
+    "estado": "Post-cosecha tardia",
+    "dias": 146
+   }
+  ],
+  "Cerezo|Tardia 2": [
+   {
+    "orden": 1,
+    "estado": "Boton blanco",
+    "dias": 0
+   },
+   {
+    "orden": 2,
+    "estado": "Plena flor",
+    "dias": 10
+   },
+   {
+    "orden": 3,
+    "estado": "Caida de petalos",
+    "dias": 17
+   },
+   {
+    "orden": 4,
+    "estado": "Caida de chaquetas",
+    "dias": 24
+   },
+   {
+    "orden": 5,
+    "estado": "Crecimiento de frutos",
+    "dias": 31
+   },
+   {
+    "orden": 6,
+    "estado": "Endurecimiento de carozo",
+    "dias": 39
+   },
+   {
+    "orden": 7,
+    "estado": "Color pajizo",
+    "dias": 56
+   },
+   {
+    "orden": 8,
+    "estado": "Inicio viraje de color",
+    "dias": 66
+   },
+   {
+    "orden": 9,
+    "estado": "Pinta",
+    "dias": 76
+   },
+   {
+    "orden": 10,
+    "estado": "Pre cosecha",
+    "dias": 86
+   },
+   {
+    "orden": 11,
+    "estado": "Cosecha",
+    "dias": 95
+   },
+   {
+    "orden": 12,
+    "estado": "Post-cosecha temprana",
+    "dias": 109
+   },
+   {
+    "orden": 13,
+    "estado": "Post-cosecha tardia",
+    "dias": 151
+   }
+  ],
+  "Cerezo|Tardia 3": [
+   {
+    "orden": 1,
+    "estado": "Boton blanco",
+    "dias": 0
+   },
+   {
+    "orden": 2,
+    "estado": "Plena flor",
+    "dias": 10
+   },
+   {
+    "orden": 3,
+    "estado": "Caida de petalos",
+    "dias": 17
+   },
+   {
+    "orden": 4,
+    "estado": "Caida de chaquetas",
+    "dias": 24
+   },
+   {
+    "orden": 5,
+    "estado": "Crecimiento de frutos",
+    "dias": 31
+   },
+   {
+    "orden": 6,
+    "estado": "Endurecimiento de carozo",
+    "dias": 40
+   },
+   {
+    "orden": 7,
+    "estado": "Color pajizo",
+    "dias": 58
+   },
+   {
+    "orden": 8,
+    "estado": "Inicio viraje de color",
+    "dias": 69
+   },
+   {
+    "orden": 9,
+    "estado": "Pinta",
+    "dias": 80
+   },
+   {
+    "orden": 10,
+    "estado": "Pre cosecha",
+    "dias": 91
+   },
+   {
+    "orden": 11,
+    "estado": "Cosecha",
+    "dias": 100
+   },
+   {
+    "orden": 12,
+    "estado": "Post-cosecha temprana",
+    "dias": 114
+   },
+   {
+    "orden": 13,
+    "estado": "Post-cosecha tardia",
+    "dias": 156
+   }
+  ],
+  "Cerezo|Muy tardia 1": [
+   {
+    "orden": 1,
+    "estado": "Boton blanco",
+    "dias": 0
+   },
+   {
+    "orden": 2,
+    "estado": "Plena flor",
+    "dias": 10
+   },
+   {
+    "orden": 3,
+    "estado": "Caida de petalos",
+    "dias": 17
+   },
+   {
+    "orden": 4,
+    "estado": "Caida de chaquetas",
+    "dias": 24
+   },
+   {
+    "orden": 5,
+    "estado": "Crecimiento de frutos",
+    "dias": 31
+   },
+   {
+    "orden": 6,
+    "estado": "Endurecimiento de carozo",
+    "dias": 40
+   },
+   {
+    "orden": 7,
+    "estado": "Color pajizo",
+    "dias": 58
+   },
+   {
+    "orden": 8,
+    "estado": "Inicio viraje de color",
+    "dias": 69
+   },
+   {
+    "orden": 9,
+    "estado": "Pinta",
+    "dias": 80
+   },
+   {
+    "orden": 10,
+    "estado": "Pre cosecha",
+    "dias": 91
+   },
+   {
+    "orden": 11,
+    "estado": "Cosecha",
+    "dias": 100
+   },
+   {
+    "orden": 12,
+    "estado": "Post-cosecha temprana",
+    "dias": 114
+   },
+   {
+    "orden": 13,
+    "estado": "Post-cosecha tardia",
+    "dias": 156
+   }
+  ],
+  "Cerezo|Muy tardia 2": [
+   {
+    "orden": 1,
+    "estado": "Boton blanco",
+    "dias": 0
+   },
+   {
+    "orden": 2,
+    "estado": "Plena flor",
+    "dias": 10
+   },
+   {
+    "orden": 3,
+    "estado": "Caida de petalos",
+    "dias": 17
+   },
+   {
+    "orden": 4,
+    "estado": "Caida de chaquetas",
+    "dias": 24
+   },
+   {
+    "orden": 5,
+    "estado": "Crecimiento de frutos",
+    "dias": 31
+   },
+   {
+    "orden": 6,
+    "estado": "Endurecimiento de carozo",
+    "dias": 41
+   },
+   {
+    "orden": 7,
+    "estado": "Color pajizo",
+    "dias": 60
+   },
+   {
+    "orden": 8,
+    "estado": "Inicio viraje de color",
+    "dias": 72
+   },
+   {
+    "orden": 9,
+    "estado": "Pinta",
+    "dias": 84
+   },
+   {
+    "orden": 10,
+    "estado": "Pre cosecha",
+    "dias": 96
+   },
+   {
+    "orden": 11,
+    "estado": "Cosecha",
+    "dias": 105
+   },
+   {
+    "orden": 12,
+    "estado": "Post-cosecha temprana",
+    "dias": 119
+   },
+   {
+    "orden": 13,
+    "estado": "Post-cosecha tardia",
+    "dias": 161
+   }
+  ],
+  "Cerezo|Muy tardia 3": [
+   {
+    "orden": 1,
+    "estado": "Boton blanco",
+    "dias": 0
+   },
+   {
+    "orden": 2,
+    "estado": "Plena flor",
+    "dias": 10
+   },
+   {
+    "orden": 3,
+    "estado": "Caida de petalos",
+    "dias": 17
+   },
+   {
+    "orden": 4,
+    "estado": "Caida de chaquetas",
+    "dias": 24
+   },
+   {
+    "orden": 5,
+    "estado": "Crecimiento de frutos",
+    "dias": 31
+   },
+   {
+    "orden": 6,
+    "estado": "Endurecimiento de carozo",
+    "dias": 41
+   },
+   {
+    "orden": 7,
+    "estado": "Color pajizo",
+    "dias": 62
+   },
+   {
+    "orden": 8,
+    "estado": "Inicio viraje de color",
+    "dias": 75
+   },
+   {
+    "orden": 9,
+    "estado": "Pinta",
+    "dias": 88
+   },
+   {
+    "orden": 10,
+    "estado": "Pre cosecha",
+    "dias": 100
+   },
+   {
+    "orden": 11,
+    "estado": "Cosecha",
+    "dias": 110
+   },
+   {
+    "orden": 12,
+    "estado": "Post-cosecha temprana",
+    "dias": 124
+   },
+   {
+    "orden": 13,
+    "estado": "Post-cosecha tardia",
+    "dias": 166
+   }
+  ],
+  "Kiwi|Muy temprana": [
+   {
+    "orden": 1,
+    "estado": "Brote de 10 cm",
+    "dias": 0
+   },
+   {
+    "orden": 2,
+    "estado": "Brotacion 40 cm",
+    "dias": 14
+   },
+   {
+    "orden": 3,
+    "estado": "Plena brotacion 80 cm",
+    "dias": 28
+   },
+   {
+    "orden": 4,
+    "estado": "Floracion (plena flor)",
+    "dias": 45
+   },
+   {
+    "orden": 5,
+    "estado": "Fruto recien cuajado",
+    "dias": 59
+   },
+   {
+    "orden": 6,
+    "estado": "Division celular",
+    "dias": 73
+   },
+   {
+    "orden": 7,
+    "estado": "Fruto 40 mm",
+    "dias": 93
+   },
+   {
+    "orden": 8,
+    "estado": "Fruto 60 mm",
+    "dias": 120
+   },
+   {
+    "orden": 9,
+    "estado": "Llenado de fruto",
+    "dias": 141
+   },
+   {
+    "orden": 10,
+    "estado": "Pre cosecha",
+    "dias": 191
+   },
+   {
+    "orden": 11,
+    "estado": "Cosecha",
+    "dias": 205
+   },
+   {
+    "orden": 12,
+    "estado": "Post cosecha",
+    "dias": 223
+   }
+  ],
+  "Kiwi|Temprana": [
+   {
+    "orden": 1,
+    "estado": "Brote de 10 cm",
+    "dias": 0
+   },
+   {
+    "orden": 2,
+    "estado": "Brotacion 40 cm",
+    "dias": 14
+   },
+   {
+    "orden": 3,
+    "estado": "Plena brotacion 80 cm",
+    "dias": 29
+   },
+   {
+    "orden": 4,
+    "estado": "Floracion (plena flor)",
+    "dias": 46
+   },
+   {
+    "orden": 5,
+    "estado": "Fruto recien cuajado",
+    "dias": 60
+   },
+   {
+    "orden": 6,
+    "estado": "Division celular",
+    "dias": 74
+   },
+   {
+    "orden": 7,
+    "estado": "Fruto 40 mm",
+    "dias": 95
+   },
+   {
+    "orden": 8,
+    "estado": "Fruto 60 mm",
+    "dias": 123
+   },
+   {
+    "orden": 9,
+    "estado": "Llenado de fruto",
+    "dias": 144
+   },
+   {
+    "orden": 10,
+    "estado": "Pre cosecha",
+    "dias": 195
+   },
+   {
+    "orden": 11,
+    "estado": "Cosecha",
+    "dias": 209
+   },
+   {
+    "orden": 12,
+    "estado": "Post cosecha",
+    "dias": 227
+   }
+  ],
+  "Kiwi|Media": [
+   {
+    "orden": 1,
+    "estado": "Brote de 10 cm",
+    "dias": 0
+   },
+   {
+    "orden": 2,
+    "estado": "Brotacion 40 cm",
+    "dias": 14
+   },
+   {
+    "orden": 3,
+    "estado": "Plena brotacion 80 cm",
+    "dias": 29
+   },
+   {
+    "orden": 4,
+    "estado": "Floracion (plena flor)",
+    "dias": 47
+   },
+   {
+    "orden": 5,
+    "estado": "Fruto recien cuajado",
+    "dias": 61
+   },
+   {
+    "orden": 6,
+    "estado": "Division celular",
+    "dias": 75
+   },
+   {
+    "orden": 7,
+    "estado": "Fruto 40 mm",
+    "dias": 97
+   },
+   {
+    "orden": 8,
+    "estado": "Fruto 60 mm",
+    "dias": 125
+   },
+   {
+    "orden": 9,
+    "estado": "Llenado de fruto",
+    "dias": 147
+   },
+   {
+    "orden": 10,
+    "estado": "Pre cosecha",
+    "dias": 199
+   },
+   {
+    "orden": 11,
+    "estado": "Cosecha",
+    "dias": 213
+   },
+   {
+    "orden": 12,
+    "estado": "Post cosecha",
+    "dias": 231
+   }
+  ],
+  "Kiwi|Tardia": [
+   {
+    "orden": 1,
+    "estado": "Brote de 10 cm",
+    "dias": 0
+   },
+   {
+    "orden": 2,
+    "estado": "Brotacion 40 cm",
+    "dias": 14
+   },
+   {
+    "orden": 3,
+    "estado": "Plena brotacion 80 cm",
+    "dias": 30
+   },
+   {
+    "orden": 4,
+    "estado": "Floracion (plena flor)",
+    "dias": 48
+   },
+   {
+    "orden": 5,
+    "estado": "Fruto recien cuajado",
+    "dias": 62
+   },
+   {
+    "orden": 6,
+    "estado": "Division celular",
+    "dias": 76
+   },
+   {
+    "orden": 7,
+    "estado": "Fruto 40 mm",
+    "dias": 99
+   },
+   {
+    "orden": 8,
+    "estado": "Fruto 60 mm",
+    "dias": 128
+   },
+   {
+    "orden": 9,
+    "estado": "Llenado de fruto",
+    "dias": 150
+   },
+   {
+    "orden": 10,
+    "estado": "Pre cosecha",
+    "dias": 204
+   },
+   {
+    "orden": 11,
+    "estado": "Cosecha",
+    "dias": 218
+   },
+   {
+    "orden": 12,
+    "estado": "Post cosecha",
+    "dias": 236
+   }
+  ],
+  "Kiwi|Muy tardia": [
+   {
+    "orden": 1,
+    "estado": "Brote de 10 cm",
+    "dias": 0
+   },
+   {
+    "orden": 2,
+    "estado": "Brotacion 40 cm",
+    "dias": 14
+   },
+   {
+    "orden": 3,
+    "estado": "Plena brotacion 80 cm",
+    "dias": 30
+   },
+   {
+    "orden": 4,
+    "estado": "Floracion (plena flor)",
+    "dias": 48
+   },
+   {
+    "orden": 5,
+    "estado": "Fruto recien cuajado",
+    "dias": 62
+   },
+   {
+    "orden": 6,
+    "estado": "Division celular",
+    "dias": 76
+   },
+   {
+    "orden": 7,
+    "estado": "Fruto 40 mm",
+    "dias": 100
+   },
+   {
+    "orden": 8,
+    "estado": "Fruto 60 mm",
+    "dias": 129
+   },
+   {
+    "orden": 9,
+    "estado": "Llenado de fruto",
+    "dias": 152
+   },
+   {
+    "orden": 10,
+    "estado": "Pre cosecha",
+    "dias": 207
+   },
+   {
+    "orden": 11,
+    "estado": "Cosecha",
+    "dias": 221
+   },
+   {
+    "orden": 12,
+    "estado": "Post cosecha",
+    "dias": 239
+   }
+  ],
+  "Ciruelo|Japones": [
+   {
+    "orden": 1,
+    "estado": "Boton blanco/rosado",
+    "dias": 0
+   },
+   {
+    "orden": 2,
+    "estado": "Plena flor",
+    "dias": 10
+   },
+   {
+    "orden": 3,
+    "estado": "Cuaje",
+    "dias": 24
+   },
+   {
+    "orden": 4,
+    "estado": "Caida de chaquetas",
+    "dias": 31
+   },
+   {
+    "orden": 5,
+    "estado": "Endurecimiento de carozo",
+    "dias": 55
+   },
+   {
+    "orden": 6,
+    "estado": "Crecimiento de frutos",
+    "dias": 70
+   },
+   {
+    "orden": 7,
+    "estado": "Inicio viraje de color",
+    "dias": 95
+   },
+   {
+    "orden": 8,
+    "estado": "Pinta",
+    "dias": 105
+   },
+   {
+    "orden": 9,
+    "estado": "Pre cosecha",
+    "dias": 115
+   },
+   {
+    "orden": 10,
+    "estado": "Cosecha",
+    "dias": 125
+   },
+   {
+    "orden": 11,
+    "estado": "Post cosecha",
+    "dias": 145
+   }
+  ],
+  "Ciruelo|Europeo": [
+   {
+    "orden": 1,
+    "estado": "Boton blanco/rosado",
+    "dias": 0
+   },
+   {
+    "orden": 2,
+    "estado": "Plena flor",
+    "dias": 10
+   },
+   {
+    "orden": 3,
+    "estado": "Cuaje",
+    "dias": 24
+   },
+   {
+    "orden": 4,
+    "estado": "Caida de chaquetas",
+    "dias": 31
+   },
+   {
+    "orden": 5,
+    "estado": "Endurecimiento de carozo",
+    "dias": 60
+   },
+   {
+    "orden": 6,
+    "estado": "Crecimiento de frutos",
+    "dias": 80
+   },
+   {
+    "orden": 7,
+    "estado": "Inicio viraje de color",
+    "dias": 110
+   },
+   {
+    "orden": 8,
+    "estado": "Pinta",
+    "dias": 122
+   },
+   {
+    "orden": 9,
+    "estado": "Pre cosecha",
+    "dias": 132
+   },
+   {
+    "orden": 10,
+    "estado": "Cosecha",
+    "dias": 143
+   },
+   {
+    "orden": 11,
+    "estado": "Post cosecha",
+    "dias": 163
+   }
+  ],
+  "Manzano|Media": [
+   {
+    "orden": 1,
+    "estado": "Boton rosado",
+    "dias": 0
+   },
+   {
+    "orden": 2,
+    "estado": "Plena flor",
+    "dias": 8
+   },
+   {
+    "orden": 3,
+    "estado": "Caida de petalos",
+    "dias": 18
+   },
+   {
+    "orden": 4,
+    "estado": "Cuaje",
+    "dias": 26
+   },
+   {
+    "orden": 5,
+    "estado": "Division celular",
+    "dias": 38
+   },
+   {
+    "orden": 6,
+    "estado": "Crecimiento de frutos",
+    "dias": 68
+   },
+   {
+    "orden": 7,
+    "estado": "Inicio viraje de color",
+    "dias": 113
+   },
+   {
+    "orden": 8,
+    "estado": "Pre cosecha",
+    "dias": 133
+   },
+   {
+    "orden": 9,
+    "estado": "Cosecha",
+    "dias": 148
+   },
+   {
+    "orden": 10,
+    "estado": "Post cosecha",
+    "dias": 168
+   }
+  ],
+  "Peral|Media": [
+   {
+    "orden": 1,
+    "estado": "Boton blanco",
+    "dias": 0
+   },
+   {
+    "orden": 2,
+    "estado": "Plena flor",
+    "dias": 8
+   },
+   {
+    "orden": 3,
+    "estado": "Caida de petalos",
+    "dias": 18
+   },
+   {
+    "orden": 4,
+    "estado": "Cuaje",
+    "dias": 26
+   },
+   {
+    "orden": 5,
+    "estado": "Division celular",
+    "dias": 38
+   },
+   {
+    "orden": 6,
+    "estado": "Crecimiento de frutos",
+    "dias": 63
+   },
+   {
+    "orden": 7,
+    "estado": "Inicio viraje de color",
+    "dias": 103
+   },
+   {
+    "orden": 8,
+    "estado": "Pre cosecha",
+    "dias": 123
+   },
+   {
+    "orden": 9,
+    "estado": "Cosecha",
+    "dias": 138
+   },
+   {
+    "orden": 10,
+    "estado": "Post cosecha",
+    "dias": 158
+   }
+  ]
+ },
+ "inicios": {
+  "Cerezo|Muy temprana 1": {
+   "dia": 30,
+   "mes": 8
+  },
+  "Cerezo|Muy temprana 2": {
+   "dia": 1,
+   "mes": 9
+  },
+  "Cerezo|Muy temprana 3": {
+   "dia": 4,
+   "mes": 9
+  },
+  "Cerezo|Temprana 1": {
+   "dia": 6,
+   "mes": 9
+  },
+  "Cerezo|Temprana 2": {
+   "dia": 8,
+   "mes": 9
+  },
+  "Cerezo|Temprana 3": {
+   "dia": 10,
+   "mes": 9
+  },
+  "Cerezo|Media 1": {
+   "dia": 13,
+   "mes": 9
+  },
+  "Cerezo|Media 2": {
+   "dia": 15,
+   "mes": 9
+  },
+  "Cerezo|Media 3": {
+   "dia": 17,
+   "mes": 9
+  },
+  "Cerezo|Tardia 1": {
+   "dia": 20,
+   "mes": 9
+  },
+  "Cerezo|Tardia 2": {
+   "dia": 22,
+   "mes": 9
+  },
+  "Cerezo|Tardia 3": {
+   "dia": 24,
+   "mes": 9
+  },
+  "Cerezo|Muy tardia 1": {
+   "dia": 26,
+   "mes": 9
+  },
+  "Cerezo|Muy tardia 2": {
+   "dia": 29,
+   "mes": 9
+  },
+  "Cerezo|Muy tardia 3": {
+   "dia": 1,
+   "mes": 10
+  },
+  "Kiwi|Muy temprana": {
+   "dia": 13,
+   "mes": 9
+  },
+  "Kiwi|Temprana": {
+   "dia": 17,
+   "mes": 9
+  },
+  "Kiwi|Media": {
+   "dia": 22,
+   "mes": 9
+  },
+  "Kiwi|Tardia": {
+   "dia": 26,
+   "mes": 9
+  },
+  "Kiwi|Muy tardia": {
+   "dia": 1,
+   "mes": 10
+  },
+  "Ciruelo|Japones": {
+   "dia": 30,
+   "mes": 8
+  },
+  "Ciruelo|Europeo": {
+   "dia": 12,
+   "mes": 9
+  },
+  "Manzano|Media": {
+   "dia": 20,
+   "mes": 9
+  },
+  "Peral|Media": {
+   "dia": 15,
+   "mes": 9
+  }
+ },
+ "requerimientos": {
+  "oxido": {
+   "N": 1.0,
+   "P": 2.29,
+   "K": 1.205,
+   "Ca": 1.399,
+   "Mg": 1.658
+  },
+  "absorcion": {
+   "N": {
+    "Cerezo": 2.5,
+    "Kiwi": 2.5,
+    "Otras": 2.5
+   },
+   "P": {
+    "Cerezo": 2.5,
+    "Kiwi": 2.0,
+    "Otras": 2.5
+   },
+   "K": {
+    "Cerezo": 4.0,
+    "Kiwi": 4.0,
+    "Otras": 4.0
+   },
+   "Ca": {
+    "Cerezo": 10.0,
+    "Kiwi": 2.0,
+    "Otras": 10.0
+   },
+   "Mg": {
+    "Cerezo": 8.0,
+    "Kiwi": 4.0,
+    "Otras": 8.0
+   }
+  },
+  "referencias": [
+   {
+    "especie": "Cerezo",
+    "referencia": "Ref. A (historica Abud)",
+    "N": 91.3,
+    "P": 11.0,
+    "K": 152.0,
+    "Ca": 11.4,
+    "Mg": 4.56
+   },
+   {
+    "especie": "Cerezo",
+    "referencia": "Ref. B (alta carga)",
+    "N": 215.0,
+    "P": 14.0,
+    "K": 193.0,
+    "Ca": 9.0,
+    "Mg": 6.39
+   }
+  ]
+ },
+ "ejemplos": [
+  {
+   "nombre": "Hayward producción",
+   "productor": "Fruticola Roma",
+   "campo": "Casas Viejas / Potrerillo / Bajo Chico ex5",
+   "especie": "Kiwi",
+   "variedad": "Hayward",
+   "grupo": "Media",
+   "porta": "Otro",
+   "etapa": "Produccion",
+   "vigor": "Normal",
+   "ha": 12.19,
+   "ton": 57.9,
+   "base": [
+    "Sulfato de Amonio",
+    "Ibicarbox Calcio",
+    "Sulfato de Magnesio",
+    "Fosfato Monoamonico (MAP)",
+    "Sulfato de Potasio",
+    "Ibicarbox Potasio",
+    ""
+   ],
+   "comp": [
+    "Humus casa",
+    "",
+    ""
+   ],
+   "dosis": {
+    "3,0": 50.0,
+    "4,0": 50.0,
+    "5,0": 50.0,
+    "5,2": 80.0,
+    "6,0": 50.0,
+    "6,2": 80.0,
+    "7,0": 50.0,
+    "8,1": 25.0,
+    "9,1": 25.0,
+    "10,1": 25.0,
+    "10,3": 40.0,
+    "11,0": 25.0,
+    "12,0": 25.0,
+    "13,0": 25.0,
+    "13,2": 80.0,
+    "14,0": 25.0,
+    "14,2": 80.0,
+    "15,0": 25.0,
+    "15,4": 25.0,
+    "15,5": 2.5,
+    "16,0": 25.0,
+    "16,4": 25.0,
+    "16,5": 2.5,
+    "17,0": 25.0,
+    "17,4": 25.0,
+    "17,5": 2.5,
+    "18,0": 25.0,
+    "18,4": 25.0,
+    "18,5": 2.5,
+    "19,4": 30.0,
+    "19,5": 3.0,
+    "20,4": 30.0,
+    "20,5": 3.0,
+    "21,4": 30.0,
+    "21,5": 3.0,
+    "22,4": 30.0,
+    "22,5": 3.0,
+    "23,4": 30.0,
+    "23,5": 3.0,
+    "24,4": 30.0,
+    "24,5": 3.0,
+    "25,4": 30.0,
+    "25,5": 3.0
+   },
+   "dosisComp": {
+    "3,0": 30.0,
+    "5,0": 30.0,
+    "7,0": 30.0,
+    "9,0": 30.0,
+    "11,0": 30.0,
+    "13,0": 30.0
+   },
+   "fruta": {}
+  },
+  {
+   "nombre": "Hayward entrada en producción",
+   "productor": "Fruticola Roma",
+   "campo": "Manzano Chico / Potrerillo ex2 / Bajo Chico ex6 / Romeral ex3y4",
+   "especie": "Kiwi",
+   "variedad": "Hayward",
+   "grupo": "Media",
+   "porta": "Otro",
+   "etapa": "Entrada en produccion (4-5 anos)",
+   "vigor": "Normal",
+   "ha": 14.71,
+   "ton": 19.8,
+   "base": [
+    "Sulfato de Amonio",
+    "Ibicarbox Calcio",
+    "Sulfato de Magnesio",
+    "Fosfato Monoamonico (MAP)",
+    "Sulfato de Potasio",
+    "",
+    ""
+   ],
+   "comp": [
+    "",
+    "",
+    ""
+   ],
+   "dosis": {
+    "3,0": 40.0,
+    "4,0": 40.0,
+    "5,0": 40.0,
+    "5,2": 50.0,
+    "6,0": 40.0,
+    "6,2": 50.0,
+    "7,0": 40.0,
+    "8,1": 25.0,
+    "9,1": 25.0,
+    "10,0": 30.0,
+    "10,3": 40.0,
+    "11,0": 30.0,
+    "12,0": 30.0,
+    "13,0": 30.0,
+    "14,4": 15.0,
+    "14,5": 1.5,
+    "15,4": 15.0,
+    "15,5": 1.5,
+    "16,4": 15.0,
+    "16,5": 1.5,
+    "17,4": 15.0,
+    "17,5": 1.5,
+    "18,4": 15.0,
+    "18,5": 1.5,
+    "19,4": 20.0,
+    "19,5": 2.0,
+    "20,4": 20.0,
+    "20,5": 2.0,
+    "21,4": 20.0,
+    "21,5": 2.0,
+    "22,4": 20.0,
+    "22,5": 2.0,
+    "23,4": 20.0,
+    "23,5": 2.0,
+    "24,4": 20.0,
+    "24,5": 2.0,
+    "25,4": 20.0,
+    "25,5": 2.0
+   },
+   "dosisComp": {},
+   "fruta": {}
+  },
+  {
+   "nombre": "Hayward entr prod debil",
+   "productor": "Fruticola Roma",
+   "campo": "Manzano Chico / Potrerillo ex2 / Bajo Chico ex6 / Romeral ex3y4",
+   "especie": "Kiwi",
+   "variedad": "Hayward",
+   "grupo": "Media",
+   "porta": "Otro",
+   "etapa": "Entrada en produccion (4-5 anos)",
+   "vigor": "Normal",
+   "ha": 14.71,
+   "ton": 19.8,
+   "base": [
+    "Sulfato de Amonio",
+    "Ibicarbox Calcio",
+    "Sulfato de Magnesio",
+    "Fosfato Monoamonico (MAP)",
+    "Sulfato de Potasio",
+    "",
+    ""
+   ],
+   "comp": [
+    "Bioamino L",
+    "",
+    ""
+   ],
+   "dosis": {
+    "3,0": 40.0,
+    "4,0": 40.0,
+    "5,0": 40.0,
+    "5,2": 50.0,
+    "6,0": 40.0,
+    "6,2": 50.0,
+    "7,0": 40.0,
+    "8,1": 25.0,
+    "9,1": 25.0,
+    "10,0": 20.0,
+    "10,3": 40.0,
+    "11,0": 20.0,
+    "12,0": 20.0,
+    "13,0": 20.0,
+    "14,0": 20.0,
+    "14,4": 15.0,
+    "14,5": 1.5,
+    "15,0": 20.0,
+    "15,4": 15.0,
+    "15,5": 1.5,
+    "16,0": 20.0,
+    "16,4": 15.0,
+    "16,5": 1.5,
+    "17,0": 20.0,
+    "17,4": 15.0,
+    "17,5": 1.5,
+    "18,4": 15.0,
+    "18,5": 1.5,
+    "19,4": 20.0,
+    "19,5": 2.0,
+    "20,4": 20.0,
+    "20,5": 2.0,
+    "21,4": 20.0,
+    "21,5": 2.0,
+    "22,4": 20.0,
+    "22,5": 2.0,
+    "23,4": 20.0,
+    "23,5": 2.0,
+    "24,4": 20.0,
+    "24,5": 2.0,
+    "25,4": 20.0,
+    "25,5": 2.0
+   },
+   "dosisComp": {
+    "6,0": 20.0,
+    "10,0": 20.0,
+    "14,0": 20.0,
+    "18,0": 20.0
+   },
+   "fruta": {}
+  },
+  {
+   "nombre": "Hayward formación",
+   "productor": "Fruticola Roma",
+   "campo": "Alto Ladera / Ladera",
+   "especie": "Kiwi",
+   "variedad": "Hayward",
+   "grupo": "Media",
+   "porta": "Otro",
+   "etapa": "Formacion (1-3 anos)",
+   "vigor": "Normal",
+   "ha": 7.73,
+   "ton": 0.5,
+   "base": [
+    "Sulfato de Amonio",
+    "Sulfato de Magnesio",
+    "Sulfato de Potasio",
+    "",
+    "",
+    "",
+    ""
+   ],
+   "comp": [
+    "Bioamino L",
+    "",
+    ""
+   ],
+   "dosis": {
+    "5,0": 20.0,
+    "6,0": 20.0,
+    "7,0": 20.0,
+    "8,0": 20.0,
+    "9,0": 20.0,
+    "9,1": 20.0,
+    "10,0": 20.0,
+    "10,1": 20.0,
+    "11,0": 20.0,
+    "11,1": 20.0,
+    "12,0": 20.0,
+    "12,1": 20.0,
+    "13,0": 20.0,
+    "13,1": 20.0,
+    "13,2": 10.0,
+    "14,0": 20.0,
+    "14,2": 10.0,
+    "15,0": 20.0,
+    "15,2": 10.0,
+    "16,0": 20.0,
+    "16,2": 10.0,
+    "17,0": 20.0,
+    "18,0": 20.0,
+    "18,2": 10.0,
+    "19,0": 20.0,
+    "19,2": 10.0,
+    "20,0": 20.0,
+    "20,2": 10.0,
+    "21,0": 20.0,
+    "21,2": 10.0,
+    "22,0": 20.0,
+    "22,2": 10.0,
+    "23,2": 10.0
+   },
+   "dosisComp": {
+    "5,0": 20.0,
+    "9,0": 20.0,
+    "13,0": 20.0,
+    "17,0": 20.0,
+    "21,0": 20.0
+   },
+   "fruta": {}
+  }
+ ],
+ "leeme": [
+  "PROGRAMA DE FERTILIZACION AL SUELO  -  FORMATO UNIFICADO ABUD & CIA.  -  TEMPORADA 2026-2027",
+  "",
+  "COMO SE USA",
+  "1.  Duplica la hoja MODELO (clic derecho > Mover o copiar > Crear una copia) y renombra la hoja con el nombre del programa.",
+  "2.  El campo PROGRAMA se llena solo con el nombre de la hoja. No hay que escribirlo.",
+  "3.  Completa el encabezado amarillo: productor, campo, especie, variedad, grupo variedad, portainjerto, etapa, vigor, ha y ton/ha.",
+  "4.  La FECHA DE INICIO no se ingresa: sale automatica de la ESPECIE y del GRUPO VARIEDAD (se muestra en el campo INICIO).",
+  "5.  Elige los fertilizantes en la fila de titulos (lista desplegable) y escribe los kg/ha en la semana que corresponda.",
+  "",
+  "PROTECCION DEL LIBRO",
+  "Las hojas estan protegidas con la clave:   montefrutal",
+  "Solo se pueden editar las celdas amarillas del encabezado, los nombres de los productos y las dosis. El resto esta bloqueado.",
+  "Las hojas Fenologia, Fertilizantes y Listas estan ocultas: clic derecho sobre cualquier pestana > Mostrar.",
+  "Para editarlas: Revisar > Desproteger hoja > clave montefrutal. Al terminar, volver a proteger y a ocultar.",
+  "La estructura del libro NO esta bloqueada, para que se pueda seguir duplicando la hoja MODELO.",
+  "",
+  "REGLA DE ORO",
+  "Amarillo = se edita.    Blanco = se escribe la dosis en kg/ha.    Gris y naranjo = se calcula solo, no se toca.",
+  "",
+  "SEMANAS Y FECHAS",
+  "La primera fila arranca dos semanas antes de la fecha de inicio y cada fila suma 7 dias.",
+  "El numero de SEMANA es una formula ISO calculada desde la fecha, asi que se corrige solo en anos de 53 semanas y si cambian las fechas.",
+  "",
+  "LA FECHA DE INICIO ES AUTOMATICA",
+  "Dia 0 de cada programa:   cerezo, ciruelo y peral = BOTON BLANCO   |   manzano = BOTON ROSADO   |   kiwi = BROTE DE 10 CM.",
+  "La fecha sale de la tabla verde de la hoja 'Fenologia', segun especie y categoria de madurez.",
+  "La categoria mas temprana parte el 30 de agosto y la mas tardia el 1 de octubre.",
+  "Para mover TODA la temporada de golpe, cambia el ANO DE INICIO DE TEMPORADA (una sola celda amarilla en la hoja 'Fenologia').",
+  "",
+  "GRUPO VARIEDAD: CATEGORIA DE MADUREZ",
+  "CEREZO  -  dias de PLENA FLOR a COSECHA, con tres niveles dentro de cada categoria (1 = mas corto, 3 = mas largo):",
+  "Muy temprana 1/2/3  =  45 / 50 / 55 dias                Temprana 1/2/3  =  55 / 60 / 65 dias",
+  "Media 1/2/3  =  70 / 75 / 80 dias                       Tardia 1/2/3  =  80 / 85 / 90 dias",
+  "Muy tardia 1/2/3  =  90 / 95 / 100 dias",
+  "KIWI  -  la categoria fija la fecha de plena flor y los dias hasta cosecha (160 a 173):",
+  "Muy temprana  flor 28-oct  |  Temprana  flor 02-nov  |  Media  flor 08-nov  |  Tardia  flor 13-nov  |  Muy tardia  flor 18-nov",
+  "",
+  "COMO SE ABREN LOS ESTADOS EN CEREZO",
+  "Cerezo no tiene estado de cuaje: despues de caida de petalos viene directamente caida de chaquetas.",
+  "PLENA FLOR, CAIDA DE PETALOS y CAIDA DE CHAQUETAS van a 7 dias una de otra, en semanas consecutivas.",
+  "CRECIMIENTO DE FRUTOS queda como maximo 1 semana despues de caida de chaquetas.",
+  "ENDURECIMIENTO DE CAROZO va a un tercio del camino entre crecimiento de frutos y color pajizo (mas cerca del primero).",
+  "Lo que el tope deja libre en las variedades mas tardias se reparte por mitades entre CRECIMIENTO -> COLOR PAJIZO y COLOR PAJIZO -> COSECHA.",
+  "PINTA -> COSECHA se mantiene en el 22% de los dias de plena flor a cosecha.   POST-COSECHA TEMPRANA -> TARDIA: siempre 6 semanas.",
+  "Si dos estados caen en la misma semana, la columna ESTADO FENOLOGICO los muestra separados por una barra.",
+  "",
+  "LISTAS QUE SE FILTRAN",
+  "GRUPO VARIEDAD y PORTAINJERTO muestran solo las opciones de la especie elegida. Elige primero la ESPECIE.",
+  "Las columnas azules ofrecen solo FERTILIZANTES BASE; las verdes, solo COMPLEMENTARIOS.",
+  "El campo INICIO avisa en rojo cuando la combinacion ESPECIE + GRUPO VARIEDAD no existe en la hoja 'Fenologia'.",
+  "",
+  "QUE HACE CADA HOJA",
+  "Fenologia (oculta)       Dias desde la fecha de inicio hasta cada estado, y la tabla de fechas de inicio automaticas.",
+  "Fertilizantes (oculta)   Catalogo unico de leyes (%). Cambiar aqui actualiza todas las hojas de programa.",
+  "Listas (oculta)          Apoyo de las listas desplegables.",
+  "Requerimientos           Conversion a oxido, FACTORES DE ABSORCION por especie y valores referenciales de analisis de fruta.",
+  "MODELO                   Plantilla vacia. Se duplica por programa.",
+  "EJ ...                   Tres programas de ejemplo con dosis reales de la cartera.",
+  "Resumen                  Consolidado de unidades nutricionales por programa.",
+  "",
+  "LO QUE HAY QUE REVISAR CADA TEMPORADA",
+  "-  El ANO DE INICIO DE TEMPORADA en la hoja 'Fenologia'.",
+  "-  Leyes de los productos formulados y suspensiones, contra la etiqueta del lote.",
+  "-  Las fechas de inicio y los dias por categoria, con observacion de terreno.",
+  "-  Factores de absorcion de la hoja 'Requerimientos', por especie.",
+  "",
+  "Los COMPLEMENTARIOS no se suman al balance de unidades nutricionales, aunque declaren ley.",
+  "",
+  "Abud & Cia.  -  Preparado por Raimundo Cuevas  -  Formato unificado, version 6.0",
+  "",
+  "Abud & Cia.  -  Documento de uso exclusivo del productor indicado en el encabezado.  Prohibida su reproduccion, copia o distribucion a terceros sin autorizacion escrita."
+ ],
+ "avisos": [
+  "El programa «Hayward producción» usa «Humus casa», que no esta en el catalogo de fertilizantes.",
+  "«Humus casa» esta en la lista COMPLEMENTARIOS pero no en el catalogo de fertilizantes, asi que sus leyes entran como cero."
+ ]
+}

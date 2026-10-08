@@ -1,7 +1,7 @@
 /* Service Worker · Plataforma Exportadora Los Olmos */
-const CACHE = 'olmos-plataforma-v17';
+const CACHE = 'olmos-plataforma-v18';
 const CORE = ['./','./index.html','./clima.html','./tecnica.html','./tecnico.html','./sag.html',
-  './datos.json','./config.json','./heladas_comunas.json','./cuarteles.json','./cosecha.json','./pesticidas.json','./fertilizacion.json','./precios.json','./manifest.webmanifest',
+  './datos.json','./config.json','./heladas_comunas.json','./cuarteles.json','./cosecha.json','./pesticidas.json','./fertilizacion.json','./precios.json','./fertbeta.json','./manifest.webmanifest',
   './icon-192.png','./icon-512.png','./apple-touch-icon.png',
   'https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js',
   'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js',

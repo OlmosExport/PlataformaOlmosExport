@@ -1,6 +1,6 @@
 PLATAFORMA EXPORTADORA LOS OLMOS
 ================================
-Versión 5.1 · Precios de Agroquímicos
+Versión 5.2 · Programa de Fertilización (Beta)
 
 
 QUÉ HAY EN LA CARPETA (todo junto, sin subcarpetas)
@@ -27,6 +27,9 @@ QUÉ HAY EN LA CARPETA (todo junto, sin subcarpetas)
                         reparto por etapa, productos y comentarios.
   precios.json          Catálogo de agroquímicos con el precio de cada
                         proveedor y el mejor precio recalculado.
+  fertbeta.json         El libro «formato unificado Abud & Cía.» hecho datos:
+                        catálogo de fertilizantes, listas, fenología de las 5
+                        especies, factores y los 4 programas de ejemplo.
 
   manifest.webmanifest  Datos de la app instalable.
   sw.js                 Permite usarla sin internet y avisa de versiones nuevas.
@@ -421,9 +424,86 @@ REVISIÓN RÁPIDA DESPUÉS DE PUBLICAR (2 minutos)
   con el detalle técnico: sácale una foto y envíala.
 
 
+PROGRAMA DE FERTILIZACIÓN (BETA)
+
+  Es el libro de Excel «Programa de Fertilización al suelo — formato
+  unificado Abud & Cía. v6.0» convertido en página. Lo que ahí se hace
+  duplicando la hoja MODELO y desprotegiendo hojas con clave, acá se hace
+  con los botones de arriba.
+
+  Está en Departamento Técnico › Programa Fertilización (beta), bajo
+  General, porque sirve para las cinco especies del libro: cerezo, kiwi,
+  ciruelo, manzano y peral.
+
+  CÓMO SE ARMA UN PROGRAMA
+
+  1. «Nuevo» crea un programa en blanco (es el equivalente a duplicar la
+     hoja MODELO).
+  2. Se completa el encabezado. Primero la ESPECIE: el grupo variedad y el
+     portainjerto se filtran según la especie, igual que en el libro.
+  3. La FECHA DE INICIO no se escribe: sale sola de la especie y el grupo
+     variedad. Día 0 es botón blanco en cerezo, ciruelo y peral, botón
+     rosado en manzano y brote de 10 cm en kiwi.
+  4. Se elige el producto en el título de cada columna: las azules ofrecen
+     solo fertilizantes base, las verdes solo complementarios.
+  5. Se escriben los kg (o L) por hectárea en la semana que corresponda.
+     Las unidades nutricionales, los totales y el balance se mueven solos.
+
+  La rejilla arranca dos semanas antes de la fecha de inicio y cada fila
+  suma 7 días, igual que el libro. Son 41 semanas.
+
+  Como en el libro, SOLO los fertilizantes base suman unidades
+  nutricionales. Los complementarios no, aunque declaren ley.
+
+  CATÁLOGOS (las hojas que el libro deja ocultas)
+
+  Fertilizantes ..... Las leyes (%) de cada producto. Cambiar una ley se
+                      aplica a todos los programas de inmediato. Desde acá
+                      se agregan productos nuevos.
+  Fenología ......... Los días que tarda cada estado desde la fecha de
+                      inicio, para las 24 combinaciones de especie y grupo.
+  Fechas de inicio .. El día y el mes de cada combinación, y el AÑO DE
+                      TEMPORADA: moverlo corre todos los programas de golpe.
+  Factores .......... Los factores de absorción del balance por extracción.
+  Respaldo .......... Descargar y cargar los programas, y el CSV.
+  Cómo se usa ....... La hoja LEEME del libro, tal cual.
+
+  EXPORTAR
+
+  Descargar imagen .. La tabla como PNG, para mandar por WhatsApp.
+  Exportar informe .. Una hoja A4 horizontal con el encabezado, los estados
+                      fenológicos, la rejilla completa con sus totales y, si
+                      hay análisis de fruta, el balance por extracción.
+  CSV ............... El programa como planilla, para abrir en Excel.
+
+  DÓNDE SE GUARDA  (importante)
+
+  Los programas viven EN EL NAVEGADOR de este equipo, no en el repositorio.
+  Eso quiere decir dos cosas: no se ven desde otro computador, y se pierden
+  si alguien limpia los datos del sitio.
+
+  Para llevarlos a otro equipo o para no perderlos: Catálogos › Respaldo ›
+  «Descargar respaldo». Ese archivo se vuelve a cargar con «Cargar
+  respaldo» en el otro computador.
+
+  LO QUE VENÍA CON DIFERENCIAS EN EL LIBRO
+
+  «Humus casa» está en la lista de complementarios pero no en el catálogo
+  de fertilizantes, así que sus leyes entran como cero. El programa
+  «Hayward producción» lo usa. Se arregla cargándolo en Catálogos ›
+  Fertilizantes.
+
+  El libro mismo advierte que con los factores de absorción actuales el
+  requerimiento teórico puede quedar bastante por debajo de lo que entregan
+  los programas reales. El semáforo del balance es una guía, no un límite.
+
+
 DÓNDE SE GUARDAN LOS DATOS DE CADA PLATAFORMA
 
   Climática ...... en datos.json, dentro del repositorio. Lo ve todo el equipo.
+  Fertilización .. el Programa de Fertilización estándar y el Beta se guardan
+                   en el navegador de cada computador. El Beta tiene respaldo
+                   en Catálogos › Respaldo; conviene descargarlo seguido.
   Campo .......... los conteos se sincronizan a Google Sheets con el botón
                    "Sincronizar con la nube".
                    Los registros fenológicos, informes y labores viven SOLO en

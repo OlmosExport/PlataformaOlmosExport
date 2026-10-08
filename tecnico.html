@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Departamento Técnico · Exportadora Los Olmos</title>
 <meta name="description" content="Estimación y flujo de cosecha de Exportadora Los Olmos.">
-<meta name="app-version" content="5.1">
+<meta name="app-version" content="5.2">
 <meta name="theme-color" content="#14301C">
 <link rel="manifest" href="./manifest.webmanifest">
 <link rel="apple-touch-icon" href="./apple-touch-icon.png">
@@ -366,6 +366,366 @@ thead th.stick{z-index:4;background:var(--g50)}
   .etbar{grid-template-columns:1fr}
 }
 
+/* ══════════════════════════════════════════════════════════════════
+   PROGRAMA DE FERTILIZACIÓN (BETA)
+   Réplica del libro «formato unificado Abud & Cía. v6.0».
+   Los colores salen del Excel tal cual: azul marino del encabezado,
+   azul de los fertilizantes base, verde de los complementarios,
+   naranjo de las unidades nutricionales y amarillo de lo que se edita.
+   ══════════════════════════════════════════════════════════════════ */
+:root{
+  --fb-navy:#1F3864; --fb-azul:#2F5597; --fb-verde:#375623;
+  --fb-naran:#C55A11; --fb-naran-s:#FCE4D6;
+  --fb-tot:#DCE6F1;   --fb-am:#FFF2CC;  --fb-gris:#F2F2F2;
+  --fb-bord:#BFBFBF;
+}
+
+/* ── cinta de programas ── */
+.fb-top{display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin-bottom:14px}
+.fb-sel{position:relative;flex:1 1 280px;min-width:0;background:var(--card);
+  border:1px solid var(--line);border-radius:10px;box-shadow:var(--sh1);
+  display:flex;align-items:center;padding:0 11px;height:40px}
+.fb-sel>svg{width:16px;height:16px;color:var(--fb-navy);flex-shrink:0}
+.fb-sel select{flex:1;min-width:0;font-family:var(--font);font-size:13.5px;
+  font-weight:700;color:var(--ink);border:none;background:transparent;
+  padding:0 20px 0 9px;cursor:pointer;appearance:none;-webkit-appearance:none;
+  background:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' \
+  viewBox='0 0 24 24' fill='none' stroke='%239AA79C' stroke-width='2.6'>\
+  <polyline points='6 9 12 15 18 9'/></svg>") no-repeat right center/11px}
+.fb-sel select:focus{outline:none}
+.fb-mini{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:700;
+  padding:0 12px;height:40px;border-radius:10px;cursor:pointer;transition:.16s;
+  font-family:var(--font);border:1px solid var(--line);background:var(--card);
+  color:var(--mut);white-space:nowrap;box-shadow:var(--sh1)}
+.fb-mini:hover{border-color:var(--g200);color:var(--g700);background:var(--g50)}
+.fb-mini svg{width:14px;height:14px}
+.fb-mini.pri{background:var(--g800);border-color:var(--g800);color:#fff}
+.fb-mini.pri:hover{background:var(--g900);border-color:var(--g900);color:#fff}
+.fb-mini.dng:hover{border-color:#E8BDB4;color:var(--red);background:var(--red-s)}
+
+/* ── encabezado amarillo del Excel, en dos tiras ── */
+.fb-cab{background:var(--card);border:1px solid var(--line);border-radius:var(--r);
+  box-shadow:var(--sh1);overflow:hidden}
+.fb-cab+.fb-cab{margin-top:9px}
+.fb-r{display:flex;flex-wrap:wrap;gap:0}
+.fb-r+.fb-r{border-top:1px solid var(--line2)}
+.fb-f{flex:1 1 150px;min-width:0;display:flex;flex-direction:column;gap:2px;
+  padding:8px 13px;border-right:1px solid var(--line2);transition:.14s}
+.fb-f:last-child{border-right:none}
+.fb-f:focus-within{background:var(--g50)}
+.fb-f.w{flex:1.7 1 215px}
+.fb-f.n{flex:.7 1 110px}
+.fb-f>span{font-family:var(--mono);font-size:8.5px;font-weight:600;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--mut2);white-space:nowrap;overflow:hidden;
+  text-overflow:ellipsis}
+.fb-f select,.fb-f input{font-family:var(--font);font-size:13.5px;font-weight:700;
+  color:var(--ink);border:none;background:transparent;padding:0;width:100%;
+  letter-spacing:-.01em;appearance:none;-webkit-appearance:none}
+.fb-f select{cursor:pointer;background:url("data:image/svg+xml;utf8,<svg \
+  xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' \
+  stroke='%239AA79C' stroke-width='2.6'><polyline points='6 9 12 15 18 9'/></svg>") \
+  no-repeat right center/11px;padding-right:15px}
+.fb-f select:focus,.fb-f input:focus{outline:none}
+.fb-f input::placeholder{color:var(--mut2);font-weight:500}
+/* lo que en el Excel es celda amarilla editable */
+.fb-f.am>span::after{content:'';display:inline-block;width:5px;height:5px;
+  border-radius:1.5px;background:#E8C45A;margin-left:5px;vertical-align:middle}
+/* el campo INICIO, que el Excel calcula solo */
+.fb-f.ro{background:var(--fb-gris)}
+.fb-f.ro b{font-size:13.5px;font-weight:800;letter-spacing:-.01em;color:var(--fb-navy)}
+.fb-f.ro b.mal{color:var(--red);font-size:11.5px;font-weight:700;line-height:1.3;
+  display:block}
+
+/* ── la rejilla de 41 semanas ── */
+.fb-tbar{display:flex;align-items:center;justify-content:space-between;gap:14px;
+  flex-wrap:wrap;margin:22px 0 10px}
+.fb-tbar-t{font-size:16px;font-weight:800;letter-spacing:-.02em}
+.fb-tbar-t b{font-family:var(--mono);font-size:11px;font-weight:500;color:var(--mut2);
+  margin-left:6px;letter-spacing:0}
+.fb-tbar-b{display:flex;gap:8px;flex-wrap:wrap}
+
+.fb-tw{background:var(--card);border:1px solid var(--line);border-radius:var(--r);
+  box-shadow:var(--sh2);overflow:auto;max-height:min(74vh,760px)}
+#fb-grid{border-collapse:separate;border-spacing:0;font-size:11.5px;width:100%}
+#fb-grid th,#fb-grid td{border-right:1px solid var(--fb-bord);
+  border-bottom:1px solid var(--fb-bord);padding:0}
+
+/* bandas de grupo */
+#fb-grid thead tr.banda th{position:sticky;top:0;z-index:6;color:#fff;font-weight:800;
+  font-size:10px;letter-spacing:.05em;text-transform:uppercase;padding:6px 8px;
+  text-align:center;white-space:nowrap;font-family:var(--font)}
+#fb-grid thead tr.banda th.b-inf{background:#808080}
+#fb-grid thead tr.banda th.b-base{background:var(--fb-azul)}
+#fb-grid thead tr.banda th.b-comp{background:var(--fb-verde)}
+#fb-grid thead tr.banda th.b-un{background:var(--fb-naran)}
+
+/* fila de títulos: los 4 fijos + los selectores de producto */
+#fb-grid thead tr.tit th{position:sticky;top:27px;z-index:6;color:#fff;
+  font-weight:700;font-size:9.5px;line-height:1.25;padding:5px 4px;
+  text-align:center;vertical-align:middle;height:48px;white-space:normal;
+  font-family:var(--font);letter-spacing:.03em}
+#fb-grid thead tr.tit th.t-inf{background:var(--fb-navy)}
+#fb-grid thead tr.tit th.t-base{background:var(--fb-azul);padding:3px;min-width:88px}
+#fb-grid thead tr.tit th.t-comp{background:var(--fb-verde);padding:3px;min-width:88px}
+#fb-grid thead tr.tit th.t-un{background:var(--fb-naran);min-width:52px;
+  text-transform:none;letter-spacing:.01em}
+/* El título de la columna: el nombre del producto escrito en el <th>,
+   con las líneas que necesite, y el <select> encima en transparente.
+   Así se lee entero y se sigue abriendo la lista nativa al tocarlo. */
+.fb-pw{position:relative;border:1px solid rgba(255,255,255,.3);border-radius:5px;
+  padding:4px 13px 4px 5px;min-height:34px;display:flex;align-items:center;
+  transition:.14s}
+.fb-pw:hover{background:rgba(255,255,255,.14)}
+.fb-pw:focus-within{outline:2px solid #fff;outline-offset:-1px}
+.fb-pw.vac{border-style:dashed;border-color:rgba(255,255,255,.45)}
+.fb-pt{font-family:var(--font);font-size:9px;font-weight:700;color:#fff;
+  line-height:1.22;text-align:left;width:100%;white-space:normal;
+  overflow-wrap:break-word;word-break:normal;hyphens:none;
+  text-transform:none;letter-spacing:0;
+  display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.fb-pw.vac .fb-pt{color:rgba(255,255,255,.65);font-weight:600;font-style:italic}
+.fb-pw>svg{position:absolute;right:3px;top:50%;margin-top:-4.5px;width:9px;height:9px;
+  color:#fff;pointer-events:none}
+.fb-ps{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer;
+  font-size:12px;border:none;background:transparent;appearance:none;-webkit-appearance:none}
+.fb-ps option{color:#16211A;background:#fff;font-size:12px}
+
+/* columnas fijas de la izquierda */
+#fb-grid .fij{position:sticky;z-index:4;background:var(--card)}
+#fb-grid .c-mes{left:0;width:44px;min-width:44px}
+#fb-grid .c-sem{left:44px;width:40px;min-width:40px}
+#fb-grid .c-fec{left:84px;width:64px;min-width:64px}
+#fb-grid .c-est{left:148px;width:176px;min-width:176px;
+  border-right:2px solid var(--fb-bord)}
+#fb-grid thead .fij{z-index:7}
+
+/* celdas del cuerpo */
+#fb-grid tbody td{height:26px;font-variant-numeric:tabular-nums;text-align:center;
+  color:var(--ink)}
+#fb-grid tbody td.c-mes,#fb-grid tbody td.c-sem{font-family:var(--mono);
+  font-size:10px;color:var(--mut);font-weight:600}
+#fb-grid tbody td.c-fec{font-family:var(--mono);font-size:10.5px;font-weight:600;
+  color:var(--s700)}
+#fb-grid tbody td.c-est{text-align:left;padding:0 9px;font-size:10.5px;font-weight:700;
+  color:var(--fb-verde);line-height:1.25;white-space:normal}
+#fb-grid tbody tr.hito td.c-mes,#fb-grid tbody tr.hito td.c-sem,
+#fb-grid tbody tr.hito td.c-fec{background:#F4F7FA}
+#fb-grid tbody tr.hito td.c-est{background:#F4F7FA}
+#fb-grid tbody tr:hover td.fij{background:var(--g50)}
+
+/* las celdas de dosis: blancas y editables, como en el Excel */
+.fb-in{width:100%;height:26px;border:none;background:transparent;text-align:center;
+  font-family:var(--font);font-size:11.5px;font-weight:600;color:var(--ink);
+  font-variant-numeric:tabular-nums;padding:0 2px;appearance:textfield;
+  -moz-appearance:textfield}
+.fb-in::-webkit-outer-spin-button,.fb-in::-webkit-inner-spin-button{
+  -webkit-appearance:none;margin:0}
+.fb-in:hover{background:#FBFCF9}
+.fb-in:focus{outline:2px solid var(--fb-azul);outline-offset:-2px;background:#fff;
+  position:relative;z-index:2}
+.fb-in:disabled{background:repeating-linear-gradient(135deg,#FAFAFA,#FAFAFA 4px,
+  #F2F2F2 4px,#F2F2F2 8px);cursor:not-allowed}
+#fb-grid td.un{background:var(--fb-naran-s);font-weight:600;font-size:11px;
+  min-width:52px}
+#fb-grid td.un.z{color:#C9B5A8}
+
+/* totales */
+#fb-grid tfoot td{position:sticky;z-index:5;font-weight:800;font-family:var(--mono);
+  font-size:11px;text-align:center;background:var(--fb-tot);color:var(--fb-navy);
+  height:28px;padding:0 4px;text-transform:none}
+#fb-grid tfoot tr.t1 td{bottom:28px}
+#fb-grid tfoot tr.t2 td{bottom:0}
+#fb-grid tfoot td.lbl-t{text-align:right;padding-right:11px;font-family:var(--font);
+  font-size:10.5px;font-weight:800;letter-spacing:.02em;z-index:6}
+#fb-grid tfoot td.un-t{background:var(--fb-naran);color:#fff}
+#fb-grid tfoot td.z{color:#A9BBD0}
+#fb-grid tfoot td.na{background:#EDF1F6}
+
+/* ── balance por extracción ── */
+.fb-det{background:var(--card);border:1px solid var(--line);border-radius:var(--r);
+  box-shadow:var(--sh1);margin-top:18px;overflow:hidden}
+.fb-det>summary{padding:13px 18px;font-size:12.5px;font-weight:700;color:var(--ink);
+  cursor:pointer;list-style:none;display:flex;align-items:center;gap:9px;transition:.14s}
+.fb-det>summary::-webkit-details-marker{display:none}
+.fb-det>summary::before{content:'';width:0;height:0;border-left:5px solid var(--mut2);
+  border-top:4px solid transparent;border-bottom:4px solid transparent;
+  transition:transform .2s;flex-shrink:0}
+.fb-det[open]>summary::before{transform:rotate(90deg)}
+.fb-det>summary:hover{background:var(--g50)}
+.fb-det>summary em{font-family:var(--mono);font-size:9.5px;color:var(--mut2);
+  font-weight:500;font-style:normal;margin-left:auto}
+.fb-bd{padding:0 18px 18px}
+.fb-bt{width:100%;border-collapse:collapse;font-size:11.5px}
+.fb-bt th{background:var(--fb-naran);color:#fff;font-size:9px;font-weight:700;
+  padding:6px 7px;text-align:center;line-height:1.3;border:1px solid #fff;
+  letter-spacing:.02em;text-transform:none;font-family:var(--font);
+  white-space:normal;position:static}
+.fb-bt th:first-child{text-align:left}
+.fb-bt td{border:1px solid var(--line);padding:0 7px;height:30px;text-align:center;
+  font-variant-numeric:tabular-nums;font-weight:600}
+.fb-bt td:first-child{text-align:left;font-weight:800;font-family:var(--mono);
+  color:var(--fb-navy)}
+.fb-bt td.ed{background:var(--fb-am);padding:0}
+.fb-bt td.calc{background:var(--fb-gris);color:var(--mut)}
+.fb-bt input{width:100%;height:30px;border:none;background:transparent;
+  text-align:center;font-family:var(--font);font-size:11.5px;font-weight:700;
+  color:var(--ink);font-variant-numeric:tabular-nums;appearance:textfield;
+  -moz-appearance:textfield}
+.fb-bt input::-webkit-outer-spin-button,.fb-bt input::-webkit-inner-spin-button{
+  -webkit-appearance:none;margin:0}
+.fb-bt input:focus{outline:2px solid var(--fb-naran);outline-offset:-2px}
+.fb-chip{display:inline-block;font-family:var(--mono);font-size:9px;font-weight:700;
+  letter-spacing:.07em;padding:3px 8px;border-radius:5px}
+.fb-chip.ok{background:var(--g100);color:var(--g800)}
+.fb-chip.def{background:var(--red-s);color:var(--red)}
+.fb-chip.exc{background:var(--warn-s);color:#8A6418}
+.fb-nota{font-size:11.5px;color:var(--mut);line-height:1.55;margin-top:11px}
+.fb-nota b{color:var(--g800);font-weight:700}
+.fb-ref{display:flex;gap:7px;flex-wrap:wrap;margin:11px 0 2px;align-items:center}
+.fb-ref span{font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:.09em;
+  text-transform:uppercase;color:var(--mut2)}
+
+/* ── resumen de programas ── */
+.fb-res{width:100%;border-collapse:collapse;font-size:11.5px}
+.fb-res th{background:var(--fb-navy);color:#fff;font-size:9px;font-weight:700;
+  padding:7px 8px;text-align:right;letter-spacing:.03em;border:1px solid #fff;
+  text-transform:none;font-family:var(--font);position:static}
+.fb-res th:first-child,.fb-res th:nth-child(2),.fb-res th:nth-child(3),
+.fb-res th:nth-child(4){text-align:left}
+.fb-res td{border:1px solid var(--line);padding:7px 8px;text-align:right;
+  font-variant-numeric:tabular-nums;font-weight:600}
+.fb-res td:first-child,.fb-res td:nth-child(2),.fb-res td:nth-child(3),
+.fb-res td:nth-child(4){text-align:left;font-weight:700}
+.fb-res td:first-child{color:var(--fb-navy);font-weight:800}
+.fb-res tr.act td{background:var(--g50)}
+.fb-res tfoot td{background:var(--fb-tot);color:var(--fb-navy);font-weight:800;
+  font-family:var(--mono);font-size:11px}
+.fb-res tfoot td:first-child{font-family:var(--font);font-size:10.5px;
+  letter-spacing:.02em}
+
+/* ── catálogos ── */
+.fb-modal{position:fixed;inset:0;z-index:300;display:none;
+  background:rgba(16,28,19,.44);backdrop-filter:blur(2px);
+  padding:28px 20px;overflow:auto}
+.fb-modal.on{display:block;animation:fade .22s var(--ease)}
+.fb-box{max-width:1080px;margin:0 auto;background:var(--card);
+  border-radius:var(--r);box-shadow:var(--sh3);overflow:hidden}
+.fb-bh{display:flex;align-items:center;gap:13px;padding:16px 20px;
+  border-bottom:1px solid var(--line)}
+.fb-bh h3{font-size:16px;font-weight:800;letter-spacing:-.02em;margin:0}
+.fb-bh p{font-size:11.5px;color:var(--mut);margin:3px 0 0;line-height:1.45}
+.fb-bx{margin-left:auto;border:none;background:var(--g50);color:var(--mut);
+  width:32px;height:32px;border-radius:9px;cursor:pointer;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;transition:.14s}
+.fb-bx:hover{background:var(--line);color:var(--ink)}
+.fb-bx svg{width:16px;height:16px}
+.fb-bb{padding:16px 20px 20px;max-height:calc(100vh - 170px);overflow:auto}
+.fb-tabs{display:flex;gap:4px;padding:0 20px;border-bottom:1px solid var(--line);
+  overflow-x:auto}
+.fb-tab{border:none;background:transparent;font-family:var(--font);font-size:12.5px;
+  font-weight:700;color:var(--mut);padding:11px 13px;cursor:pointer;
+  border-bottom:2px solid transparent;transition:.14s;white-space:nowrap}
+.fb-tab:hover{color:var(--g700)}
+.fb-tab.on{color:var(--g800);border-bottom-color:var(--g700)}
+.fb-pane{display:none}
+.fb-pane.on{display:block}
+
+.fb-cat{width:100%;border-collapse:collapse;font-size:11.5px}
+.fb-cat th{background:var(--fb-navy);color:#fff;font-size:9px;font-weight:700;
+  padding:7px 6px;text-align:center;border:1px solid #fff;letter-spacing:.02em;
+  position:sticky;top:0;z-index:2;text-transform:none;font-family:var(--font);
+  white-space:nowrap}
+/* El catálogo necesita respirar: el nombre del producto es lo que se lee. */
+.fb-cat{table-layout:fixed}
+.fb-cat col.c-cod{width:62px} .fb-cat col.c-nom{width:216px}
+.fb-cat col.c-tip{width:122px} .fb-cat col.c-cat{width:132px}
+.fb-cat col.c-ley{width:58px}  .fb-cat col.c-uni{width:66px}
+.fb-cat col.c-obs{width:230px} .fb-cat col.c-del{width:34px}
+.fb-cat input,.fb-cat select{text-overflow:ellipsis}
+/* El <select> del tipo necesitaba su flecha. */
+.fb-cat select{background:url("data:image/svg+xml;utf8,<svg \
+  xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' \
+  stroke='%239AA79C' stroke-width='2.6'><polyline points='6 9 12 15 18 9'/></svg>") \
+  no-repeat right 5px center/10px;padding-right:17px;cursor:pointer}
+.fb-cat th.l{text-align:left}
+.fb-cat td{border:1px solid var(--line);padding:0;height:30px;text-align:center}
+.fb-cat input,.fb-cat select{width:100%;height:30px;border:none;background:transparent;
+  font-family:var(--font);font-size:11.5px;font-weight:600;color:var(--ink);
+  text-align:center;padding:0 5px;appearance:none;-webkit-appearance:none}
+.fb-cat input.l,.fb-cat select.l{text-align:left;font-weight:700}
+.fb-cat input:focus,.fb-cat select:focus{outline:2px solid var(--g500);
+  outline-offset:-2px;background:#fff}
+.fb-cat input[type=number]{font-variant-numeric:tabular-nums}
+.fb-cat td.ley{background:var(--fb-am)}
+.fb-cat td.del{width:32px}
+.fb-cat .bdel{border:none;background:transparent;color:var(--mut2);cursor:pointer;
+  width:30px;height:30px;border-radius:6px;transition:.14s;display:flex;
+  align-items:center;justify-content:center;margin:0 auto}
+.fb-cat .bdel:hover{background:var(--red-s);color:var(--red)}
+.fb-cat .bdel svg{width:13px;height:13px}
+.fb-cat tr.base td:nth-child(2){border-left:3px solid var(--fb-azul)}
+.fb-cat tr.comp td:nth-child(2){border-left:3px solid var(--fb-verde)}
+
+.fb-fen{display:grid;grid-template-columns:repeat(auto-fill,minmax(292px,1fr));
+  gap:11px}
+.fb-fc{border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.fb-fc>h4{margin:0;background:var(--g50);padding:8px 11px;font-size:11.5px;
+  font-weight:800;color:var(--g900);border-bottom:1px solid var(--line);
+  display:flex;align-items:center;gap:7px}
+.fb-fc>h4 em{font-family:var(--mono);font-size:9px;font-weight:600;color:var(--mut2);
+  font-style:normal;margin-left:auto}
+.fb-fr{display:flex;align-items:center;gap:8px;padding:3px 11px;font-size:11px;
+  border-bottom:1px solid var(--line2)}
+.fb-fr:last-child{border-bottom:none}
+.fb-fr b{font-family:var(--mono);font-size:9.5px;color:var(--mut2);width:16px;
+  flex-shrink:0;font-weight:600}
+.fb-fr span{flex:1;min-width:0;font-weight:600;font-size:10.5px;line-height:1.25;
+  white-space:normal;overflow-wrap:break-word;word-break:normal;hyphens:none}
+.fb-fr input{width:52px;flex-shrink:0;height:24px;border:1px solid var(--line);
+  border-radius:5px;background:var(--fb-am);font-family:var(--mono);font-size:10.5px;
+  font-weight:700;text-align:center;color:var(--ink);appearance:textfield;
+  -moz-appearance:textfield}
+.fb-fr input::-webkit-outer-spin-button,.fb-fr input::-webkit-inner-spin-button{
+  -webkit-appearance:none;margin:0}
+.fb-fr input:focus{outline:2px solid var(--g500);outline-offset:-1px}
+.fb-fr em{font-family:var(--mono);font-size:8.5px;color:var(--mut2);font-style:normal;
+  width:52px;flex-shrink:0;text-align:right}
+
+.fb-ayuda{font-size:12.5px;line-height:1.62;color:var(--mut)}
+.fb-ayuda h4{font-size:12px;font-weight:800;color:var(--ink);margin:19px 0 5px;
+  letter-spacing:.01em}
+.fb-ayuda h4:first-child{margin-top:2px}
+.fb-ayuda p{margin:4px 0}
+.fb-ayuda p.b{padding-left:15px;position:relative}
+.fb-ayuda p.b::before{content:'';position:absolute;left:0;top:7px;width:5px;height:5px;
+  border-radius:50%;background:var(--g300)}
+
+/* ── avisos ── */
+.fb-av{display:flex;gap:11px;align-items:flex-start;background:var(--warn-s);
+  border:1px solid #F0DCB4;border-radius:var(--r);padding:12px 15px;margin-top:16px}
+.fb-av>svg{width:17px;height:17px;color:#B5891F;flex-shrink:0;margin-top:1px}
+.fb-av div{font-size:12px;line-height:1.55;color:#6B5418}
+.fb-av b{font-weight:800;color:#54410F}
+.fb-av ul{margin:5px 0 0;padding-left:17px}
+.fb-av li{margin:2px 0}
+
+.fb-vacio{text-align:center;padding:52px 20px;color:var(--mut)}
+.fb-vacio svg{width:38px;height:38px;color:var(--line);margin-bottom:12px}
+.fb-vacio p{font-size:13px;margin:0 0 16px}
+
+.fb-toast{position:fixed;left:50%;bottom:26px;transform:translate(-50%,14px);
+  background:var(--g900);color:#fff;font-size:12.5px;font-weight:600;
+  padding:11px 19px;border-radius:10px;box-shadow:var(--sh3);z-index:400;
+  opacity:0;pointer-events:none;transition:.24s var(--ease);max-width:min(90vw,440px);
+  text-align:center;line-height:1.45}
+.fb-toast.on{opacity:1;transform:translate(-50%,0)}
+
+@media (max-width:900px){
+  .fb-f{flex:1 1 44%}
+  .fb-tw{max-height:none}
+  .fb-fen{grid-template-columns:1fr}
+}
+
 /* ══ HOJA DEL INFORME ══
    Reproduce el PDF que se entrega hoy. Solo existe al exportar. */
 #ft-print{display:none}
@@ -390,7 +750,9 @@ thead th.stick{z-index:4;background:var(--g50)}
 .ik{font-weight:700;min-width:124px}
 .iv{font-weight:800;text-align:center;min-width:70px}
 .hd2 .ik{min-width:112px}
-.hlogo{height:34px;width:auto;margin-left:auto;align-self:center}
+.hplaca{margin-left:auto;align-self:center;background:#203764;border-radius:5px;
+  padding:7px 13px;display:flex;align-items:center;flex-shrink:0}
+.hlogo{height:30px;width:auto;display:block}
 
 .hetapas{border-collapse:collapse;width:100%;font-size:7px;margin-bottom:8px}
 .hetapas th{background:#203764;color:#fff;padding:4px 5px;font-weight:700;font-size:6.5px;
@@ -407,11 +769,12 @@ thead th.stick{z-index:4;background:var(--g50)}
   white-space:normal;overflow-wrap:break-word;word-break:normal;hyphens:none}
 .htabla th.vacio{background:#fff;border-color:#fff}
 .htabla th.banda{font-size:7px;letter-spacing:.03em}
-.htabla th.l{width:168px} .htabla th.r{width:24px}
+.htabla th.h-l{width:168px;text-align:left} .htabla th.r{width:24px}
 .htabla td{border:1px solid #fff;padding:2.4px 2px;text-align:center;
   font-variant-numeric:tabular-nums}
-.htabla td.l{text-align:left;font-size:6.5px;padding-left:4px;vertical-align:middle;
-  line-height:1.25}
+.htabla td.h-l{text-align:left;font-size:6.5px;padding-left:4px;vertical-align:middle;
+  line-height:1.25;white-space:normal;overflow-wrap:break-word;word-break:normal;
+  hyphens:none}
 .htabla td.r{font-weight:700}
 .htabla tr.ep td{background:#DFC9EF}
 .htabla tr.e0 td{background:#C6E0B4}
@@ -419,7 +782,7 @@ thead th.stick{z-index:4;background:var(--g50)}
 .htabla tr.e2 td{background:#F8CBAD}
 .htabla tr.e3 td{background:#C9A6E4}
 .htabla tfoot td{background:#203764;color:#fff;font-weight:800;padding:4px 2px}
-.htabla tfoot td.l{background:#fff;border-color:#fff}
+.htabla tfoot td.h-l{background:#fff;border-color:#fff}
 
 .hcom{margin-top:8px;border:1px solid #BFBFBF;padding:5px 7px;font-size:5.4px;
   line-height:1.36}
@@ -605,6 +968,101 @@ thead th.stick{z-index:4;background:var(--g50)}
   .vistas{align-self:stretch}
 }
 
+/* ══ HOJA DEL INFORME DEL PROGRAMA BETA ══
+   La hoja del libro en A4 horizontal. Solo existe al exportar.
+   Se usa una página con nombre para no pisar el informe vertical
+   del Programa de Fertilización estándar. */
+#fb-print{display:none}
+.fb-imprimiendo #fb-print{display:block}
+
+@page fbhoriz{size:A4 landscape;margin:7mm}
+
+@media print{
+  body.fb-imprimiendo{background:#fff}
+  body.fb-imprimiendo .wrap,body.fb-imprimiendo .burger,
+  body.fb-imprimiendo .scrim,body.fb-imprimiendo .fb-toast,
+  body.fb-imprimiendo .fb-modal{display:none!important}
+  body.fb-imprimiendo #fb-print{display:block;position:static}
+  .hoja-fb{page:fbhoriz}
+}
+
+#fb-print{font-family:var(--font);color:#16211A}
+.hoja-fb{width:100%}
+.fhcab{background:#1F3864;color:#fff;text-align:center;font-weight:800;font-size:11px;
+  line-height:1.5;padding:7px 10px;letter-spacing:.03em}
+.fhfila{display:flex;align-items:center;gap:14px;margin:5px 0 5px}
+.fhdatos{border-collapse:collapse;font-size:7px}
+.fhdatos td{border:1px solid #fff;padding:2.6px 6px;background:#1F3864;color:#fff;
+  white-space:nowrap}
+.fhdatos .fh-k{font-weight:700;min-width:96px}
+.fhdatos .fh-i{font-weight:800;text-align:center;min-width:92px;background:#2F5597}
+/* El logotipo es blanco: sin placa oscura detrás no se ve en papel. */
+.fhplaca{margin-left:auto;background:#1F3864;border-radius:4px;padding:6px 11px;
+  display:flex;align-items:center;flex-shrink:0}
+.fhlogo{height:26px;width:auto;display:block}
+
+.fhetapas{border-collapse:collapse;width:100%;font-size:6.5px;margin-bottom:5px;
+  table-layout:fixed}
+.fhetapas th{background:#1F3864;color:#fff;padding:3.5px 3px;font-weight:700;font-size:5.6px;
+  border:1px solid #fff;text-align:center;line-height:1.2;overflow-wrap:break-word;
+  word-break:normal;hyphens:none;white-space:normal;text-transform:none;
+  font-family:var(--font);position:static;letter-spacing:0}
+.fhetapas td{border:1px solid #fff;padding:1.6px 3px;text-align:center;background:#DCE6F1;
+  white-space:nowrap}
+.fhetapas td.fh-d{background:#B4C7E7;font-weight:700}
+
+.fhtabla{border-collapse:collapse;width:100%;font-size:6.5px;table-layout:fixed}
+.fhtabla th{background:#1F3864;color:#fff;padding:2.4px 2px;font-weight:700;font-size:5.8px;
+  line-height:1.2;text-align:center;vertical-align:middle;border:1px solid #fff;
+  overflow-wrap:break-word;word-break:normal;hyphens:none;white-space:normal;
+  text-transform:none;font-family:var(--font);position:static;letter-spacing:0}
+.fhtabla th em{font-family:var(--mono);font-size:5px;font-weight:500;font-style:normal;
+  opacity:.75}
+.fhtabla th.fh-g{font-size:7px;letter-spacing:.04em;padding:3.4px 2px;background:#808080;
+  white-space:nowrap;overflow:hidden}
+.fhtabla th.fh-g.fh-b{background:#2F5597}
+.fhtabla th.fh-g.fh-c{background:#375623}
+.fhtabla th.fh-g.fh-u{background:#C55A11}
+.fhtabla th.fh-b{background:#2F5597}
+.fhtabla th.fh-c{background:#375623}
+.fhtabla th.fh-u{background:#C55A11}
+.fhtabla th.fh-l{text-align:left;padding-left:4px}
+.fhtabla{page-break-inside:auto}
+.fhtabla thead{display:table-header-group}
+.fhtabla tfoot{display:table-row-group}
+.fhtabla tr{page-break-inside:avoid}
+.fhtabla td{border:1px solid #D0D6DE;padding:1.1px 2px;text-align:center;
+  font-variant-numeric:tabular-nums;background:#fff;line-height:1.15;height:11px;
+  white-space:nowrap}
+.fhtabla td.fh-r,.fhtabla td.fh-w{font-family:var(--mono);font-size:6px;color:#55615A}
+.fhtabla td.fh-l{text-align:left;padding-left:4px;font-weight:700;color:#375623;
+  font-size:6px;line-height:1.2;white-space:normal;overflow-wrap:break-word;
+  word-break:normal;hyphens:none}
+.fhtabla td.fh-n{background:#FCE4D6}
+.fhtabla tr.fh-h td.fh-r,.fhtabla tr.fh-h td.fh-w,.fhtabla tr.fh-h td.fh-l{background:#F0F4F8}
+.fhtabla tfoot td{background:#DCE6F1;color:#1F3864;font-weight:800;padding:2.6px 2px;
+  border-color:#B8C6D8;height:auto}
+.fhtabla tfoot td.fh-t{text-align:right;padding-right:6px;letter-spacing:.02em}
+.fhtabla tfoot td.fh-n{background:#C55A11;color:#fff}
+.fhtabla tfoot td.fh-v{background:#EDF1F6}
+
+.fhsub{background:#C55A11;color:#fff;font-weight:800;font-size:7.5px;letter-spacing:.05em;
+  padding:4px 7px;margin-top:9px;page-break-after:avoid}
+.fhbal{page-break-inside:avoid}
+.fhbal{border-collapse:collapse;width:100%;font-size:6.5px}
+.fhbal th{background:#C55A11;color:#fff;padding:3px 3px;font-weight:700;font-size:5.8px;
+  border:1px solid #fff;text-align:center;line-height:1.25;white-space:normal;
+  text-transform:none;font-family:var(--font);position:static;letter-spacing:0}
+.fhbal th.fh-l{text-align:left}
+.fhbal td{border:1px solid #D0D6DE;padding:2.4px 3px;text-align:center;
+  font-variant-numeric:tabular-nums;white-space:nowrap}
+.fhbal td.fh-l{text-align:left;font-weight:800;font-family:var(--mono)}
+.fhbal td.fh-ok{background:#E8F2EA;font-weight:700;color:#1E5B33}
+.fhbal td.fh-def{background:#FBEDEA;font-weight:700;color:#A8392A}
+.fhbal td.fh-exc{background:#FBF1DE;font-weight:700;color:#8A6418}
+
+.fhpie{font-size:5.8px;color:#8A948C;margin-top:5px;line-height:1.4}
+
 @media (prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;transition-duration:.01ms!important}}
 </style>
 </head>
@@ -624,6 +1082,10 @@ thead th.stick{z-index:4;background:var(--g50)}
       <button class="s-item" id="nav-precios" onclick="ir('precios')">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M12 1v22"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
         <span>Precios de Agroquímicos</span></button>
+
+      <button class="s-item" id="nav-fertbeta" onclick="ir('fertbeta')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M3 15h18M9 3v18"/></svg>
+        <span>Programa Fertilización</span><span class="s-tag">beta</span></button>
 
       <div class="s-lbl">Especies</div>
       <button class="s-grp" id="grp-cer" onclick="abrirEspecie('cer')" aria-expanded="true">
@@ -670,7 +1132,7 @@ thead th.stick{z-index:4;background:var(--g50)}
       <a class="s-home" href="./index.html">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M3 10.5L12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/></svg>
         Inicio · otras plataformas</a>
-      <div class="s-ver">Departamento Técnico · v<span id="ver">5.1</span><br><span id="gen">—</span></div>
+      <div class="s-ver">Departamento Técnico · v<span id="ver">5.2</span><br><span id="gen">—</span></div>
     </div>
   </aside>
 
@@ -949,10 +1411,76 @@ thead th.stick{z-index:4;background:var(--g50)}
       <div id="pr-res"></div>
     </section>
 
+    <!-- ══ PROGRAMA DE FERTILIZACIÓN (BETA) ══
+         El libro «formato unificado Abud & Cía.» hecho página: se arma el
+         programa acá mismo, con las mismas listas y las mismas fórmulas. -->
+    <section class="view" id="v-fertbeta">
+      <div class="head">
+        <div><div class="h-t">Programa de Fertilización <span style="font-family:var(--mono);font-size:12px;font-weight:600;letter-spacing:.06em;color:var(--warn);vertical-align:super">BETA</span></div>
+          <div class="h-s">Armá el programa por semana, como en el libro. Las listas, la fenología y las leyes se editan desde acá.</div></div>
+        <div class="stamp"><span class="dot"></span>Temporada <b id="fb-temp">—</b></div>
+      </div>
+
+      <div class="fb-top">
+        <label class="fb-sel">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M4 4h7l2 2h7v13a1 1 0 01-1 1H5a1 1 0 01-1-1V4z"/></svg>
+          <select id="fb-prog" onchange="fbElegir(this.value)" aria-label="Programa"></select>
+        </label>
+        <button class="fb-mini pri" onclick="fbNuevo()" title="Crear un programa en blanco">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Nuevo</button>
+        <button class="fb-mini" onclick="fbDuplicar()" title="Copiar el programa actual">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 012-2h8"/></svg>Duplicar</button>
+        <button class="fb-mini" onclick="fbRenombrar()" title="Cambiar el nombre del programa">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 013 3L7 19l-4 1 1-4 12.5-12.5z"/></svg>Renombrar</button>
+        <button class="fb-mini dng" onclick="fbBorrar()" title="Borrar el programa actual">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"/></svg>Borrar</button>
+        <button class="fb-mini" onclick="fbCatalogos('fert')" title="Fertilizantes, fenología, factores y ayuda">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.6 1.6 0 00.3 1.8l.1.1a2 2 0 01-2.8 2.8l-.1-.1a1.6 1.6 0 00-2.7 1.1V21a2 2 0 01-4 0v-.1A1.6 1.6 0 006 19.4l-.1.1a2 2 0 01-2.8-2.8l.1-.1A1.6 1.6 0 003 15H3a2 2 0 010-4h.1A1.6 1.6 0 004.6 9L4.5 9a2 2 0 012.8-2.8l.1.1A1.6 1.6 0 0010 4.6V4a2 2 0 014 0v.1A1.6 1.6 0 0018 5.6l.1-.1a2 2 0 012.8 2.8l-.1.1a1.6 1.6 0 00-.3 1.8v0a1.6 1.6 0 001.5 1H21a2 2 0 010 4h-.1a1.6 1.6 0 00-1.5 1z"/></svg>Catálogos</button>
+      </div>
+
+      <div id="fb-cuerpo"></div>
+    </section>
+
   </main>
 </div>
 
 <div id="ft-print"></div>
+<!-- ══ CATÁLOGOS DEL PROGRAMA BETA ══
+     Las hojas que el libro deja ocultas: fertilizantes, fenología,
+     factores de absorción y el LEEME. Acá se editan sin salir de la app. -->
+<div class="fb-modal" id="fb-modal" onclick="if(event.target===this)fbCerrarCat()">
+  <div class="fb-box" role="dialog" aria-modal="true" aria-labelledby="fb-mt">
+    <div class="fb-bh">
+      <div>
+        <h3 id="fb-mt">Catálogos</h3>
+        <p>Lo que acá se cambie se aplica a todos los programas, igual que en el libro.</p>
+      </div>
+      <button class="fb-bx" onclick="fbCerrarCat()" aria-label="Cerrar">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="fb-tabs">
+      <button class="fb-tab on" id="fb-t-fert" onclick="fbTab('fert')">Fertilizantes</button>
+      <button class="fb-tab" id="fb-t-fen" onclick="fbTab('fen')">Fenología</button>
+      <button class="fb-tab" id="fb-t-ini" onclick="fbTab('ini')">Fechas de inicio</button>
+      <button class="fb-tab" id="fb-t-req" onclick="fbTab('req')">Factores</button>
+      <button class="fb-tab" id="fb-t-resp" onclick="fbTab('resp')">Respaldo</button>
+      <button class="fb-tab" id="fb-t-ayuda" onclick="fbTab('ayuda')">Cómo se usa</button>
+    </div>
+    <div class="fb-bb">
+      <div class="fb-pane on" id="fb-p-fert"></div>
+      <div class="fb-pane" id="fb-p-fen"></div>
+      <div class="fb-pane" id="fb-p-ini"></div>
+      <div class="fb-pane" id="fb-p-req"></div>
+      <div class="fb-pane" id="fb-p-resp"></div>
+      <div class="fb-pane" id="fb-p-ayuda"></div>
+    </div>
+  </div>
+</div>
+<div class="fb-toast" id="fb-toast"></div>
+<input type="file" id="fb-file" accept=".json,application/json" style="display:none"
+       onchange="fbImportar(this)">
+<div id="fb-print"></div>
 
 <script>
 /* ═══════════════════════════════════════════════════════════════════
@@ -960,7 +1488,7 @@ thead th.stick{z-index:4;background:var(--g50)}
    Lee cosecha.json, que sale del Excel FLUJO_CEREZOS con el script
    scripts/generar_cosecha.py. Esta página solo muestra: no escribe nada.
    ═══════════════════════════════════════════════════════════════════ */
-const APP_VERSION="5.1";
+const APP_VERSION="5.2";
 const LOGO_IMG="data:image/png;base64,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";
 document.getElementById("logo").src=LOGO_IMG;
 
@@ -1004,6 +1532,7 @@ function ir(v){
   if(v==='fert')abrirFert();
   if(v==='fito')abrirFito();
   if(v==='precios')abrirPrecios();
+  if(v==='fertbeta')abrirFertBeta();
   cerrarMenu();
   window.scrollTo(0,0);
 }
@@ -1972,7 +2501,7 @@ function fertHojaInforme(){
         fertFilaDato('Superficie bloque (ha)',mil1(e.superficie))+
         fertFilaDato('Eficiencia sistema riego',Math.round(e.eficiencia*100)+'%')+
       '</table>'+
-      '<img class="hlogo" src="'+LOGO_IMG+'" alt="Exportadora Los Olmos">'+
+      '<div class="hplaca"><img class="hlogo" src="'+LOGO_IMG+'" alt="Exportadora Los Olmos"></div>'+
     '</div>'+
 
     '<table class="hetapas"><thead><tr><th>Etapa</th><th>Estado Fenológico</th>'+
@@ -1988,7 +2517,7 @@ function fertHojaInforme(){
       '<tr><th class="vacio" colspan="3"></th>'+
         '<th class="banda" colspan="'+cols.length+'">Dosis de fertilizante '+
         (e.superficie===1?'(kg/ha)':'(kg para '+mil1(e.superficie)+' ha)')+'</th></tr>'+
-      '<tr><th class="l">Etapa</th><th class="r">Etapa</th><th>Aplicación</th>'+
+      '<tr><th class="h-l">Etapa</th><th class="r">Etapa</th><th>Aplicación</th>'+
         cols.map(function(c){ return '<th>'+esc(c)+'</th>'; }).join('')+'</tr>'+
     '</thead><tbody>';
 
@@ -1998,11 +2527,11 @@ function fertHojaInforme(){
     const cl=f.previo?'ep':'e'+f.etapa;
     h+='<tr class="'+cl+'">';
     if(f.previo){
-      h+='<td class="l" colspan="2">'+esc(f.titulo)+'</td>';
+      h+='<td class="h-l" colspan="2">'+esc(f.titulo)+'</td>';
     }else{
       if(!puesta[f.etapa]){
         puesta[f.etapa]=true;
-        h+='<td class="l" rowspan="'+porEtapa[f.etapa]+'">'+esc(d.estados[f.etapa])+'</td>';
+        h+='<td class="h-l" rowspan="'+porEtapa[f.etapa]+'">'+esc(d.estados[f.etapa])+'</td>';
       }
       h+='<td class="r">'+ROMANO[f.etapa]+'</td>';
     }
@@ -2011,7 +2540,7 @@ function fertHojaInforme(){
         const v=f.dosis[c];
         return '<td>'+(v==null||v<0.004?'':mil2(v))+'</td>'; }).join('')+'</tr>';
   });
-  h+='</tbody><tfoot><tr><td class="l" colspan="2"></td><td>Total</td>'+
+  h+='</tbody><tfoot><tr><td class="h-l" colspan="2"></td><td>Total</td>'+
     cols.map(function(c){
       const v=R.dist.total[c];
       return '<td>'+(v>0.004?mil2(v):'0')+'</td>'; }).join('')+'</tr></tfoot></table>'+
@@ -2597,6 +3126,1439 @@ if('serviceWorker' in navigator && location.protocol==='https:'){
   window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));
 }
 cargar();
+
+/* ═══════════════════════════════════════════════════════════════════
+   PROGRAMA DE FERTILIZACIÓN (BETA)
+
+   Esto es el libro «Programa de Fertilización — formato unificado
+   Abud & Cía. v6.0» hecho página. Cada fórmula del Excel está acá, con
+   el mismo nombre de celda al lado para poder cotejarla:
+
+     W8    fecha de inicio   DATE(año; mes; día) de la tabla de inicios
+     C10   primera fecha     ($W$8-14) - WEEKDAY($W$8-14;2) + 1
+     C11+  fechas            la anterior + 7
+     A     mes               CHOOSE(MONTH(fecha); "ene"; …)
+     B     semana            la fórmula ISO del libro
+     D     estado fenológico MATCH de la semana contra las semanas de los
+                             estados, con " / " si dos caen en la misma
+     Q:U   unidades          ROUND(SUMPRODUCT(dosis base; ley)/100; 1)
+     51    total / ha        ROUND(SUM(columna); 1)
+     52    total / sector    ROUND(total_ha × ha; 1)
+     63:67 balance           requerimiento, entrega, balance y semáforo
+
+   El motor quedó cotejado celda por celda contra el libro recalculado:
+   2.125 celdas, ninguna distinta. Las pruebas de pruebas/ lo repiten
+   contra esperado_fertbeta.json para no depender del Excel.
+
+   Como en el libro: solo los FERTILIZANTES BASE suman al balance de
+   unidades nutricionales. Los complementarios no, aunque declaren ley.
+   ═══════════════════════════════════════════════════════════════════ */
+
+let FB = null;            // catálogos y programas, ya cargados
+const FB_FILAS = 41;      // filas 10 a 50 del Excel
+const FB_BASE = 7;        // columnas E a K
+const FB_COMP = 3;        // columnas M a O
+const FB_LLAVE = 'olo_fertbeta_v1';
+const FB_NUT = ['N', 'P2O5', 'K2O', 'CaO', 'MgO'];
+const FB_ELEM = ['N', 'P', 'K', 'Ca', 'Mg'];
+const FB_MES = ['ene', 'feb', 'mar', 'abr', 'may', 'jun',
+                'jul', 'ago', 'sep', 'oct', 'nov', 'dic'];
+
+/* ── redondeo ──
+   Excel sube el 0,5; Math.round también con positivos. Se escala para
+   no arrastrar el error del punto flotante en los decimales. */
+function fbRed(x, dec) {
+  const f = Math.pow(10, dec || 0);
+  const y = +(x * f).toPrecision(14);
+  return (y >= 0 ? Math.floor(y + 0.5) : Math.ceil(y - 0.5)) / f;
+}
+
+/* ── fechas ──
+   Todo en UTC para que el programa no se corra un día según el huso. */
+function fbFecha(a, m, d) { return new Date(Date.UTC(a, m - 1, d)); }
+function fbMas(f, d) { const x = new Date(f.getTime()); x.setUTCDate(x.getUTCDate() + d); return x; }
+function fbDiaSem(f) { return f.getUTCDay() === 0 ? 7 : f.getUTCDay(); }   // WEEKDAY(;2)
+function fbSemana(f) {                                                     // semana ISO
+  const t = new Date(f.getTime());
+  t.setUTCDate(t.getUTCDate() + 4 - fbDiaSem(t));
+  const y0 = Date.UTC(t.getUTCFullYear(), 0, 1);
+  return Math.ceil(((t - y0) / 864e5 + 1) / 7);
+}
+function fbISO(f) { return f.toISOString().slice(0, 10); }
+function fbDMY(f) {
+  const p = n => String(n).padStart(2, '0');
+  return p(f.getUTCDate()) + '-' + p(f.getUTCMonth() + 1) + '-' + f.getUTCFullYear();
+}
+function fbDM(f) { return String(f.getUTCDate()).padStart(2, '0') + '-' + FB_MES[f.getUTCMonth()]; }
+
+/* ── guardado ──
+   Vive en este navegador. El respaldo JSON es la forma de llevarlo a
+   otro equipo; está en Catálogos › Respaldo. */
+function fbGuardar() {
+  try {
+    localStorage.setItem(FB_LLAVE, JSON.stringify({
+      programas: FB.programas, activo: FB.activo, catalogo: FB.catalogo,
+      fenologia: FB.fenologia, inicios: FB.inicios,
+      anoTemporada: FB.anoTemporada, requerimientos: FB.requerimientos,
+      listas: FB.listas
+    }));
+  } catch (e) {
+    fbAviso('No se pudo guardar: el navegador no tiene espacio. Descargá el respaldo.');
+  }
+}
+
+async function fbCargar() {
+  if (FB) return FB;
+  let base;
+  try {
+    const r = await fetch('./fertbeta.json', { cache: 'no-store' });
+    base = await r.json();
+  } catch (e) { return null; }
+
+  FB = {
+    fuente: base.fuente, formato: base.formato, temporada: base.temporada,
+    leeme: base.leeme, avisos: base.avisos || [],
+    anoTemporada: base.anoTemporada, catalogo: base.catalogo,
+    listas: base.listas, fenologia: base.fenologia, inicios: base.inicios,
+    requerimientos: base.requerimientos, programas: [], activo: null,
+    semilla: base.ejemplos
+  };
+
+  let g = null;
+  try { g = JSON.parse(localStorage.getItem(FB_LLAVE) || 'null'); } catch (e) { g = null; }
+
+  if (g && Array.isArray(g.programas) && g.programas.length) {
+    FB.programas = g.programas;
+    FB.activo = g.activo;
+    if (g.catalogo && g.catalogo.length) FB.catalogo = g.catalogo;
+    if (g.fenologia) FB.fenologia = g.fenologia;
+    if (g.inicios) FB.inicios = g.inicios;
+    if (g.anoTemporada) FB.anoTemporada = g.anoTemporada;
+    if (g.requerimientos) FB.requerimientos = g.requerimientos;
+    if (g.listas) FB.listas = g.listas;
+  } else {
+    // Primera vez: entran los 4 programas del libro como punto de partida.
+    FB.programas = base.ejemplos.map((p, i) => fbNormalizar(p, 'ej' + i));
+    FB.activo = FB.programas.length ? FB.programas[0].id : null;
+  }
+  if (!FB.programas.some(p => p.id === FB.activo)) {
+    FB.activo = FB.programas.length ? FB.programas[0].id : null;
+  }
+  return FB;
+}
+
+function fbNormalizar(p, id) {
+  const base = (p.base || []).slice(0, FB_BASE);
+  const comp = (p.comp || []).slice(0, FB_COMP);
+  while (base.length < FB_BASE) base.push('');
+  while (comp.length < FB_COMP) comp.push('');
+  return {
+    id: id || ('p' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6)),
+    nombre: p.nombre || 'Programa',
+    productor: p.productor || '', campo: p.campo || '',
+    especie: p.especie || 'Cerezo', variedad: p.variedad || '',
+    grupo: p.grupo || '', porta: p.porta || '',
+    etapa: p.etapa || '', vigor: p.vigor || '',
+    ha: p.ha ?? null, ton: p.ton ?? null,
+    base: base, comp: comp,
+    dosis: Object.assign({}, p.dosis), dosisComp: Object.assign({}, p.dosisComp),
+    fruta: Object.assign({}, p.fruta)
+  };
+}
+
+function fbActivo() { return FB.programas.find(p => p.id === FB.activo) || null; }
+function fbLey(nombre) { return FB.catalogo.find(x => x.nombre === nombre) || null; }
+
+/* ══ EL MOTOR ══════════════════════════════════════════════════════ */
+
+/* W8. Vacío si la combinación especie + grupo variedad no está en la
+   tabla de fenología: ahí el libro avisa en rojo y no arma nada. */
+function fbInicio(p) {
+  const ini = FB.inicios[p.especie + '|' + p.grupo];
+  if (!ini || !FB.anoTemporada) return null;
+  return fbFecha(FB.anoTemporada, ini.mes, ini.dia);
+}
+
+/* X10:Y27. Los estados del combo, en orden. */
+function fbEstados(p) {
+  return (FB.fenologia[p.especie + '|' + p.grupo] || [])
+    .slice().sort((a, b) => a.orden - b.orden);
+}
+
+/* C10:C50. Arranca dos semanas antes del inicio, en el lunes de esa
+   semana, y de ahí cada fila suma 7 días. */
+function fbFechas(p) {
+  const w8 = fbInicio(p);
+  if (!w8) return new Array(FB_FILAS).fill(null);
+  const d0 = fbMas(w8, -14);
+  const primera = fbMas(d0, -(fbDiaSem(d0) - 1));
+  return Array.from({ length: FB_FILAS }, (_, i) => fbMas(primera, 7 * i));
+}
+
+/* Z y AA. La semana ISO en que cae cada estado. */
+function fbSemEstados(p) {
+  const w8 = fbInicio(p);
+  if (!w8) return [];
+  return fbEstados(p).map(e => ({ estado: e.estado, sem: fbSemana(fbMas(w8, e.dias)) }));
+}
+
+/* D. Primera coincidencia de semana; si el estado siguiente cae en la
+   misma, los muestra separados por " / ", como hace el libro. */
+function fbEstadoDe(ae, sem) {
+  for (let i = 0; i < ae.length; i++) {
+    if (ae[i].sem === sem) {
+      if (i + 1 < ae.length && ae[i + 1].sem === sem) {
+        return ae[i].estado + ' / ' + ae[i + 1].estado;
+      }
+      return ae[i].estado;
+    }
+  }
+  return '';
+}
+
+/* Q:U. Solo las columnas base entran, y se redondea por fila. */
+function fbUnidades(p, i, nut) {
+  let t = 0;
+  for (let j = 0; j < FB_BASE; j++) {
+    const d = p.dosis[i + ',' + j];
+    const nombre = p.base[j];
+    if (!d || !nombre) continue;
+    const prod = fbLey(nombre);
+    t += d * (prod ? (prod[nut] || 0) : 0);
+  }
+  return fbRed(t / 100, 1);
+}
+
+/* Toda la hoja de una vez: filas, totales y balance. */
+function fbCalcular(p) {
+  const fechas = fbFechas(p), ae = fbSemEstados(p);
+  const filas = fechas.map((f, i) => {
+    if (!f) return { mes: '', sem: '', fecha: null, estado: '', un: [0, 0, 0, 0, 0] };
+    const sem = fbSemana(f);
+    return {
+      mes: FB_MES[f.getUTCMonth()], sem: sem, fecha: f,
+      estado: fbEstadoDe(ae, sem),
+      un: FB_NUT.map(n => fbUnidades(p, i, n))
+    };
+  });
+
+  const ha = p.ha || 0;
+  const sum = (n, f) => fbRed(Array.from({ length: FB_FILAS }, (_, i) => f(i))
+    .reduce((a, b) => a + (b || 0), 0), 1);
+  const tBase = Array.from({ length: FB_BASE }, (_, j) => sum(j, i => p.dosis[i + ',' + j]));
+  const tComp = Array.from({ length: FB_COMP }, (_, j) => sum(j, i => p.dosisComp[i + ',' + j]));
+  const tUn = FB_NUT.map((_, k) => fbRed(filas.reduce((a, f) => a + f.un[k], 0), 1));
+
+  return {
+    filas: filas, inicio: fbInicio(p), estados: fbEstados(p),
+    tBase: tBase, tComp: tComp, tUn: tUn,
+    sBase: tBase.map(v => fbRed(v * ha, 1)),
+    sComp: tComp.map(v => fbRed(v * ha, 1)),
+    balance: fbBalance(p, tUn)
+  };
+}
+
+/* 63:67. El bloque opcional: sin análisis de fruta no calcula nada,
+   igual que el libro. El factor de absorción sale de la especie. */
+function fbBalance(p, tUn) {
+  const r = FB.requerimientos;
+  const col = p.especie === 'Cerezo' ? 'Cerezo' : p.especie === 'Kiwi' ? 'Kiwi' : 'Otras';
+  return FB_ELEM.map((el, i) => {
+    const an = p.fruta[el];
+    const fo = r.oxido[el], fa = (r.absorcion[el] || {})[col];
+    const f = { elemento: el, oxido: fo, absorcion: fa, analisis: an ?? null,
+                ton: p.ton ?? null, entrega: tUn[i] };
+    if (an == null || p.ton == null || fa == null) {
+      return Object.assign(f, { extraccion: null, requerimiento: null,
+                                balance: null, estado: '' });
+    }
+    const ex = fbRed(an / 100, 3);
+    const rq = fbRed(ex * fo * fa * p.ton, 1);
+    const bal = fbRed(tUn[i] - rq, 1);
+    return Object.assign(f, {
+      extraccion: ex, requerimiento: rq, balance: bal,
+      estado: bal < -0.1 * rq ? 'DEFICIT' : bal > 0.3 * rq ? 'EXCESO' : 'OK'
+    });
+  });
+}
+
+/* ══ LA PÁGINA ═════════════════════════════════════════════════════ */
+
+async function abrirFertBeta() {
+  if (!await fbCargar()) {
+    $('fb-cuerpo').innerHTML = '<div class="fb-vacio"><p>No se pudo leer fertbeta.json.</p></div>';
+    return;
+  }
+  $('fb-temp').textContent = FB.temporada || '—';
+  fbListaProgramas();
+  fbPintar();
+}
+
+function fbListaProgramas() {
+  $('fb-prog').innerHTML = FB.programas.map(p =>
+    `<option value="${fbEsc(p.id)}"${p.id === FB.activo ? ' selected' : ''}>${fbEsc(p.nombre)}</option>`
+  ).join('') || '<option value="">— sin programas —</option>';
+}
+
+function fbElegir(id) { FB.activo = id; fbGuardar(); fbPintar(); }
+
+function fbEsc(s) {
+  return String(s ?? '').replace(/[&<>"']/g, c =>
+    ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+}
+function fbN(v, dec) {
+  if (v == null || v === '' || !isFinite(v)) return '';
+  return Number(v).toLocaleString('es-CL', { minimumFractionDigits: 0, maximumFractionDigits: dec ?? 1 });
+}
+
+function fbPintar() {
+  const p = fbActivo();
+  if (!p) {
+    $('fb-cuerpo').innerHTML = `<div class="fb-vacio">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 4h7l2 2h7v13a1 1 0 01-1 1H5a1 1 0 01-1-1V4z"/></svg>
+      <p>No hay ningún programa todavía.</p>
+      <button class="fb-mini pri" onclick="fbNuevo()">Crear el primero</button></div>`;
+    return;
+  }
+  const c = fbCalcular(p);
+  $('fb-cuerpo').innerHTML = fbCabecera(p, c) + fbRejilla(p, c) + fbBloqueBalance(p, c)
+    + fbBloqueResumen() + fbAvisosHTML(p, c);
+}
+
+/* ── encabezado ── */
+function fbCabecera(p, c) {
+  const L = FB.listas;
+  const grupos = L.grupos[p.especie] || [];
+  const portas = L.portainjertos[p.especie] || [];
+  const op = (arr, v, vacio) =>
+    `<option value=""${!v ? ' selected' : ''}>${vacio || '—'}</option>` +
+    arr.map(x => `<option value="${fbEsc(x)}"${x === v ? ' selected' : ''}>${fbEsc(x)}</option>`).join('');
+
+  const primero = c.estados.length ? c.estados[0].estado : '';
+  const inicio = c.inicio
+    ? `<b>${fbDMY(c.inicio)}</b><span style="font-family:var(--mono);font-size:9px;color:var(--mut2);display:block;margin-top:1px">${fbEsc(primero)}</span>`
+    : `<b class="mal">Revisá especie + grupo variedad</b>`;
+
+  return `
+  <div class="fb-cab">
+    <div class="fb-r">
+      <label class="fb-f w am"><span>Programa</span>
+        <input value="${fbEsc(p.nombre)}" oninput="fbSet('nombre',this.value,1)" placeholder="Nombre del programa"></label>
+      <label class="fb-f w am"><span>Productor</span>
+        <input value="${fbEsc(p.productor)}" oninput="fbSet('productor',this.value)" placeholder="(productor)"></label>
+      <label class="fb-f w am"><span>Campo</span>
+        <input value="${fbEsc(p.campo)}" oninput="fbSet('campo',this.value)" placeholder="(campo)"></label>
+    </div>
+    <div class="fb-r">
+      <label class="fb-f am"><span>Especie</span>
+        <select onchange="fbSetEspecie(this.value)">${op(L.especies, p.especie)}</select></label>
+      <label class="fb-f am"><span>Variedad</span>
+        <input value="${fbEsc(p.variedad)}" oninput="fbSet('variedad',this.value)" placeholder="(variedad)"></label>
+      <label class="fb-f am"><span>Grupo variedad</span>
+        <select onchange="fbSet('grupo',this.value,1)">${op(grupos, p.grupo)}</select></label>
+      <label class="fb-f am"><span>Portainjerto</span>
+        <select onchange="fbSet('porta',this.value)">${op(portas, p.porta)}</select></label>
+      <label class="fb-f am"><span>Etapa</span>
+        <select onchange="fbSet('etapa',this.value)">${op(L.etapas, p.etapa)}</select></label>
+      <label class="fb-f n am"><span>Vigor</span>
+        <select onchange="fbSet('vigor',this.value)">${op(L.vigor, p.vigor)}</select></label>
+    </div>
+    <div class="fb-r">
+      <label class="fb-f n am"><span>Superficie (ha)</span>
+        <input type="number" step="0.01" min="0" value="${p.ha ?? ''}" oninput="fbSetNum('ha',this.value,1)" placeholder="—"></label>
+      <label class="fb-f n am"><span>Producción (ton/ha)</span>
+        <input type="number" step="0.1" min="0" value="${p.ton ?? ''}" oninput="fbSetNum('ton',this.value,1)" placeholder="—"></label>
+      <div class="fb-f w ro"><span>Inicio (automático)</span>${inicio}</div>
+    </div>
+  </div>`;
+}
+
+function fbSet(k, v, repintar) {
+  const p = fbActivo(); if (!p) return;
+  p[k] = v; fbGuardar();
+  if (k === 'nombre') fbListaProgramas();
+  if (repintar) fbPintar();
+}
+function fbSetNum(k, v, repintar) {
+  const p = fbActivo(); if (!p) return;
+  p[k] = v === '' ? null : Number(v); fbGuardar();
+  if (repintar) fbRecalcular();
+}
+/* Al cambiar la especie, grupo y portainjerto dejan de ser válidos:
+   el libro filtra esas listas por especie, así que se limpian. */
+function fbSetEspecie(v) {
+  const p = fbActivo(); if (!p) return;
+  p.especie = v;
+  const g = FB.listas.grupos[v] || [], po = FB.listas.portainjertos[v] || [];
+  if (!g.includes(p.grupo)) p.grupo = g.length === 1 ? g[0] : '';
+  if (!po.includes(p.porta)) p.porta = '';
+  fbGuardar(); fbPintar();
+}
+
+/* ── rejilla ── */
+function fbRejilla(p, c) {
+  const base = FB.catalogo.filter(x => x.tipo === 'Base').map(x => x.nombre);
+  const comp = FB.catalogo.filter(x => x.tipo === 'Complementario').map(x => x.nombre);
+  // El libro tiene nombres en las listas que no están en el catálogo.
+  // Se ofrecen igual, para no perder lo que ya estaba escrito.
+  const extra = n => n && !base.includes(n) && !comp.includes(n) ? [n] : [];
+
+  const selProd = (arr, v, j, cual) => {
+    const opts = `<option value="">— elegir —</option>` +
+      [...new Set([...arr, ...extra(v)])].map(x =>
+        `<option value="${fbEsc(x)}"${x === v ? ' selected' : ''}>${fbEsc(x)}</option>`).join('');
+    const u = v ? fbLey(v) : null;
+    return `<div class="fb-pw${v ? '' : ' vac'}" title="${fbEsc(v || 'Sin producto')}">
+      <span class="fb-pt">${v ? fbEsc(v) + (u && u.unidad === 'L' ? ' <em style="font-weight:500;opacity:.7">L/ha</em>' : '') : 'elegir producto'}</span>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="6 9 12 15 18 9"/></svg>
+      <select class="fb-ps" onchange="fbSetProd('${cual}',${j},this.value)"
+        aria-label="Producto de la columna ${j + 1}">${opts}</select></div>`;
+  };
+
+  const uni = n => { const x = fbLey(n); return x ? x.unidad : 'kg'; };
+
+  let th = `<thead>
+    <tr class="banda">
+      <th class="b-inf fij c-mes" colspan="4">Cuándo se aplica</th>
+      <th class="b-base" colspan="${FB_BASE}">Fertilizantes base · kg (o L) / ha por semana</th>
+      <th class="b-comp" colspan="${FB_COMP}">Complementarios · dosis / ha</th>
+      <th class="b-un" colspan="5">Unidades nutricionales de la semana (UN/ha)</th>
+    </tr>
+    <tr class="tit">
+      <th class="t-inf fij c-mes">Mes</th>
+      <th class="t-inf fij c-sem">Sem</th>
+      <th class="t-inf fij c-fec">Fecha</th>
+      <th class="t-inf fij c-est">Estado fenológico</th>`;
+  for (let j = 0; j < FB_BASE; j++) th += `<th class="t-base">${selProd(base, p.base[j], j, 'base')}</th>`;
+  for (let j = 0; j < FB_COMP; j++) th += `<th class="t-comp">${selProd(comp, p.comp[j], j, 'comp')}</th>`;
+  th += FB_NUT.map(n => `<th class="t-un">${n === 'P2O5' ? 'P<sub>2</sub>O<sub>5</sub>'
+    : n === 'K2O' ? 'K<sub>2</sub>O' : n}</th>`).join('') + `</tr></thead>`;
+
+  let tb = '<tbody>';
+  for (let i = 0; i < FB_FILAS; i++) {
+    const f = c.filas[i];
+    tb += `<tr class="${f.estado ? 'hito' : ''}">
+      <td class="fij c-mes">${f.mes}</td>
+      <td class="fij c-sem">${f.sem}</td>
+      <td class="fij c-fec">${f.fecha ? fbDM(f.fecha) : ''}</td>
+      <td class="fij c-est">${fbEsc(f.estado)}</td>`;
+    for (let j = 0; j < FB_BASE; j++) {
+      const v = p.dosis[i + ',' + j];
+      tb += `<td><input class="fb-in" type="number" step="0.1" min="0" value="${v ?? ''}"
+        ${p.base[j] ? '' : 'disabled'} data-i="${i}" data-j="${j}" data-c="base"
+        oninput="fbDosis(this)" title="${fbEsc(p.base[j] || '')}"></td>`;
+    }
+    for (let j = 0; j < FB_COMP; j++) {
+      const v = p.dosisComp[i + ',' + j];
+      tb += `<td><input class="fb-in" type="number" step="0.1" min="0" value="${v ?? ''}"
+        ${p.comp[j] ? '' : 'disabled'} data-i="${i}" data-j="${j}" data-c="comp"
+        oninput="fbDosis(this)" title="${fbEsc(p.comp[j] || '')}"></td>`;
+    }
+    tb += f.un.map((v, k) => `<td class="un${v ? '' : ' z'}" id="fb-u${i}-${k}">${v ? fbN(v, 1) : '0'}</td>`).join('');
+    tb += '</tr>';
+  }
+  tb += '</tbody>';
+
+  const tot = (arr, cls) => arr.map((v, j) =>
+    `<td class="${cls}${v ? '' : ' z'}" id="fb-${cls}${j}">${v ? fbN(v, 1) : '–'}</td>`).join('');
+  const tf = `<tfoot>
+    <tr class="t1">
+      <td class="lbl-t fij c-mes" colspan="4">Total kg (o L) / ha</td>
+      ${tot(c.tBase, 'tb')}${tot(c.tComp, 'tc')}
+      ${c.tUn.map((v, k) => `<td class="un-t" id="fb-tu${k}">${fbN(v, 1)}</td>`).join('')}
+    </tr>
+    <tr class="t2">
+      <td class="lbl-t fij c-mes" colspan="4">Total kg (o L) / sector${p.ha ? ' · ' + fbN(p.ha, 2) + ' ha' : ''}</td>
+      ${tot(c.sBase, 'sb')}${tot(c.sComp, 'sc')}
+      <td class="na" colspan="5"></td>
+    </tr></tfoot>`;
+
+  const usados = p.base.filter(Boolean).length + p.comp.filter(Boolean).length;
+  return `
+  <div class="fb-tbar">
+    <div class="fb-tbar-t">Programa por semana
+      <b>${FB_FILAS} semanas · ${usados} producto${usados === 1 ? '' : 's'}</b></div>
+    <div class="fb-tbar-b">
+      <button class="fb-mini" onclick="fbDescargarImagen()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>Descargar imagen</button>
+      <button class="fb-mini" onclick="fbImprimir()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M6 9V2h12v7"/><rect x="6" y="14" width="12" height="8"/><path d="M6 18H4a2 2 0 01-2-2v-3a2 2 0 012-2h16a2 2 0 012 2v3a2 2 0 01-2 2h-2"/></svg>Exportar informe</button>
+      <button class="fb-mini" onclick="fbLimpiarDosis()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"/></svg>Vaciar dosis</button>
+    </div>
+  </div>
+  <div class="fb-tw"><table id="fb-grid">${th}${tb}${tf}</table></div>
+  <div class="barra-n">Las celdas blancas se escriben en <b>kg o L por hectárea</b>.
+    Elegí el producto en el título de la columna: azul para los fertilizantes base,
+    verde para los complementarios. Las columnas naranjas y los totales se calculan solos.
+    <b>Solo los fertilizantes base suman unidades nutricionales</b>, igual que en el libro.</div>`;
+}
+
+function fbSetProd(cual, j, v) {
+  const p = fbActivo(); if (!p) return;
+  (cual === 'base' ? p.base : p.comp)[j] = v;
+  // Sacar el producto de una columna borra sus dosis: en el Excel la
+  // columna queda sin ley y lo escrito deja de tener sentido.
+  if (!v) {
+    const d = cual === 'base' ? p.dosis : p.dosisComp;
+    for (let i = 0; i < FB_FILAS; i++) delete d[i + ',' + j];
+  }
+  fbGuardar(); fbPintar();
+}
+
+/* Al escribir una dosis solo se tocan la fila y los totales, no la
+   tabla completa: así no se pierde el foco ni el cursor. */
+function fbDosis(el) {
+  const p = fbActivo(); if (!p) return;
+  const i = +el.dataset.i, j = +el.dataset.j;
+  const d = el.dataset.c === 'base' ? p.dosis : p.dosisComp;
+  const v = el.value === '' ? null : Number(el.value);
+  if (v == null || !isFinite(v)) delete d[i + ',' + j]; else d[i + ',' + j] = v;
+  fbGuardar();
+  fbRecalcularFila(p, i);
+  fbRecalcularTotales(p);
+}
+
+function fbRecalcularFila(p, i) {
+  FB_NUT.forEach((n, k) => {
+    const v = fbUnidades(p, i, n);
+    const c = $('fb-u' + i + '-' + k);
+    if (c) { c.textContent = v ? fbN(v, 1) : '0'; c.classList.toggle('z', !v); }
+  });
+}
+
+function fbRecalcularTotales(p) {
+  const c = fbCalcular(p);
+  const set = (id, v, guion) => {
+    const e = $(id); if (!e) return;
+    e.textContent = v ? fbN(v, 1) : (guion ? '–' : '0');
+    e.classList.toggle('z', !v);
+  };
+  c.tBase.forEach((v, j) => set('fb-tb' + j, v, 1));
+  c.tComp.forEach((v, j) => set('fb-tc' + j, v, 1));
+  c.sBase.forEach((v, j) => set('fb-sb' + j, v, 1));
+  c.sComp.forEach((v, j) => set('fb-sc' + j, v, 1));
+  c.tUn.forEach((v, k) => { const e = $('fb-tu' + k); if (e) e.textContent = fbN(v, 1); });
+  fbPintarBalance(p, c);
+  fbPintarResumen();
+}
+
+function fbRecalcular() { const p = fbActivo(); if (p) fbRecalcularTotales(p); }
+
+function fbLimpiarDosis() {
+  const p = fbActivo(); if (!p) return;
+  if (!confirm('¿Vaciar todas las dosis de «' + p.nombre + '»?\nLos productos y el encabezado quedan como están.')) return;
+  p.dosis = {}; p.dosisComp = {};
+  fbGuardar(); fbPintar(); fbAviso('Dosis vaciadas.');
+}
+
+/* ── balance por extracción ── */
+function fbBloqueBalance(p, c) {
+  return `<details class="fb-det" id="fb-det-bal"${fbAbierto('bal') ? ' open' : ''}
+            ontoggle="fbRecordar('bal',this.open)">
+    <summary>Requerimiento por extracción de fruta
+      <em>opcional · solo si hay análisis de fruta</em></summary>
+    <div class="fb-bd" id="fb-bal">${fbTablaBalance(p, c)}</div></details>`;
+}
+
+function fbTablaBalance(p, c) {
+  const col = p.especie === 'Cerezo' ? 'Cerezo' : p.especie === 'Kiwi' ? 'Kiwi' : 'Otras especies';
+  const refs = (FB.requerimientos.referencias || []).filter(r => r.especie === p.especie);
+  const chip = e => !e ? '' :
+    `<span class="fb-chip ${e === 'OK' ? 'ok' : e === 'DEFICIT' ? 'def' : 'exc'}">${e}</span>`;
+
+  let filas = c.balance.map((b, k) => `<tr>
+    <td>${b.elemento}</td>
+    <td class="ed"><input type="number" step="0.01" min="0" value="${b.analisis ?? ''}"
+      oninput="fbFruta('${b.elemento}',this.value)" placeholder="—"
+      aria-label="Análisis de fruta ${b.elemento}"></td>
+    <td class="calc">${b.extraccion != null ? fbN(b.extraccion, 3) : '—'}</td>
+    <td class="calc">${fbN(b.oxido, 3)}</td>
+    <td class="calc">${b.absorcion != null ? fbN(b.absorcion, 2) : '—'}</td>
+    <td class="calc">${p.ton != null ? fbN(p.ton, 1) : '—'}</td>
+    <td>${b.requerimiento != null ? fbN(b.requerimiento, 1) : '—'}</td>
+    <td>${fbN(b.entrega, 1)}</td>
+    <td>${b.balance != null ? (b.balance > 0 ? '+' : '') + fbN(b.balance, 1) : '—'}</td>
+    <td>${chip(b.estado)}</td></tr>`).join('');
+
+  return `<table class="fb-bt">
+    <thead><tr>
+      <th>Nutriente</th><th>Análisis fruta<br>(mg/100 g)</th><th>Extracción<br>(kg/ton)</th>
+      <th>Factor a óxido</th><th>Factor absorción<br>(${fbEsc(col)})</th><th>Producción<br>(ton/ha)</th>
+      <th>Requerimiento<br>(UN/ha)</th><th>Programa entrega<br>(UN/ha)</th>
+      <th>Balance<br>(UN/ha)</th><th>Estado</th>
+    </tr></thead><tbody>${filas}</tbody></table>
+    ${refs.length ? `<div class="fb-ref"><span>Cargar referencia</span>${refs.map((r, i) =>
+      `<button class="fb-mini" onclick="fbCargarRef(${i})">${fbEsc(r.referencia)}</button>`).join('')}
+      <button class="fb-mini" onclick="fbCargarRef(-1)">Vaciar</button></div>`
+    : `<div class="fb-ref"><span>${fbEsc(p.especie)} no tiene valores de referencia cargados en el libro</span>
+       <button class="fb-mini" onclick="fbCargarRef(-1)">Vaciar</button></div>`}
+    <div class="fb-nota">Requerimiento (UN/ha) = (mg/100 g ÷ 100) × factor a óxido ×
+      factor de absorción × producción (ton/ha). El factor de absorción sale de la
+      <b>especie</b>, y se edita en Catálogos › Factores.<br>
+      <b>DEFICIT</b>: entrega más de 10% bajo el requerimiento.
+      <b>EXCESO</b>: más de 30% sobre. Es una guía, no un límite: el libro mismo
+      avisa que con estos factores el requerimiento teórico puede quedar
+      bastante por debajo de lo que entregan los programas reales.</div>`;
+}
+
+function fbFruta(el, v) {
+  const p = fbActivo(); if (!p) return;
+  if (v === '') delete p.fruta[el]; else p.fruta[el] = Number(v);
+  fbGuardar();
+  fbPintarBalance(p, fbCalcular(p));
+}
+function fbCargarRef(i) {
+  const p = fbActivo(); if (!p) return;
+  if (i < 0) { p.fruta = {}; }
+  else {
+    const r = (FB.requerimientos.referencias || []).filter(x => x.especie === p.especie)[i];
+    if (!r) return;
+    p.fruta = {};
+    FB_ELEM.forEach(e => { if (r[e] != null) p.fruta[e] = r[e]; });
+  }
+  fbGuardar();
+  fbPintarBalance(p, fbCalcular(p));
+}
+function fbPintarBalance(p, c) {
+  const e = $('fb-bal'); if (e) e.innerHTML = fbTablaBalance(p, c);
+}
+
+/* Qué bloques quedan abiertos, para que no se cierren al repintar. */
+function fbAbierto(k) {
+  try { return localStorage.getItem('olo_fb_open_' + k) === '1'; } catch (e) { return false; }
+}
+function fbRecordar(k, v) {
+  try { localStorage.setItem('olo_fb_open_' + k, v ? '1' : '0'); } catch (e) { }
+}
+
+/* ── resumen de todos los programas ── */
+function fbBloqueResumen() {
+  return `<details class="fb-det" id="fb-det-res"${fbAbierto('res') ? ' open' : ''}
+            ontoggle="fbRecordar('res',this.open)">
+    <summary>Resumen de programas
+      <em>${FB.programas.length} programa${FB.programas.length === 1 ? '' : 's'} · unidades por hectárea</em></summary>
+    <div class="fb-bd" id="fb-res">${fbTablaResumen()}</div></details>`;
+}
+
+function fbTablaResumen() {
+  const rows = FB.programas.map(p => ({ p: p, c: fbCalcular(p) }));
+  const haTot = rows.reduce((a, r) => a + (r.p.ha || 0), 0);
+  const pond = k => {
+    if (!haTot) return null;
+    return rows.reduce((a, r) => a + r.c.tUn[k] * (r.p.ha || 0), 0) / haTot;
+  };
+  return `<table class="fb-res">
+    <thead><tr><th>Programa</th><th>Especie</th><th>Variedad</th><th>Etapa</th>
+      <th>ha</th><th>ton/ha</th><th>N</th><th>P₂O₅</th><th>K₂O</th><th>CaO</th><th>MgO</th></tr></thead>
+    <tbody>${rows.map(r => `<tr class="${r.p.id === FB.activo ? 'act' : ''}">
+      <td>${fbEsc(r.p.nombre)}</td><td>${fbEsc(r.p.especie)}</td>
+      <td>${fbEsc(r.p.variedad) || '—'}</td><td>${fbEsc(r.p.etapa) || '—'}</td>
+      <td>${fbN(r.p.ha, 2) || '—'}</td><td>${fbN(r.p.ton, 1) || '—'}</td>
+      ${r.c.tUn.map(v => `<td>${fbN(v, 1)}</td>`).join('')}</tr>`).join('')}</tbody>
+    <tfoot><tr><td colspan="4">Total / promedio ponderado por superficie</td>
+      <td>${fbN(haTot, 2)}</td><td>—</td>
+      ${[0, 1, 2, 3, 4].map(k => { const v = pond(k); return `<td>${v == null ? '—' : fbN(v, 1)}</td>`; }).join('')}
+    </tr></tfoot></table>
+    <div class="fb-nota">Las columnas N a MgO son las unidades nutricionales por hectárea
+      de la temporada completa. El total es el <b>promedio ponderado por superficie</b>,
+      como en la hoja Resumen del libro.</div>`;
+}
+function fbPintarResumen() {
+  const e = $('fb-res'); if (e) e.innerHTML = fbTablaResumen();
+}
+
+/* ── avisos ── */
+function fbAvisosHTML(p, c) {
+  const av = [];
+  if (!c.inicio) {
+    av.push(`La combinación <b>${fbEsc(p.especie)} + ${fbEsc(p.grupo) || '(sin grupo)'}</b>
+      no está en la tabla de fenología, así que no hay fecha de inicio y la rejilla
+      queda sin fechas ni estados. Elegí un grupo variedad de la lista o cargalo en
+      Catálogos › Fenología.`);
+  }
+  // Productos escritos que el catálogo no conoce: sus leyes entran como cero.
+  const sin = [...new Set([...p.base, ...p.comp].filter(n => n && !fbLey(n)))];
+  if (sin.length) {
+    av.push(`${sin.map(n => '«' + fbEsc(n) + '»').join(', ')}
+      ${sin.length === 1 ? 'no está' : 'no están'} en el catálogo de fertilizantes, así que
+      ${sin.length === 1 ? 'sus leyes entran' : 'sus leyes entran'} como cero y no
+      ${sin.length === 1 ? 'suma' : 'suman'} unidades nutricionales. Se
+      ${sin.length === 1 ? 'carga' : 'cargan'} en Catálogos › Fertilizantes.`);
+  }
+  // Un complementario puesto en columna base sí suma, y conviene decirlo.
+  const mal = p.base.filter(n => { const x = fbLey(n); return x && x.tipo === 'Complementario'; });
+  if (mal.length) {
+    av.push(`${mal.map(n => '«' + fbEsc(n) + '»').join(', ')} está en una columna de
+      <b>fertilizantes base</b>, pero el catálogo lo declara complementario: por estar
+      ahí sí suma al balance de unidades.`);
+  }
+  if (!p.ha) av.push('Sin superficie no se puede calcular el total por sector.');
+  if (!av.length) return '';
+  return `<div class="fb-av">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 9v5M12 17.5v.5"/><path d="M10.3 3.9L2.5 17.5A1.7 1.7 0 004 20h16a1.7 1.7 0 001.5-2.5L13.7 3.9a1.7 1.7 0 00-3 0z"/></svg>
+    <div>${av.length === 1 ? av[0] : '<b>Hay cosas que revisar</b><ul>' + av.map(a => '<li>' + a + '</li>').join('') + '</ul>'}</div></div>`;
+}
+
+/* ── gestión de programas ── */
+function fbNuevo() {
+  const n = prompt('Nombre del programa nuevo:', 'Programa ' + (FB.programas.length + 1));
+  if (n == null) return;
+  const p = fbNormalizar({ nombre: n.trim() || ('Programa ' + (FB.programas.length + 1)),
+    especie: 'Cerezo', etapa: 'Produccion', vigor: 'Normal' });
+  FB.programas.push(p); FB.activo = p.id;
+  fbGuardar(); fbListaProgramas(); fbPintar();
+  fbAviso('Programa «' + p.nombre + '» creado.');
+}
+function fbDuplicar() {
+  const a = fbActivo(); if (!a) return;
+  const p = fbNormalizar(JSON.parse(JSON.stringify(a)));
+  p.nombre = a.nombre + ' (copia)';
+  FB.programas.push(p); FB.activo = p.id;
+  fbGuardar(); fbListaProgramas(); fbPintar();
+  fbAviso('Copia creada: «' + p.nombre + '».');
+}
+function fbRenombrar() {
+  const p = fbActivo(); if (!p) return;
+  const n = prompt('Nombre del programa:', p.nombre);
+  if (n == null || !n.trim()) return;
+  p.nombre = n.trim(); fbGuardar(); fbListaProgramas(); fbPintar();
+}
+function fbBorrar() {
+  const p = fbActivo(); if (!p) return;
+  if (!confirm('¿Borrar el programa «' + p.nombre + '»?\nNo se puede deshacer.')) return;
+  FB.programas = FB.programas.filter(x => x.id !== p.id);
+  FB.activo = FB.programas.length ? FB.programas[0].id : null;
+  fbGuardar(); fbListaProgramas(); fbPintar();
+  fbAviso('Programa borrado.');
+}
+
+function fbAviso(t) {
+  const e = $('fb-toast'); if (!e) return;
+  e.textContent = t; e.classList.add('on');
+  clearTimeout(fbAviso._t);
+  fbAviso._t = setTimeout(() => e.classList.remove('on'), 2600);
+}
+
+/* ══ CATÁLOGOS ═════════════════════════════════════════════════════ */
+
+function fbCatalogos(tab) {
+  $('fb-modal').classList.add('on');
+  document.body.style.overflow = 'hidden';
+  fbTab(tab || 'fert');
+}
+function fbCerrarCat() {
+  $('fb-modal').classList.remove('on');
+  document.body.style.overflow = '';
+  fbPintar();
+}
+function fbTab(k) {
+  ['fert', 'fen', 'ini', 'req', 'resp', 'ayuda'].forEach(x => {
+    const t = $('fb-t-' + x), p = $('fb-p-' + x);
+    if (t) t.classList.toggle('on', x === k);
+    if (p) p.classList.toggle('on', x === k);
+  });
+  ({ fert: fbPaneFert, fen: fbPaneFen, ini: fbPaneIni,
+     req: fbPaneReq, resp: fbPaneResp, ayuda: fbPaneAyuda }[k] || (() => { }))();
+}
+
+/* ── catálogo de fertilizantes ── */
+function fbPaneFert() {
+  const cats = [...new Set(FB.catalogo.map(x => x.categoria).filter(Boolean))].sort();
+  const filas = FB.catalogo.map((x, i) => `<tr class="${x.tipo === 'Base' ? 'base' : 'comp'}">
+    <td><input class="l" value="${fbEsc(x.codigo)}" oninput="fbCat(${i},'codigo',this.value)" aria-label="Código"></td>
+    <td><input class="l" value="${fbEsc(x.nombre)}" oninput="fbCat(${i},'nombre',this.value)" aria-label="Producto"></td>
+    <td><select onchange="fbCat(${i},'tipo',this.value)" aria-label="Tipo">
+      <option${x.tipo === 'Base' ? ' selected' : ''}>Base</option>
+      <option${x.tipo === 'Complementario' ? ' selected' : ''}>Complementario</option></select></td>
+    <td><input class="l" value="${fbEsc(x.categoria)}" list="fb-cats" oninput="fbCat(${i},'categoria',this.value)" aria-label="Categoría"></td>
+    ${['N', 'P2O5', 'K2O', 'CaO', 'MgO', 'S'].map(k =>
+      `<td class="ley"><input type="number" step="0.1" min="0" max="100" value="${x[k] ?? 0}"
+        oninput="fbCat(${i},'${k}',this.value)" aria-label="${k} %"></td>`).join('')}
+    <td><select onchange="fbCat(${i},'unidad',this.value)" aria-label="Unidad">
+      <option${x.unidad === 'kg' ? ' selected' : ''}>kg</option>
+      <option${x.unidad === 'L' ? ' selected' : ''}>L</option></select></td>
+    <td><input class="l" value="${fbEsc(x.obs)}" oninput="fbCat(${i},'obs',this.value)" aria-label="Observación"></td>
+    <td class="del"><button class="bdel" onclick="fbCatBorrar(${i})" title="Quitar del catálogo">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"/></svg></button></td></tr>`).join('');
+
+  const usados = fbProductosEnUso();
+  $('fb-p-fert').innerHTML = `
+    <datalist id="fb-cats">${cats.map(c => `<option>${fbEsc(c)}</option>`).join('')}</datalist>
+    <div class="fb-nota" style="margin:0 0 12px">Las celdas amarillas son las leyes (%).
+      Cambiar una ley se aplica a <b>todos</b> los programas de inmediato, igual que la
+      hoja Fertilizantes del libro. El <b>tipo</b> decide en qué columnas aparece:
+      <b>Base</b> en las azules, que suman unidades nutricionales, y
+      <b>Complementario</b> en las verdes, que no suman.</div>
+    <div style="overflow:auto;max-height:52vh;border:1px solid var(--line);border-radius:10px">
+    <table class="fb-cat">
+      <colgroup><col class="c-cod"><col class="c-nom"><col class="c-tip"><col class="c-cat">
+        <col class="c-ley"><col class="c-ley"><col class="c-ley"><col class="c-ley">
+        <col class="c-ley"><col class="c-ley"><col class="c-uni"><col class="c-obs">
+        <col class="c-del"></colgroup>
+      <thead><tr>
+      <th class="l">Código</th><th class="l">Producto</th><th>Tipo</th><th class="l">Categoría</th>
+      <th>N %</th><th>P₂O₅ %</th><th>K₂O %</th><th>CaO %</th><th>MgO %</th><th>S %</th>
+      <th>Unidad</th><th class="l">Observación</th><th></th>
+    </tr></thead><tbody>${filas}</tbody></table></div>
+    <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap">
+      <button class="fb-mini pri" onclick="fbCatAgregar('Base')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Agregar fertilizante base</button>
+      <button class="fb-mini" onclick="fbCatAgregar('Complementario')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Agregar complementario</button>
+      <button class="fb-mini" onclick="fbCatRestablecer()">Volver a los del libro</button>
+    </div>
+    <div class="fb-nota">${FB.catalogo.length} productos
+      (${FB.catalogo.filter(x => x.tipo === 'Base').length} base,
+      ${FB.catalogo.filter(x => x.tipo === 'Complementario').length} complementarios).
+      ${usados.length ? 'En uso ahora: ' + usados.length + '.' : ''}</div>`;
+}
+
+function fbProductosEnUso() {
+  const s = new Set();
+  FB.programas.forEach(p => [...p.base, ...p.comp].forEach(n => { if (n) s.add(n); }));
+  return [...s];
+}
+
+/* Al renombrar un producto se arrastra el nombre a los programas que lo
+   usan, para no dejarlos apuntando a un producto que ya no existe. */
+function fbCat(i, k, v) {
+  const x = FB.catalogo[i]; if (!x) return;
+  if (['N', 'P2O5', 'K2O', 'CaO', 'MgO', 'S'].includes(k)) {
+    x[k] = v === '' ? 0 : Number(v);
+  } else if (k === 'nombre') {
+    const viejo = x.nombre, nuevo = v;
+    x.nombre = nuevo;
+    FB.programas.forEach(p => {
+      p.base = p.base.map(n => n === viejo ? nuevo : n);
+      p.comp = p.comp.map(n => n === viejo ? nuevo : n);
+    });
+  } else { x[k] = v; }
+  fbGuardar();
+}
+
+function fbCatAgregar(tipo) {
+  const n = prompt('Nombre del producto nuevo:', '');
+  if (n == null || !n.trim()) return;
+  const nombre = n.trim();
+  if (fbLey(nombre)) { alert('Ya hay un producto con ese nombre en el catálogo.'); return; }
+  const pre = tipo === 'Base' ? 'F' : 'C';
+  const nums = FB.catalogo.filter(x => x.codigo.startsWith(pre))
+    .map(x => parseInt(x.codigo.slice(1), 10)).filter(x => !isNaN(x));
+  const cod = pre + String((nums.length ? Math.max(...nums) : 0) + 1).padStart(2, '0');
+  FB.catalogo.push({ codigo: cod, nombre: nombre, tipo: tipo, categoria: '',
+    N: 0, P2O5: 0, K2O: 0, CaO: 0, MgO: 0, S: 0, unidad: 'kg', obs: '' });
+  fbGuardar(); fbPaneFert();
+  fbAviso('«' + nombre + '» agregado como ' + cod + '. Cargale las leyes.');
+}
+
+function fbCatBorrar(i) {
+  const x = FB.catalogo[i]; if (!x) return;
+  const uso = FB.programas.filter(p => [...p.base, ...p.comp].includes(x.nombre));
+  if (uso.length) {
+    alert('«' + x.nombre + '» está en uso en ' + uso.length + ' programa' +
+      (uso.length === 1 ? '' : 's') + ' (' + uso.map(p => p.nombre).join(', ') +
+      ').\nSacalo de esas columnas antes de quitarlo del catálogo.');
+    return;
+  }
+  if (!confirm('¿Quitar «' + x.nombre + '» del catálogo?')) return;
+  FB.catalogo.splice(i, 1); fbGuardar(); fbPaneFert();
+}
+
+async function fbCatRestablecer() {
+  if (!confirm('¿Volver al catálogo del libro?\nSe pierden los productos y las leyes que hayas cambiado.')) return;
+  const r = await fetch('./fertbeta.json', { cache: 'no-store' });
+  const base = await r.json();
+  FB.catalogo = base.catalogo; fbGuardar(); fbPaneFert();
+  fbAviso('Catálogo restablecido.');
+}
+
+/* ── fenología ── */
+function fbPaneFen() {
+  const combos = Object.keys(FB.fenologia).sort();
+  const p = fbActivo();
+  const actual = p ? p.especie + '|' + p.grupo : '';
+  $('fb-p-fen').innerHTML = `
+    <div class="fb-nota" style="margin:0 0 12px">Los días que cada estado tarda
+      <b>desde la fecha de inicio</b>. Día 0 es botón blanco en cerezo, ciruelo y peral,
+      botón rosado en manzano y brote de 10 cm en kiwi. Cambiar un día mueve el estado
+      a la semana que corresponda en todos los programas de esa combinación.</div>
+    <div class="fb-fen">${combos.map(k => {
+      const [esp, gr] = k.split('|');
+      const es = FB.fenologia[k].slice().sort((a, b) => a.orden - b.orden);
+      const ini = FB.inicios[k];
+      const w8 = ini && FB.anoTemporada ? fbFecha(FB.anoTemporada, ini.mes, ini.dia) : null;
+      return `<div class="fb-fc"${k === actual ? ' style="border-color:var(--g300);box-shadow:0 0 0 2px var(--g100)"' : ''}>
+        <h4>${fbEsc(esp)} · ${fbEsc(gr)}<em>${es.length} estados</em></h4>
+        ${es.map((e, i) => `<div class="fb-fr">
+          <b>${e.orden}</b><span title="${fbEsc(e.estado)}">${fbEsc(e.estado)}</span>
+          <input type="number" step="1" min="0" value="${e.dias}"
+            onchange="fbFen('${fbEsc(k)}',${i},this.value)" aria-label="Días de ${fbEsc(e.estado)}">
+          <em>${w8 ? fbDM(fbMas(w8, e.dias)) : ''}</em></div>`).join('')}
+      </div>`;
+    }).join('')}</div>
+    <div style="margin-top:12px"><button class="fb-mini" onclick="fbFenRestablecer()">Volver a la fenología del libro</button></div>`;
+}
+function fbFen(k, i, v) {
+  const es = FB.fenologia[k].slice().sort((a, b) => a.orden - b.orden);
+  if (!es[i]) return;
+  es[i].dias = v === '' ? 0 : Math.round(Number(v));
+  fbGuardar(); fbPaneFen();
+}
+async function fbFenRestablecer() {
+  if (!confirm('¿Volver a la fenología del libro?')) return;
+  const r = await fetch('./fertbeta.json', { cache: 'no-store' });
+  const base = await r.json();
+  FB.fenologia = base.fenologia; fbGuardar(); fbPaneFen();
+  fbAviso('Fenología restablecida.');
+}
+
+/* ── fechas de inicio y año de temporada ── */
+function fbPaneIni() {
+  const ks = Object.keys(FB.inicios).sort();
+  const porEsp = {};
+  ks.forEach(k => { const e = k.split('|')[0]; (porEsp[e] = porEsp[e] || []).push(k); });
+  $('fb-p-ini').innerHTML = `
+    <div class="fb-nota" style="margin:0 0 12px">La fecha de inicio sale de la
+      <b>especie</b> y el <b>grupo variedad</b>. El año de temporada es una sola
+      perilla: moverla corre todos los programas de golpe, como la celda amarilla
+      de la hoja Fenología.</div>
+    <div class="fb-cab" style="margin-bottom:14px"><div class="fb-r">
+      <label class="fb-f n am"><span>Año de inicio de temporada</span>
+        <input type="number" step="1" min="2000" max="2100" value="${FB.anoTemporada ?? ''}"
+          onchange="fbAno(this.value)"></label>
+      <div class="fb-f w ro"><span>Temporada</span><b>${FB.temporada || '—'}</b></div>
+    </div></div>
+    <div class="fb-fen">${Object.keys(porEsp).map(esp => `<div class="fb-fc">
+      <h4>${fbEsc(esp)}<em>${porEsp[esp].length} grupos</em></h4>
+      ${porEsp[esp].map(k => {
+        const i = FB.inicios[k];
+        const w8 = FB.anoTemporada ? fbFecha(FB.anoTemporada, i.mes, i.dia) : null;
+        return `<div class="fb-fr">
+          <span title="${fbEsc(k.split('|')[1])}">${fbEsc(k.split('|')[1])}</span>
+          <input type="number" step="1" min="1" max="31" value="${i.dia}"
+            onchange="fbIni('${fbEsc(k)}','dia',this.value)" aria-label="Día" style="width:44px">
+          <input type="number" step="1" min="1" max="12" value="${i.mes}"
+            onchange="fbIni('${fbEsc(k)}','mes',this.value)" aria-label="Mes" style="width:44px">
+          <em>${w8 ? fbDM(w8) : ''}</em></div>`;
+      }).join('')}</div>`).join('')}</div>`;
+}
+function fbAno(v) {
+  const n = Math.round(Number(v));
+  if (!n || n < 2000 || n > 2100) return;
+  FB.anoTemporada = n;
+  FB.temporada = n + '-' + (n + 1);
+  fbGuardar(); fbPaneIni();
+  const t = $('fb-temp'); if (t) t.textContent = FB.temporada;
+  fbAviso('Temporada movida a ' + FB.temporada + '.');
+}
+function fbIni(k, campo, v) {
+  const i = FB.inicios[k]; if (!i) return;
+  const n = Math.round(Number(v));
+  if (campo === 'dia' && (n < 1 || n > 31)) return;
+  if (campo === 'mes' && (n < 1 || n > 12)) return;
+  i[campo] = n; fbGuardar(); fbPaneIni();
+}
+
+/* ── factores ── */
+function fbPaneReq() {
+  const r = FB.requerimientos;
+  $('fb-p-req').innerHTML = `
+    <div class="fb-nota" style="margin:0 0 12px">Los <b>factores de absorción</b> son
+      los que usa el bloque de balance por extracción. Cada programa toma la columna
+      de su especie; el resto de las especies usa «Otras». Editarlos acá cambia
+      todos los programas.</div>
+    <table class="fb-cat" style="max-width:560px">
+      <thead><tr><th class="l">Nutriente</th><th>Factor a óxido</th>
+        <th>Cerezo</th><th>Kiwi</th><th>Otras especies</th></tr></thead>
+      <tbody>${FB_ELEM.map(e => `<tr>
+        <td><input class="l" value="${e}" disabled></td>
+        <td class="calc" style="background:var(--fb-gris)"><input type="number" step="0.001"
+          value="${r.oxido[e]}" oninput="fbOxido('${e}',this.value)" aria-label="Factor a óxido ${e}"></td>
+        ${['Cerezo', 'Kiwi', 'Otras'].map(c => `<td class="ley"><input type="number" step="0.1"
+          min="0" value="${(r.absorcion[e] || {})[c] ?? ''}"
+          oninput="fbAbs('${e}','${c}',this.value)" aria-label="Absorción ${e} ${c}"></td>`).join('')}
+      </tr>`).join('')}</tbody></table>
+    <div class="fb-nota">El libro deja dicho: «con estos factores el requerimiento teórico
+      puede quedar por debajo de lo que entregan los programas reales. Revisarlos antes de
+      usar el semáforo como criterio.» Base: los factores de los programas históricos
+      24-25 / 25-26, con los de kiwi ajustados.</div>
+    ${(r.referencias || []).length ? `
+      <h4 style="font-size:12px;font-weight:800;margin:20px 0 7px">Valores referenciales de análisis de fruta</h4>
+      <table class="fb-cat" style="max-width:640px">
+        <thead><tr><th class="l">Especie</th><th class="l">Referencia</th>
+          <th>N</th><th>P</th><th>K</th><th>Ca</th><th>Mg</th></tr></thead>
+        <tbody>${r.referencias.map(x => `<tr>
+          <td><input class="l" value="${fbEsc(x.especie)}" disabled></td>
+          <td><input class="l" value="${fbEsc(x.referencia)}" disabled></td>
+          ${FB_ELEM.map(e => `<td><input value="${x[e] ?? '—'}" disabled></td>`).join('')}
+        </tr>`).join('')}</tbody></table>
+      <div class="fb-nota">En mg por 100 g de fruta fresca. Se cargan al programa con los
+        botones del bloque de balance. Kiwi, ciruelo y manzano no traen valores en el libro.</div>` : ''}
+    <div style="margin-top:12px"><button class="fb-mini" onclick="fbReqRestablecer()">Volver a los factores del libro</button></div>`;
+}
+function fbOxido(e, v) { FB.requerimientos.oxido[e] = Number(v) || 0; fbGuardar(); }
+function fbAbs(e, c, v) {
+  FB.requerimientos.absorcion[e] = FB.requerimientos.absorcion[e] || {};
+  FB.requerimientos.absorcion[e][c] = v === '' ? null : Number(v);
+  fbGuardar();
+}
+async function fbReqRestablecer() {
+  if (!confirm('¿Volver a los factores del libro?')) return;
+  const r = await fetch('./fertbeta.json', { cache: 'no-store' });
+  const base = await r.json();
+  FB.requerimientos = base.requerimientos; fbGuardar(); fbPaneReq();
+  fbAviso('Factores restablecidos.');
+}
+
+/* ── respaldo ──
+   Los programas viven en este navegador. El respaldo es la forma de
+   llevarlos a otro equipo o de no perderlos si se limpia el caché. */
+function fbPaneResp() {
+  let kb = 0;
+  try { kb = (localStorage.getItem(FB_LLAVE) || '').length / 1024; } catch (e) { }
+  $('fb-p-resp').innerHTML = `
+    <div class="fb-nota" style="margin:0 0 14px">Los programas se guardan
+      <b>en este navegador</b>, no en un servidor. Eso quiere decir que están
+      en este equipo y no en los demás, y que se van si alguien limpia los datos
+      del sitio. Descargá el respaldo para llevarlos a otro computador o para
+      tenerlos guardados.</div>
+    <div style="display:flex;gap:9px;flex-wrap:wrap">
+      <button class="fb-mini pri" onclick="fbExportar()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M12 3v12M7 11l5 5 5-5M4 20h16"/></svg>Descargar respaldo</button>
+      <button class="fb-mini" onclick="$('fb-file').click()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M12 18V6M7 10l5-5 5 5M4 20h16"/></svg>Cargar respaldo</button>
+      <button class="fb-mini" onclick="fbExportarCSV()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 9v12"/></svg>Programa actual en CSV</button>
+      <button class="fb-mini dng" onclick="fbVolverLibro()">Volver a los programas del libro</button>
+    </div>
+    <div class="fb-nota">Guardado ahora: <b>${FB.programas.length} programa${FB.programas.length === 1 ? '' : 's'}</b>,
+      ${FB.catalogo.length} productos, ${kb.toFixed(0)} KB.<br>
+      El CSV abre en Excel con el programa de la semana tal cual está en la tabla.</div>`;
+}
+
+function fbExportar() {
+  const d = {
+    formato: 'Los Olmos · programa de fertilizacion beta', version: 1,
+    generado: new Date().toISOString(), fuente: FB.fuente,
+    anoTemporada: FB.anoTemporada, temporada: FB.temporada,
+    catalogo: FB.catalogo, listas: FB.listas, fenologia: FB.fenologia,
+    inicios: FB.inicios, requerimientos: FB.requerimientos,
+    programas: FB.programas, activo: FB.activo
+  };
+  fbBajar(new Blob([JSON.stringify(d, null, 1)], { type: 'application/json' }),
+    'respaldo_fertilizacion_' + fbISO(new Date()) + '.json');
+  fbAviso('Respaldo descargado.');
+}
+
+function fbImportar(el) {
+  const f = el.files && el.files[0]; if (!f) return;
+  const r = new FileReader();
+  r.onload = () => {
+    let d;
+    try { d = JSON.parse(r.result); }
+    catch (e) { alert('Ese archivo no es un respaldo válido.'); el.value = ''; return; }
+    if (!d || !Array.isArray(d.programas)) {
+      alert('Ese archivo no trae programas.'); el.value = ''; return;
+    }
+    const n = d.programas.length;
+    if (!confirm('El respaldo trae ' + n + ' programa' + (n === 1 ? '' : 's') +
+      '.\n¿Reemplazar los ' + FB.programas.length + ' que hay ahora?')) { el.value = ''; return; }
+    FB.programas = d.programas.map((p, i) => fbNormalizar(p, p.id || 'i' + i));
+    FB.activo = FB.programas.some(p => p.id === d.activo) ? d.activo
+      : (FB.programas[0] ? FB.programas[0].id : null);
+    if (d.catalogo && d.catalogo.length) FB.catalogo = d.catalogo;
+    if (d.fenologia) FB.fenologia = d.fenologia;
+    if (d.inicios) FB.inicios = d.inicios;
+    if (d.anoTemporada) { FB.anoTemporada = d.anoTemporada; FB.temporada = d.temporada || FB.temporada; }
+    if (d.requerimientos) FB.requerimientos = d.requerimientos;
+    if (d.listas) FB.listas = d.listas;
+    fbGuardar(); fbListaProgramas(); fbPaneResp(); fbPintar();
+    const t = $('fb-temp'); if (t) t.textContent = FB.temporada || '—';
+    fbAviso(n + ' programa' + (n === 1 ? '' : 's') + ' cargado' + (n === 1 ? '' : 's') + '.');
+    el.value = '';
+  };
+  r.readAsText(f);
+}
+
+async function fbVolverLibro() {
+  if (!confirm('¿Volver a los 4 programas del libro?\nSe pierden los programas que hayas armado. Descargá el respaldo primero si querés guardarlos.')) return;
+  const r = await fetch('./fertbeta.json', { cache: 'no-store' });
+  const base = await r.json();
+  FB.programas = base.ejemplos.map((p, i) => fbNormalizar(p, 'ej' + i));
+  FB.activo = FB.programas[0] ? FB.programas[0].id : null;
+  FB.catalogo = base.catalogo; FB.fenologia = base.fenologia;
+  FB.inicios = base.inicios; FB.requerimientos = base.requerimientos;
+  FB.listas = base.listas; FB.anoTemporada = base.anoTemporada;
+  FB.temporada = base.temporada;
+  fbGuardar(); fbListaProgramas(); fbPaneResp(); fbPintar();
+  fbAviso('Programas del libro restablecidos.');
+}
+
+function fbExportarCSV() {
+  const p = fbActivo(); if (!p) return;
+  const c = fbCalcular(p);
+  const q = s => '"' + String(s ?? '').replace(/"/g, '""') + '"';
+  const L = [];
+  L.push(['PROGRAMA', p.nombre, '', 'PRODUCTOR', p.productor, '', 'CAMPO', p.campo].map(q).join(';'));
+  L.push(['ESPECIE', p.especie, '', 'VARIEDAD', p.variedad, '', 'GRUPO VARIEDAD', p.grupo].map(q).join(';'));
+  L.push(['PORTAINJERTO', p.porta, '', 'ETAPA', p.etapa, '', 'VIGOR', p.vigor].map(q).join(';'));
+  L.push(['SUPERFICIE (ha)', p.ha ?? '', '', 'PRODUCCION (ton/ha)', p.ton ?? '', '',
+    'INICIO', c.inicio ? fbDMY(c.inicio) : ''].map(q).join(';'));
+  L.push('');
+  L.push(['MES', 'SEM', 'FECHA', 'ESTADO FENOLOGICO',
+    ...p.base.map((n, j) => n || 'base ' + (j + 1)),
+    ...p.comp.map((n, j) => n || 'comp ' + (j + 1)), ...FB_NUT].map(q).join(';'));
+  c.filas.forEach((f, i) => {
+    L.push([f.mes, f.sem, f.fecha ? fbDMY(f.fecha) : '', f.estado,
+      ...Array.from({ length: FB_BASE }, (_, j) => p.dosis[i + ',' + j] ?? ''),
+      ...Array.from({ length: FB_COMP }, (_, j) => p.dosisComp[i + ',' + j] ?? ''),
+      ...f.un].map(q).join(';'));
+  });
+  L.push(['', '', '', 'TOTAL kg (o L) / ha', ...c.tBase, ...c.tComp, ...c.tUn].map(q).join(';'));
+  L.push(['', '', '', 'TOTAL kg (o L) / SECTOR', ...c.sBase, ...c.sComp, '', '', '', '', ''].map(q).join(';'));
+  // El BOM hace que Excel reconozca los acentos sin preguntar nada.
+  fbBajar(new Blob(['﻿' + L.join('\r\n')], { type: 'text/csv;charset=utf-8' }),
+    fbArchivo(p) + '.csv');
+  fbAviso('CSV descargado.');
+}
+
+function fbBajar(blob, nombre) {
+  const u = URL.createObjectURL(blob), a = document.createElement('a');
+  a.href = u; a.download = nombre;
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(u), 1500);
+}
+function fbArchivo(p) {
+  return (p.nombre || 'programa').normalize('NFD').replace(/[̀-ͯ]/g, '')
+    .replace(/[^a-zA-Z0-9]+/g, '_').replace(/^_|_$/g, '').toLowerCase() || 'programa';
+}
+
+/* ── cómo se usa ── */
+function fbPaneAyuda() {
+  // El LEEME del libro, con los títulos en mayúscula pasados a subtítulo.
+  const L = FB.leeme || [];
+  let h = '';
+  L.forEach(linea => {
+    if (!linea) return;
+    const esTitulo = linea === linea.toUpperCase() && linea.length < 60 && /[A-Z]/.test(linea);
+    if (esTitulo) h += `<h4>${fbEsc(linea)}</h4>`;
+    else if (/^\s*[-\d]/.test(linea)) h += `<p class="b">${fbEsc(linea.replace(/^\s*[-]\s*/, ''))}</p>`;
+    else h += `<p>${fbEsc(linea)}</p>`;
+  });
+  $('fb-p-ayuda').innerHTML = `
+    <div class="fb-nota" style="margin:0 0 14px">Lo que el libro explica en su hoja LEEME,
+      traído tal cual. Lo que ahí se hace duplicando hojas y desprotegiendo con clave,
+      acá se hace con los botones de arriba: <b>Nuevo</b> en vez de duplicar la hoja MODELO,
+      y <b>Catálogos</b> en vez de mostrar las hojas ocultas.</div>
+    <div class="fb-ayuda">${h}</div>
+    ${(FB.avisos || []).length ? `<div class="fb-av" style="margin-top:16px">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 9v5M12 17.5v.5"/><path d="M10.3 3.9L2.5 17.5A1.7 1.7 0 004 20h16a1.7 1.7 0 001.5-2.5L13.7 3.9a1.7 1.7 0 00-3 0z"/></svg>
+      <div><b>Lo que venía con diferencias en el libro</b><ul>${FB.avisos.map(a =>
+        '<li>' + fbEsc(a) + '</li>').join('')}</ul></div></div>` : ''}`;
+}
+
+/* ══ INFORME IMPRESO ════════════════════════════════════════════════
+   La hoja del libro, en A4 horizontal: encabezado azul marino, los
+   datos del bloque amarillo, la tira de estados fenológicos, la
+   rejilla completa con sus totales y, si hay análisis de fruta, el
+   balance por extracción. ═══════════════════════════════════════════ */
+
+function fbHojaInforme() {
+  const p = fbActivo(); if (!p) return '';
+  const c = fbCalcular(p);
+  const logo = (typeof LOGO_IMG === 'string') ? LOGO_IMG : '';
+  const uni = n => { const x = fbLey(n); return x ? x.unidad : 'kg'; };
+
+  const dato = (k, v) => `<td class="fh-k">${fbEsc(k)}</td><td class="fh-i">${fbEsc(v || '—')}</td>`;
+
+  const cab = `
+    <div class="fhcab">PROGRAMA DE FERTILIZACIÓN AL SUELO · TEMPORADA ${fbEsc(FB.temporada || '')}</div>
+    <div class="fhfila">
+      <table class="fhdatos"><tbody>
+        <tr>${dato('PROGRAMA', p.nombre)}${dato('PRODUCTOR', p.productor)}${dato('CAMPO', p.campo)}</tr>
+        <tr>${dato('ESPECIE', p.especie)}${dato('VARIEDAD', p.variedad)}${dato('GRUPO VARIEDAD', p.grupo)}</tr>
+        <tr>${dato('PORTAINJERTO', p.porta)}${dato('ETAPA', p.etapa)}${dato('VIGOR', p.vigor)}</tr>
+        <tr>${dato('SUPERFICIE (ha)', fbN(p.ha, 2))}${dato('PRODUCCIÓN (ton/ha)', fbN(p.ton, 1))}${dato('INICIO', c.inicio ? fbDMY(c.inicio) : '—')}</tr>
+      </tbody></table>
+      ${logo ? `<div class="fhplaca"><img class="fhlogo" src="${logo}" alt="Exportadora Los Olmos"></div>` : ''}
+    </div>`;
+
+  // Tira de estados: nombre, día desde el inicio y fecha en que cae.
+  const est = c.estados.length ? `
+    <table class="fhetapas" style="table-layout:fixed"><thead><tr>
+      ${c.estados.map(e => `<th style="width:${(100 / c.estados.length).toFixed(3)}%">${fbEsc(e.estado)}</th>`).join('')}
+    </tr></thead><tbody>
+      <tr>${c.estados.map(e => `<td class="fh-d">día ${e.dias}</td>`).join('')}</tr>
+      <tr>${c.estados.map(e => `<td>${c.inicio ? fbDM(fbMas(c.inicio, e.dias)) : '—'}</td>`).join('')}</tr>
+    </tbody></table>` : '';
+
+  // Rejilla: solo las columnas con producto, para que no sobren vacías.
+  const jb = p.base.map((n, j) => n ? j : -1).filter(j => j >= 0);
+  const jc = p.comp.map((n, j) => n ? j : -1).filter(j => j >= 0);
+
+  // Los anchos se reparten en porcentaje: las 4 columnas de la izquierda
+  // y las 5 de unidades son fijas, y lo que sobra se divide entre los
+  // productos que el programa tenga. Así la hoja nunca se pasa del ancho.
+  const anchoFijo = 3.1 + 2.6 + 4.2 + 12.5 + 5 * 4.1;
+  const nProd = jb.length + jc.length;
+  const anchoProd = nProd ? (100 - anchoFijo) / nProd : 0;
+  const cols = `<colgroup>
+    <col style="width:3.1%"><col style="width:2.6%">
+    <col style="width:4.2%"><col style="width:12.5%">
+    ${[...jb, ...jc].map(() => `<col style="width:${anchoProd.toFixed(3)}%">`).join('')}
+    ${FB_NUT.map(() => '<col style="width:4.1%">').join('')}</colgroup>`;
+
+  const th = `<thead>
+    <tr>
+      <th class="fh-g" colspan="4">CUÁNDO SE APLICA</th>
+      ${jb.length ? `<th class="fh-g fh-b" colspan="${jb.length}">FERTILIZANTES BASE · kg (o L) / ha</th>` : ''}
+      ${jc.length ? `<th class="fh-g fh-c" colspan="${jc.length}">${jc.length > 1 ? 'COMPLEMENTARIOS' : 'COMPLEM.'}</th>` : ''}
+      <th class="fh-g fh-u" colspan="5">UNIDADES NUTRICIONALES (UN/ha)</th>
+    </tr>
+    <tr>
+      <th class="fh-r">MES</th><th class="fh-r">SEM</th><th class="fh-w">FECHA</th><th class="fh-l">ESTADO FENOLÓGICO</th>
+      ${jb.map(j => `<th class="fh-b">${fbEsc(p.base[j])}<br><em>${uni(p.base[j])}/ha</em></th>`).join('')}
+      ${jc.map(j => `<th class="fh-c">${fbEsc(p.comp[j])}<br><em>${uni(p.comp[j])}/ha</em></th>`).join('')}
+      ${FB_NUT.map(n => `<th class="fh-u">${n === 'P2O5' ? 'P₂O₅' : n === 'K2O' ? 'K₂O' : n}</th>`).join('')}
+    </tr></thead>`;
+
+  const tb = '<tbody>' + c.filas.map((f, i) => `<tr class="${f.estado ? 'fh-h' : ''}">
+    <td class="fh-r">${f.mes}</td><td class="fh-r">${f.sem}</td>
+    <td class="fh-w">${f.fecha ? fbDM(f.fecha) : ''}</td>
+    <td class="fh-l">${fbEsc(f.estado)}</td>
+    ${jb.map(j => { const v = p.dosis[i + ',' + j]; return `<td>${v ? fbN(v, 1) : ''}</td>`; }).join('')}
+    ${jc.map(j => { const v = p.dosisComp[i + ',' + j]; return `<td>${v ? fbN(v, 1) : ''}</td>`; }).join('')}
+    ${f.un.map(v => `<td class="fh-n">${v ? fbN(v, 1) : ''}</td>`).join('')}
+  </tr>`).join('') + '</tbody>';
+
+  const tf = `<tfoot>
+    <tr><td class="fh-t" colspan="4">TOTAL kg (o L) / ha</td>
+      ${jb.map(j => `<td>${c.tBase[j] ? fbN(c.tBase[j], 1) : '–'}</td>`).join('')}
+      ${jc.map(j => `<td>${c.tComp[j] ? fbN(c.tComp[j], 1) : '–'}</td>`).join('')}
+      ${c.tUn.map(v => `<td class="fh-n">${fbN(v, 1)}</td>`).join('')}</tr>
+    <tr><td class="fh-t" colspan="4">TOTAL kg (o L) / SECTOR${p.ha ? ' · ' + fbN(p.ha, 2) + ' ha' : ''}</td>
+      ${jb.map(j => `<td>${c.sBase[j] ? fbN(c.sBase[j], 1) : '–'}</td>`).join('')}
+      ${jc.map(j => `<td>${c.sComp[j] ? fbN(c.sComp[j], 1) : '–'}</td>`).join('')}
+      <td class="fh-v" colspan="5"></td></tr></tfoot>`;
+
+  // El balance solo sale si hay análisis de fruta, como en el libro.
+  const hayFruta = c.balance.some(b => b.requerimiento != null);
+  const bal = hayFruta ? `
+    <div class="fhsub">REQUERIMIENTO POR EXTRACCIÓN DE FRUTA</div>
+    <table class="fhbal"><thead><tr>
+      <th class="fh-l">NUTRIENTE</th><th>Análisis fruta (mg/100 g)</th><th>Extracción (kg/ton)</th>
+      <th>Factor a óxido</th><th>Factor absorción</th><th>Producción (ton/ha)</th>
+      <th>REQUERIMIENTO (UN/ha)</th><th>PROGRAMA ENTREGA (UN/ha)</th>
+      <th>BALANCE (UN/ha)</th><th>ESTADO</th></tr></thead>
+    <tbody>${c.balance.map(b => `<tr>
+      <td class="fh-l">${b.elemento}</td>
+      <td>${b.analisis != null ? fbN(b.analisis, 2) : '—'}</td>
+      <td>${b.extraccion != null ? fbN(b.extraccion, 3) : '—'}</td>
+      <td>${fbN(b.oxido, 3)}</td>
+      <td>${b.absorcion != null ? fbN(b.absorcion, 2) : '—'}</td>
+      <td>${p.ton != null ? fbN(p.ton, 1) : '—'}</td>
+      <td>${b.requerimiento != null ? fbN(b.requerimiento, 1) : '—'}</td>
+      <td>${fbN(b.entrega, 1)}</td>
+      <td>${b.balance != null ? (b.balance > 0 ? '+' : '') + fbN(b.balance, 1) : '—'}</td>
+      <td class="fh-${b.estado.toLowerCase() || 'na'}">${b.estado || '—'}</td></tr>`).join('')}</tbody></table>
+    <div class="fhpie">DÉFICIT: entrega más de 10% bajo el requerimiento. EXCESO: más de 30% sobre.
+      Es una guía, no un límite.</div>` : '';
+
+  return `<div class="hoja-fb">
+    ${cab}${est}
+    <table class="fhtabla">${cols}${th}${tb}${tf}</table>
+    ${bal}
+    <div class="fhpie">Exportadora Los Olmos · Departamento Técnico · emitido el
+      ${fbDMY(new Date(Date.now() - new Date().getTimezoneOffset() * 6e4))} ·
+      formato unificado del programa de fertilización al suelo.</div>
+  </div>`;
+}
+
+function fbImprimir() {
+  const p = fbActivo(); if (!p) return;
+  $('fb-print').innerHTML = fbHojaInforme();
+  document.body.classList.add('fb-imprimiendo');
+  const limpiar = () => {
+    document.body.classList.remove('fb-imprimiendo');
+    $('fb-print').innerHTML = '';
+    window.removeEventListener('afterprint', limpiar);
+  };
+  window.addEventListener('afterprint', limpiar);
+  setTimeout(() => { window.print(); setTimeout(limpiar, 800); }, 90);
+}
+
+/* ══ IMAGEN DE LA TABLA ═════════════════════════════════════════════
+   Se dibuja a mano en un canvas, sin librerías, para que funcione sin
+   internet. Sale a 2× para que se lea bien al compartirla. ══════════ */
+
+function fbDescargarImagen() {
+  const p = fbActivo(); if (!p) return;
+  const c = fbCalcular(p);
+  const jb = p.base.map((n, j) => n ? j : -1).filter(j => j >= 0);
+  const jc = p.comp.map((n, j) => n ? j : -1).filter(j => j >= 0);
+
+  const E = 2;                                  // escala
+  const F = { mes: 42, sem: 36, fec: 60, est: 180, dosis: 74, un: 50 };
+  const anchos = [F.mes, F.sem, F.fec, F.est,
+    ...jb.map(() => F.dosis), ...jc.map(() => F.dosis),
+    ...FB_NUT.map(() => F.un)];
+  const W = anchos.reduce((a, b) => a + b, 0);
+  const hCab = 58, hBanda = 20, hTit = 40, hFila = 21, hTot = 23, hPie = 26;
+  const H = hCab + hBanda + hTit + FB_FILAS * hFila + hTot * 2 + hPie;
+
+  const cv = document.createElement('canvas');
+  cv.width = W * E; cv.height = H * E;
+  const g = cv.getContext('2d');
+  g.scale(E, E);
+  g.textBaseline = 'middle';
+
+  const NAVY = '#1F3864', AZUL = '#2F5597', VERDE = '#375623',
+        NARAN = '#C55A11', NARANS = '#FCE4D6', TOT = '#DCE6F1',
+        BORD = '#BFBFBF', HITO = '#F4F7FA';
+
+  const caja = (x, y, w, h, fondo, borde) => {
+    if (fondo) { g.fillStyle = fondo; g.fillRect(x, y, w, h); }
+    if (borde !== false) {
+      g.strokeStyle = borde || BORD; g.lineWidth = .5;
+      g.strokeRect(x + .25, y + .25, w - .5, h - .5);
+    }
+  };
+  const texto = (t, x, y, w, px, bold, color, alin) => {
+    if (t == null || t === '') return;
+    g.font = (bold ? '700 ' : '400 ') + px + 'px Inter, system-ui, sans-serif';
+    g.fillStyle = color || '#16211A';
+    let s = String(t);
+    while (g.measureText(s).width > w - 6 && s.length > 1) s = s.slice(0, -1);
+    if (s !== String(t) && s.length > 1) s = s.slice(0, -1) + '…';
+    g.textAlign = alin || 'center';
+    const cx = alin === 'left' ? x + 4 : alin === 'right' ? x + w - 4 : x + w / 2;
+    g.fillText(s, cx, y);
+  };
+  /* Para los títulos de producto, que son largos: parte por palabras. */
+  const cortar = (t, w, px, max) => {
+    g.font = '700 ' + px + 'px Inter, system-ui, sans-serif';
+    const pal = String(t).split(/\s+/), lin = [];
+    let a = '';
+    pal.forEach(x => {
+      const pr = a ? a + ' ' + x : x;
+      if (g.measureText(pr).width <= w - 6) { a = pr; }
+      else { if (a) lin.push(a); a = x; }
+    });
+    if (a) lin.push(a);
+    if (lin.length > max) {
+      lin.length = max;
+      let u = lin[max - 1];
+      while (g.measureText(u + '…').width > w - 6 && u.length > 1) u = u.slice(0, -1);
+      lin[max - 1] = u + '…';
+    }
+    return lin;
+  };
+
+  let y = 0;
+
+  // Cabecera.
+  caja(0, 0, W, hCab, NAVY, NAVY);
+  texto('PROGRAMA DE FERTILIZACIÓN AL SUELO · TEMPORADA ' + (FB.temporada || ''),
+    0, 15, W, 11, true, '#fff');
+  texto(p.nombre + (p.productor ? '  ·  ' + p.productor : '') + (p.campo ? '  ·  ' + p.campo : ''),
+    0, 31, W, 10.5, true, '#D7E2F2');
+  const sub = [p.especie, p.variedad, p.grupo, p.porta, p.etapa, p.vigor,
+    p.ha ? fbN(p.ha, 2) + ' ha' : '', p.ton ? fbN(p.ton, 1) + ' ton/ha' : '',
+    c.inicio ? 'inicio ' + fbDMY(c.inicio) : ''].filter(Boolean).join('   ·   ');
+  texto(sub, 0, 46, W, 9, false, '#AEC0DC');
+  y = hCab;
+
+  // Banda de grupos.
+  let x = 0;
+  const banda = (w, t, col) => { caja(x, y, w, hBanda, col, '#fff');
+    texto(t, x, y + hBanda / 2, w, 8.5, true, '#fff'); x += w; };
+  banda(F.mes + F.sem + F.fec + F.est, 'CUÁNDO SE APLICA', '#808080');
+  if (jb.length) banda(F.dosis * jb.length, 'FERTILIZANTES BASE · kg (o L) / ha', AZUL);
+  if (jc.length) banda(F.dosis * jc.length,
+    jc.length > 1 ? 'COMPLEMENTARIOS' : 'COMPLEM.', VERDE);
+  banda(F.un * 5, 'UNIDADES NUTRICIONALES (UN/ha)', NARAN);
+  y += hBanda;
+
+  // Fila de títulos.
+  x = 0;
+  const tit = (w, t, col, chico) => {
+    caja(x, y, w, hTit, col, '#fff');
+    const px = chico ? 7.5 : 8.5;
+    const lin = cortar(t, w, px, chico ? 3 : 2);
+    const h0 = y + hTit / 2 - (lin.length - 1) * (px + 1.6) / 2;
+    g.textAlign = 'center';
+    lin.forEach((l, i) => {
+      g.font = '700 ' + px + 'px Inter, system-ui, sans-serif';
+      g.fillStyle = '#fff';
+      g.fillText(l, x + w / 2, h0 + i * (px + 1.6));
+    });
+    x += w;
+  };
+  tit(F.mes, 'MES', NAVY); tit(F.sem, 'SEM', NAVY);
+  tit(F.fec, 'FECHA', NAVY); tit(F.est, 'ESTADO FENOLÓGICO', NAVY);
+  jb.forEach(j => tit(F.dosis, p.base[j], AZUL, true));
+  jc.forEach(j => tit(F.dosis, p.comp[j], VERDE, true));
+  FB_NUT.forEach(n => tit(F.un, n === 'P2O5' ? 'P\u2082O\u2085'
+    : n === 'K2O' ? 'K\u2082O' : n, NARAN));
+  y += hTit;
+
+  // Cuerpo.
+  c.filas.forEach((f, i) => {
+    const fondo = f.estado ? HITO : '#fff';
+    x = 0;
+    const cel = (w, t, col, px, bold, alin) => {
+      caja(x, y, w, hFila, col || fondo);
+      texto(t, x, y + hFila / 2, w, px || 9, bold, undefined, alin);
+      x += w;
+    };
+    cel(F.mes, f.mes, undefined, 8.5, false);
+    cel(F.sem, f.sem, undefined, 8.5, false);
+    cel(F.fec, f.fecha ? fbDM(f.fecha) : '', undefined, 8.5, false);
+    // El estado va en verde y en negrita, como en el libro.
+    caja(x, y, F.est, hFila, fondo);
+    texto(f.estado, x, y + hFila / 2, F.est, 8.5, true, VERDE, 'left');
+    x += F.est;
+    jb.forEach(j => cel(F.dosis, p.dosis[i + ',' + j] ? fbN(p.dosis[i + ',' + j], 1) : ''));
+    jc.forEach(j => cel(F.dosis, p.dosisComp[i + ',' + j] ? fbN(p.dosisComp[i + ',' + j], 1) : ''));
+    f.un.forEach(v => cel(F.un, v ? fbN(v, 1) : '', NARANS, 8.5));
+    y += hFila;
+  });
+
+  // Totales.
+  const filaTot = (etiqueta, vb, vc, vu) => {
+    x = 0;
+    caja(0, y, F.mes + F.sem + F.fec + F.est, hTot, TOT);
+    texto(etiqueta, 0, y + hTot / 2, F.mes + F.sem + F.fec + F.est - 6, 9, true, NAVY, 'right');
+    x = F.mes + F.sem + F.fec + F.est;
+    jb.forEach(j => { caja(x, y, F.dosis, hTot, TOT);
+      texto(vb[j] ? fbN(vb[j], 1) : '–', x, y + hTot / 2, F.dosis, 9, true, NAVY); x += F.dosis; });
+    jc.forEach(j => { caja(x, y, F.dosis, hTot, TOT);
+      texto(vc[j] ? fbN(vc[j], 1) : '–', x, y + hTot / 2, F.dosis, 9, true, NAVY); x += F.dosis; });
+    if (vu) {
+      vu.forEach(v => { caja(x, y, F.un, hTot, NARAN);
+        texto(fbN(v, 1), x, y + hTot / 2, F.un, 9, true, '#fff'); x += F.un; });
+    } else {
+      caja(x, y, F.un * 5, hTot, '#EDF1F6');
+    }
+    y += hTot;
+  };
+  filaTot('TOTAL kg (o L) / ha', c.tBase, c.tComp, c.tUn);
+  filaTot('TOTAL kg (o L) / SECTOR' + (p.ha ? ' · ' + fbN(p.ha, 2) + ' ha' : ''),
+    c.sBase, c.sComp, null);
+
+  // Pie.
+  caja(0, y, W, hPie, '#fff', false);
+  texto('Exportadora Los Olmos · Departamento Técnico · ' +
+    fbDMY(new Date(Date.now() - new Date().getTimezoneOffset() * 6e4)) +
+    '  ·  solo los fertilizantes base suman unidades nutricionales',
+    0, y + hPie / 2, W, 8.5, false, '#9AA79C');
+
+  cv.toBlob(b => {
+    fbBajar(b, fbArchivo(p) + '_' + fbISO(new Date()) + '.png');
+    fbAviso('Imagen descargada.');
+  }, 'image/png');
+}
 
 </script>
 </body>
